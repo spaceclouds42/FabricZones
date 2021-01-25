@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "builders",
+  "version": "${version}",
+
+  "name": "Fabric Builders",
+  "description": "Adds a builder mode to allow players to build as if in creative, but eliminates risk of spawning in illegals or loads of diamonds",
+  "authors": [
+    "SpaceClouds42"
+  ],
+  "contact": {
+    "homepage": "https://github.com/SpaceClouds42/Builders",
+    "sources": "https://github.com/SpaceClouds42/Builders",
+    "issues": "https://github.com/SpaceClouds42/Builders/issues"
+  },
+
+  "license": "LGPL-3.0",
+  "icon": "assets/builders/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "us.spaceclouds42.builders.Common::INSTANCE"
+      }
+    ]
+  },
+  "mixins": [
+    "builders.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.1",
+    "fabric": "*",
+    "fabric-language-kotlin": "*",
+    "minecraft": "1.17.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
