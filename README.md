@@ -22,3 +22,5 @@ it is not anywhere near production ready yet, and will likely have major bugs or
 - /gamemode builder
     - abilities: fly, invincibility, not able to pvp, toggleable noclip
     - block menu, maybe add some default build kits?
+- /builder player (add|remove) \<name\>
+    - gives `/gamemode builder` perms to player
