@@ -24,3 +24,5 @@ it is not anywhere near production ready yet, and will likely have major bugs or
     - block menu, maybe add some default build kits?
 - /builder player (add|remove) \<name\>
     - gives `/gamemode builder` perms to player
+- log any changes to any zone to file
+- prevent destructive things to occur in builder zones (tnt, wither head explosions, fire tick, etc.)

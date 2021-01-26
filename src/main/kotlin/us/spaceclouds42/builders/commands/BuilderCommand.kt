@@ -1,8 +1,9 @@
 package us.spaceclouds42.builders.commands
 
-import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
+import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.server.command.CommandManager
+import net.minecraft.util.math.BlockPos
 import us.spaceclouds42.builders.utils.Context
 import us.spaceclouds42.builders.utils.Dispatcher
 import us.spaceclouds42.builders.utils.Node
@@ -37,42 +38,16 @@ class BuilderCommand {
                         .argument("name", StringArgumentType.word())
                         .then(
                             CommandManager
-                                .argument("x1", IntegerArgumentType.integer())
-                                .suggests { context, builder ->
-                                    context.source.player.x
-                                    builder.buildFuture()
-                                }
+                                .argument("start", BlockPosArgumentType.blockPos())
                                 .then(
                                     CommandManager
-                                        .argument("z1", IntegerArgumentType.integer())
-                                        .suggests { context, builder ->
-                                            context.source.player.z
-                                            builder.buildFuture()
-                                        }
-                                        .then(
-                                            CommandManager
-                                                .argument("x2", IntegerArgumentType.integer())
-                                                .suggests { context, builder ->
-                                                    context.source.player.x
-                                                    builder.buildFuture()
-                                                }
-                                                .then(
-                                                    CommandManager
-                                                        .argument("z2", IntegerArgumentType.integer())
-                                                        .suggests { context, builder ->
-                                                            context.source.player.z
-                                                            builder.buildFuture()
-                                                        }
-                                                        .executes { zoneCreateCommand(
-                                                            it,
-                                                            StringArgumentType.getString(it, "name"),
-                                                            IntegerArgumentType.getInteger(it, "x1"),
-                                                            IntegerArgumentType.getInteger(it, "z1"),
-                                                            IntegerArgumentType.getInteger(it, "x2"),
-                                                            IntegerArgumentType.getInteger(it, "z2")
-                                                        ) }
-                                                )
-                                        )
+                                        .argument("end", BlockPosArgumentType.blockPos())
+                                        .executes { zoneCreateCommand(
+                                            it,
+                                            StringArgumentType.getString(it, "name"),
+                                            BlockPosArgumentType.getBlockPos(it, "start"),
+                                            BlockPosArgumentType.getBlockPos(it, "end")
+                                        ) }
                                 )
                         )
                 )
@@ -84,6 +59,25 @@ class BuilderCommand {
         val editNode: Node =
             CommandManager
                 .literal("edit")
+                .then(
+                    CommandManager
+                        .argument("name", StringArgumentType.word())
+                        //TODO: suggest zone names for edit
+                        .then(
+                            CommandManager
+                                .argument("start", BlockPosArgumentType.blockPos())
+                                .then(
+                                    CommandManager
+                                        .argument("end", BlockPosArgumentType.blockPos())
+                                        .executes { zoneEditCommand(
+                                            it,
+                                            StringArgumentType.getString(it, "name"),
+                                            BlockPosArgumentType.getBlockPos(it, "start"),
+                                            BlockPosArgumentType.getBlockPos(it, "end")
+                                        ) }
+                                )
+                        )
+                )
                 .build()
 
         /**
@@ -92,6 +86,15 @@ class BuilderCommand {
         val deleteNode: Node =
             CommandManager
                 .literal("remove")
+                .then(
+                    CommandManager
+                        .argument("name", StringArgumentType.word())
+                        //TODO: suggest zone names for delete
+                        .executes { zoneDeleteCommand(
+                            it,
+                            StringArgumentType.getString(it, "name")
+                        ) }
+                )
                 .build()
 
         /**
@@ -100,6 +103,15 @@ class BuilderCommand {
         val gotoNode: Node =
             CommandManager
                 .literal("goto")
+                .then(
+                    CommandManager
+                        .argument("name", StringArgumentType.word())
+                        //TODO: suggest zone names for goto
+                        .executes { zoneGotoCommand(
+                            it,
+                            StringArgumentType.getString(it, "name")
+                        ) }
+                )
                 .build()
 
         /**
@@ -108,6 +120,7 @@ class BuilderCommand {
         val listNode: Node =
             CommandManager
                 .literal("list")
+                .executes { zoneListCommand(it) }
                 .build()
 
         /**
@@ -148,8 +161,71 @@ class BuilderCommand {
         playerNode.addChild(removeNode)
     }
 
-    private fun zoneCreateCommand(context: Context, name: String, x1: Int, z1: Int, x2: Int, z2: Int): Int {
-        println("Creating zone: \"$name\" from $x1 $z1 to $x2 $z2")
-        return 1
+    /**
+     * Creates a new zone if name
+     * is not already taken by
+     * another zone
+     *
+     * @param context command source
+     * @param name zone name
+     * @param startPos first corner of zone
+     * @param endPos second corner of zone
+     * @return 1 if successful creation, 0 if not
+     */
+    private fun zoneCreateCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
+        println("Creating zone: \"$name\" from ${startPos.x} ${startPos.z} to ${endPos.x} ${endPos.z}")
+        return 0
+    }
+
+    /**
+     * Edits an existing zone's corners
+     *
+     * @param context command source
+     * @param name zone name
+     * @param startPos new first corner of zone
+     * @param endPos new second corner of zone
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
+        println("Editing zone: \"$name\", now located at ${startPos.x} ${startPos.z} to ${endPos.x} ${endPos.z}")
+        return 0
+    }
+
+    /**
+     * Deletes an existing zone
+     *
+     * @param context command source
+     * @param name zone name
+     * @return 1 if successful deletion, 0 if not
+     */
+    private fun zoneDeleteCommand(context: Context, name: String): Int {
+        println("Deleting zone: \"$name\"")
+        return 0
+    }
+
+    /**
+     * Teleports to a zone
+     *
+     * @param context command source
+     * @param name zone name
+     * @return 1 if successful teleport, 0 if not
+     */
+    private fun zoneGotoCommand(context: Context, name: String): Int {
+        println("Going to \"$name\"")
+        return 0
+    }
+
+    /**
+     * Lists all existing zones with
+     * hover text with additional info
+     * including who created it, location,
+     * last edited by
+     *
+     * @param context command source
+     * @return 1 if successful listing, 0 if not
+     */
+    private fun zoneListCommand(context: Context): Int {
+        println("Listing all builder zones..")
+        return 0
     }
 }
