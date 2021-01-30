@@ -1,6 +1,6 @@
 # This workflow will build a Javadoc and publish it.
 
-name: Javadoc
+name: Dokka
 
 on:
   push:
@@ -22,11 +22,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew javadoc
-      - name: GitHub Pages Javadoc
+        run: ./gradlew dokkaHtml
+      - name: GitHub Pages Dokka
         if: success()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/docs/javadoc
-          destination_dir: javadoc/
+          publish_dir: build/docs/dokka
+          destination_dir: dokka/
