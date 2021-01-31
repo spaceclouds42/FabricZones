@@ -3,6 +3,7 @@ $dokka.linkExtension:html
 $dokka.location:us.spaceclouds42.builders.utils////PointingToDeclaration/us.spaceclouds42.builders.utils.html
 us.spaceclouds42.builders
 us.spaceclouds42.builders.commands
+us.spaceclouds42.builders.data
 us.spaceclouds42.builders.data.spec
 us.spaceclouds42.builders.utils
 
