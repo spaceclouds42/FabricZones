@@ -7,9 +7,23 @@ import net.minecraft.util.Identifier
  * position of zone corners
  */
 data class Pos(
+    /**
+     * Dimension identifier
+     */
     val world: Identifier,
 
-    val x: Double,
-    val y: Double,
-    val z: Double,
+    /**
+     * x coordinate
+     */
+    val x: Int,
+
+    /**
+     * y coordinate
+     */
+    val y: Int,
+
+    /**
+     * z coordinate
+     */
+    val z: Int,
 )

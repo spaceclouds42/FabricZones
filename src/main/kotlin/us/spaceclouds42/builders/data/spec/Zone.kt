@@ -5,12 +5,19 @@ package us.spaceclouds42.builders.data.spec
  * are allowed to use /gamemode builder
  */
 data class Zone(
+    /**
+     * Name of the zone. Must be unique
+     */
     val name: String,
 
     /**
-     * Boundaries corners of the zone
+     * Start corner
      */
     var startPos: Pos,
+
+    /**
+     * End corner
+     */
     var endPos: Pos,
 
     /**
