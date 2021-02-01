@@ -1,16 +1,17 @@
 package us.spaceclouds42.builders.data.spec
 
-import net.minecraft.util.Identifier
+import kotlinx.serialization.Serializable
 
 /**
  * Position type, used to store
  * position of zone corners
  */
+@Serializable
 data class Pos(
     /**
-     * Dimension identifier
+     * Dimension identifier as string. Ex: "minecraft:overworld"
      */
-    val world: Identifier,
+    val world: String,
 
     /**
      * x coordinate

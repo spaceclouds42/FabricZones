@@ -1,9 +1,12 @@
 package us.spaceclouds42.builders.data.spec
 
+import kotlinx.serialization.Serializable
+
 /**
  * Build zones, areas where builders
  * are allowed to use /gamemode builder
  */
+@Serializable
 data class Zone(
     /**
      * Name of the zone. Must be unique

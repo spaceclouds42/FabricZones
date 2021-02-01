@@ -1,16 +1,17 @@
 package us.spaceclouds42.builders.data.spec
 
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
 /**
  * Contains configurable properties of builders
  * that can help with using builder mode
  */
+@Serializable
 data class Builder(
     /**
-     * UUID of the builder
+     * Name of the builder
      */
-    val uuid: UUID,
+    val name: String,
 
     /**
      * If enabled, the builder will not
