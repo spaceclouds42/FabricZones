@@ -5,5 +5,6 @@ us.spaceclouds42.builders
 us.spaceclouds42.builders.commands
 us.spaceclouds42.builders.data
 us.spaceclouds42.builders.data.spec
+us.spaceclouds42.builders.log
 us.spaceclouds42.builders.utils
 
