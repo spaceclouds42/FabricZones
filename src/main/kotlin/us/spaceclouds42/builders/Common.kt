@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import us.spaceclouds42.builders.commands.BuilderCommand
-import us.spaceclouds42.builders.data.DataManager
+import us.spaceclouds42.builders.data.BuilderManager
 import us.spaceclouds42.builders.log.LogInfo
 import us.spaceclouds42.builders.log.LogMode
 import us.spaceclouds42.builders.log.Logger
@@ -18,7 +18,7 @@ object Common : ModInitializer {
         LOGGER.info(LogInfo("Registering to SERVER_STARTING event"), LogMode.WTF)
         ServerLifecycleEvents.SERVER_STARTING.register {
             SERVER = it
-            DataManager.register()
+            BuilderManager.register()
         }
 
 
