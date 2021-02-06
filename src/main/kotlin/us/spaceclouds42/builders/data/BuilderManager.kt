@@ -2,7 +2,7 @@ package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.json.Json
 import us.spaceclouds42.builders.data.spec.Builder
-import us.spaceclouds42.builders.data.spec.DataSpecBase
+import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
 import java.io.File
 
 object BuilderManager : ManagerBase() {
@@ -20,7 +20,7 @@ object BuilderManager : ManagerBase() {
         return Json.decodeFromString(Builder.serializer(), dataString)
     }
 
-    override fun writeToFile(dataFile: File, data: DataSpecBase) {
+    override fun writeToFile(dataFile: File, data: IdentifiableDataSpecBase) {
         dataFile.writeText(Json.encodeToString(Builder.serializer(), data as Builder))
     }
 }

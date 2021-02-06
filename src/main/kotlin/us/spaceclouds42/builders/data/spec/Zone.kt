@@ -42,4 +42,4 @@ data class Zone(
     // saved to file
     //
     // val buildLog: MutableMap<LocalDateTime, BlockChange>,
-) : DataSpecBase()
+) : IdentifiableDataSpecBase()

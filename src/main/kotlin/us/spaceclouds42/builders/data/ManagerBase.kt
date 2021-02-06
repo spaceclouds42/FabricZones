@@ -4,7 +4,7 @@ import kotlinx.serialization.SerializationException
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.util.WorldSavePath
 import us.spaceclouds42.builders.LOGGER
-import us.spaceclouds42.builders.data.spec.DataSpecBase
+import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
 import us.spaceclouds42.builders.log.LogInfo
 import us.spaceclouds42.builders.log.LogMode
 import java.io.File
@@ -13,15 +13,15 @@ import kotlin.reflect.KClass
 
 /**
  * An interface for all data managers. All methods include
- * an example implementation using [DataSpecBase] as the data type
+ * an example implementation using [IdentifiableDataSpecBase] as the data type
  * that the manager manages
  */
 abstract class ManagerBase {
     /**
      * The data type that the manager manages.
-     * All data types must be of type [DataSpecBase]
+     * All data types must be of type [IdentifiableDataSpecBase]
      */
-    abstract val dataSpec: KClass<out DataSpecBase>
+    abstract val dataSpec: KClass<out IdentifiableDataSpecBase>
 
     /**
      * Name of the directory where data is stored
@@ -65,7 +65,7 @@ abstract class ManagerBase {
     /**
      * A map of all the manager's data in memory
      */
-    protected val cache: MutableMap<String, DataSpecBase> = mutableMapOf()
+    protected val cache: MutableMap<String, IdentifiableDataSpecBase> = mutableMapOf()
 
     /**
      * Directory where the manager's data is saved to file
@@ -112,7 +112,7 @@ abstract class ManagerBase {
      * @return the object that was loaded, or null if already
      * in [cache] or a deserialization error occurred
      */
-    protected fun loadData(id: String): DataSpecBase? {
+    protected fun loadData(id: String): IdentifiableDataSpecBase? {
         // In the case that the data is
         // already in memory, shouldn't
         // add it to cache.
@@ -174,7 +174,7 @@ abstract class ManagerBase {
      * @return the **previously** loaded data, which can
      * be null if the [cache] did not have that data stored
      */
-    protected fun reloadData(id: String): DataSpecBase? {
+    protected fun reloadData(id: String): IdentifiableDataSpecBase? {
         val oldData = cache.remove(id)
         loadData(id)
         return oldData
@@ -186,7 +186,7 @@ abstract class ManagerBase {
      *
      * @return the previous cache
      */
-    protected fun reloadAllData(): Map<String, DataSpecBase> {
+    protected fun reloadAllData(): Map<String, IdentifiableDataSpecBase> {
         val oldCache = cache
         val loadedIds = cache.keys
         cache.clear()
@@ -236,7 +236,7 @@ abstract class ManagerBase {
      * @param id the id of the object to be removed
      * @return the deleted data, null if it was not in the [cache]
      */
-    protected fun deleteData(id: String): DataSpecBase? {
+    protected fun deleteData(id: String): IdentifiableDataSpecBase? {
         val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
 
         dataFile.delete()
@@ -250,7 +250,7 @@ abstract class ManagerBase {
      *
      * @return the deleted cache
      */
-    protected fun deleteAllLoadedData(): Map<String, DataSpecBase> {
+    protected fun deleteAllLoadedData(): Map<String, IdentifiableDataSpecBase> {
         val oldCache = cache
         val loadedIds = cache.keys
         cache.clear()
@@ -300,25 +300,25 @@ abstract class ManagerBase {
      *
      * Example implementation:
      * ```
-     *      return Json.decodeFromString(DataSpecBase.serializer(), dataString)
+     *      return Json.decodeFromString(IdentifiableDataSpecBase.serializer(), dataString)
      * ```
      *
      * @param dataString Raw text from the file being read
      * @return an object created using the data from [dataString], should
      *         be of the same type as the type that the data manager manages
      */
-    abstract fun readFromFile(dataString: String): DataSpecBase
+    abstract fun readFromFile(dataString: String): IdentifiableDataSpecBase
 
     /**
      * Serializes [data] and writes it to [file][dataFile].
      *
      * Example implementation:
      * ```
-     *      dataFile.writeText(Json.encodeToString(DataSpecBase.serializer(), data))
+     *      dataFile.writeText(Json.encodeToString(IdentifiableDataSpecBase.serializer(), data))
      * ```
      *
      * @param dataFile file to write to
      * @param data object being saved
      */
-    abstract fun writeToFile(dataFile: File, data: DataSpecBase)
+    abstract fun writeToFile(dataFile: File, data: IdentifiableDataSpecBase)
 }
