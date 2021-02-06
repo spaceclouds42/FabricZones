@@ -25,7 +25,7 @@ data class Builder(
      * Whether or not a player sees zone borders. (Only displayed when inside a zone)
      */
     var areZoneBordersVisible: Boolean = true,
-) : DataType() {
+) : DataSpecBase() {
     /**
      * Set's the player's active inventory to their saved inventory, and
      * saves the previously active inventory. The inventory is saved with

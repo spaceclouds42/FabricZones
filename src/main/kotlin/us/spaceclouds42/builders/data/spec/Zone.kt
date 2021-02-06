@@ -11,7 +11,7 @@ data class Zone(
     /**
      * Name of the zone. Must be unique
      */
-    val name: String,
+    override val id: String,
 
     /**
      * Start corner
@@ -42,4 +42,4 @@ data class Zone(
     // saved to file
     //
     // val buildLog: MutableMap<LocalDateTime, BlockChange>,
-)
+) : DataSpecBase()

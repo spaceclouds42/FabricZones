@@ -4,7 +4,7 @@ import kotlinx.serialization.SerializationException
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.util.WorldSavePath
 import us.spaceclouds42.builders.LOGGER
-import us.spaceclouds42.builders.data.spec.DataType
+import us.spaceclouds42.builders.data.spec.DataSpecBase
 import us.spaceclouds42.builders.log.LogInfo
 import us.spaceclouds42.builders.log.LogMode
 import java.io.File
@@ -13,15 +13,15 @@ import kotlin.reflect.KClass
 
 /**
  * An interface for all data managers. All methods include
- * an example implementation using [DataType] as the data type
+ * an example implementation using [DataSpecBase] as the data type
  * that the manager manages
  */
 abstract class ManagerBase {
     /**
      * The data type that the manager manages.
-     * All data types must be of type [DataType]
+     * All data types must be of type [DataSpecBase]
      */
-    abstract val dataType: KClass<out DataType>
+    abstract val dataSpec: KClass<out DataSpecBase>
 
     /**
      * Name of the directory where data is stored
@@ -65,7 +65,7 @@ abstract class ManagerBase {
     /**
      * A map of all the manager's data in memory
      */
-    private val cache: MutableMap<String, DataType> = mutableMapOf()
+    protected val cache: MutableMap<String, DataSpecBase> = mutableMapOf()
 
     /**
      * Directory where the manager's data is saved to file
@@ -91,7 +91,7 @@ abstract class ManagerBase {
                 .resolve(dirName)
 
             // Loads up all data in the file system
-            // for this manager's data type
+            // for this manager's spec type
             if (enableLoadAllOnStart) {
                 dataDir.toFile().walk().forEach {
                     if (it.name.endsWith(fileExtension)) {
@@ -120,7 +120,7 @@ abstract class ManagerBase {
         // already in memory, shouldn't
         // add it to cache.
         if (cache.keys.contains(id)) {
-            LOGGER.warn(LogInfo("Requested data '#1' of type '#2' is already in memory!", arrayOf(id, dataType.simpleName!!)), LogMode.DEBUG)
+            LOGGER.warn(LogInfo("Requested data '#1' of type '#2' is already in memory!", arrayOf(id, dataSpec.simpleName!!)), LogMode.DEBUG)
             return false
         }
 
@@ -142,9 +142,9 @@ abstract class ManagerBase {
 
             // Here's some cursed reflection code
             // to create an empty object of the
-            // data manager's data type with only
+            // data manager's spec type with only
             // the id. :tiny_potato:
-            val constructor = dataType.constructors.first()
+            val constructor = dataSpec.constructors.first()
             val data = constructor.callBy(mapOf(constructor.parameters[0] to id))
 
             cache[id] = data
@@ -165,7 +165,7 @@ abstract class ManagerBase {
      */
     fun saveData(id: String) {
         val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
-        val data = cache[id] ?: throw NoSuchElementException("No cached data for '${dataType.simpleName}' object '$id'")
+        val data = cache[id] ?: throw NoSuchElementException("No cached data for '${dataSpec.simpleName}' object '$id'")
 
         if (!dataFile.exists()) {
             dataFile.createNewFile()
@@ -174,13 +174,15 @@ abstract class ManagerBase {
         writeToFile(dataFile, data)
     }
 
+    // TODO: private fun loadAllData()
+
     /**
      * Saves all data in the [cache] to file. By
      * default, this will only get called when
      * the server stops and if [enableSaveOnShutDown]
      * is set to true
      */
-    fun saveAllData() {
+    private fun saveAllData() {
         for (key in cache.keys) {
             saveData(key)
         }
@@ -191,7 +193,7 @@ abstract class ManagerBase {
      *
      * @param id the identifier of the entity as a string
      */
-    fun managedEntityJoined(id: String) {
+    protected fun managedEntityJoined(id: String) {
         loadData(id)
     }
 
@@ -200,7 +202,7 @@ abstract class ManagerBase {
      *
      * @param id the identifier of the entity as a string
      */
-    fun managedEntityLeft(id: String) {
+    protected fun managedEntityLeft(id: String) {
         saveData(id)
         cache.remove(id)
     }
@@ -210,25 +212,25 @@ abstract class ManagerBase {
      *
      * Example implementation:
      * ```
-     *      return Json.decodeFromString(DataType.serializer(), dataString)
+     *      return Json.decodeFromString(DataSpecBase.serializer(), dataString)
      * ```
      *
      * @param dataString Raw text from the file being read
      * @return an object created using the data from [dataString], should
      *         be of the same type as the type that the data manager manages
      */
-    abstract fun readFromFile(dataString: String): DataType
+    abstract fun readFromFile(dataString: String): DataSpecBase
 
     /**
      * Serializes [data] and writes it to [file][dataFile].
      *
      * Example implementation:
      * ```
-     *      dataFile.writeText(Json.encodeToString(DataType.serializer(), data))
+     *      dataFile.writeText(Json.encodeToString(DataSpecBase.serializer(), data))
      * ```
      *
      * @param dataFile file to write to
      * @param data object being saved
      */
-    abstract fun writeToFile(dataFile: File, data: DataType)
+    abstract fun writeToFile(dataFile: File, data: DataSpecBase)
 }
