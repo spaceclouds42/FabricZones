@@ -93,11 +93,7 @@ abstract class ManagerBase {
             // Loads up all data in the file system
             // for this manager's spec type
             if (enableLoadAllOnStart) {
-                dataDir.toFile().walk().forEach {
-                    if (it.name.endsWith(fileExtension)) {
-                        loadData(it.name.replace(fileExtension, ""))
-                    }
-                }
+                loadAllData()
             }
         }
 
@@ -115,7 +111,7 @@ abstract class ManagerBase {
      * @param id identifier of the requested object as a string
      * @return whether or not it successfully loaded the data to memory
      */
-    fun loadData(id: String): Boolean {
+    private fun loadData(id: String): Boolean {
         // In the case that the data is
         // already in memory, shouldn't
         // add it to cache.
@@ -158,12 +154,14 @@ abstract class ManagerBase {
     }
 
     /**
-     * Saves data from [cache] to file. This DOES NOT
-     * remove the data from the cache!
+     * Saves data from [cache] to file. This does NOT
+     * remove the data from the cache! Any time a change
+     * to any data is made, this should be called for that
+     * object
      *
      * @param id identifier of the object to be saved as a string
      */
-    fun saveData(id: String) {
+    protected fun saveData(id: String) {
         val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
         val data = cache[id] ?: throw NoSuchElementException("No cached data for '${dataSpec.simpleName}' object '$id'")
 
@@ -174,7 +172,31 @@ abstract class ManagerBase {
         writeToFile(dataFile, data)
     }
 
-    // TODO: private fun loadAllData()
+    /**
+     * Deletes the save file for specified object,
+     * and removes that object from the cache
+     *
+     * @param id the id of the object to be removed
+     */
+    protected fun deleteData(id: String) {
+        val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
+
+        dataFile.delete()
+
+        cache.remove(id)
+    }
+
+    /**
+     * Loads all data from file to [cache]. By default, this is only
+     * called when the server starts and if [enableLoadAllOnStart] is true
+     */
+    private fun loadAllData() {
+        dataDir.toFile().walk().forEach {
+            if (it.name.endsWith(fileExtension)) {
+                loadData(it.name.replace(fileExtension, ""))
+            }
+        }
+    }
 
     /**
      * Saves all data in the [cache] to file. By
