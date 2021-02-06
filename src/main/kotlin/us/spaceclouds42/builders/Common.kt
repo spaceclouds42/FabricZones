@@ -10,6 +10,9 @@ import us.spaceclouds42.builders.log.LogMode
 import us.spaceclouds42.builders.log.Logger
 import us.spaceclouds42.builders.utils.Dispatcher
 
+/**
+ * Does some initialization work, registers commands, starts up data managers, and sets global variables
+ */
 object Common : ModInitializer {
     override fun onInitialize() {
         LOGGER = Logger()
@@ -21,11 +24,13 @@ object Common : ModInitializer {
             BuilderManager.register()
         }
 
-
         LOGGER.info(LogInfo("Registering to CommandRegistrationCallback.EVENT event"), LogMode.WTF)
         CommandRegistrationCallback.EVENT.register(::registerCommands)
     }
 
+    /**
+     * Registers all the [commands][us.spaceclouds42.builders.commands] to the server
+     */
     private fun registerCommands(dispatcher: Dispatcher, dedicated: Boolean) {
         LOGGER.info(LogInfo("Registering commands"), LogMode.DEBUG)
         BuilderCommand().register(dispatcher)

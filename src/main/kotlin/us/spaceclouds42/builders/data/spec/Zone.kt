@@ -3,8 +3,9 @@ package us.spaceclouds42.builders.data.spec
 import kotlinx.serialization.Serializable
 
 /**
- * Build zones, areas where builders
- * are allowed to use /gamemode builder
+ * Zones, manageable areas where builders
+ * can be allowed to use /gamemode builder,
+ * and other protection settings like visibility
  */
 @Serializable
 data class Zone(
@@ -30,11 +31,13 @@ data class Zone(
 
     /**
      * Determines which groups have access, and what level of access.
-     * See [ZoneAccessMode]'s documentation for more information
+     *
+     * @see ZoneAccessMode
      */
     var accessMode: ZoneAccessMode = ZoneAccessMode.EVERYONE,
 
     // Not to be implemented yet.. still very unsure of how I want this implemented
+    //
     // Tracks any changes made to a zone made by
     // a builder. Config does have settings for
     // how much is logged, and only the last 20

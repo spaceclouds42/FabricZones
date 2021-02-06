@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos
 import us.spaceclouds42.builders.utils.Context
 import us.spaceclouds42.builders.utils.Dispatcher
 import us.spaceclouds42.builders.utils.Node
-
+// TODO: rethink entire command structure :tiny_potato:
 class BuilderCommand {
     fun register(dispatcher: Dispatcher) {
         /**

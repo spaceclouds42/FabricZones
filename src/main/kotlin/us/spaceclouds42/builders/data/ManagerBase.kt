@@ -12,14 +12,13 @@ import java.nio.file.Path
 import kotlin.reflect.KClass
 
 /**
- * An interface for all data managers. All methods include
- * an example implementation using [IdentifiableDataSpecBase] as the data type
- * that the manager manages
+ * A way of loading, mutating, saving, and deleting data. Compatible
+ * with data classes that extend [IdentifiableDataSpecBase]
  */
 abstract class ManagerBase {
     /**
-     * The data type that the manager manages.
-     * All data types must be of type [IdentifiableDataSpecBase]
+     * The data specification type that the manager manages.
+     * All spec types must extend [IdentifiableDataSpecBase]
      */
     abstract val dataSpec: KClass<out IdentifiableDataSpecBase>
 

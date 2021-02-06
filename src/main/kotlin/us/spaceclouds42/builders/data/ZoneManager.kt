@@ -6,6 +6,9 @@ import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
 import us.spaceclouds42.builders.data.spec.Zone
 import java.io.File
 
+/**
+ * Manages data concerning [zones][Zone]
+ */
 object ZoneManager : ManagerBase() {
     override val dataSpec = Builder::class
 

@@ -5,6 +5,9 @@ import us.spaceclouds42.builders.data.spec.Builder
 import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
 import java.io.File
 
+/**
+ * Manages data concerning [builders][Builder]
+ */
 object BuilderManager : ManagerBase() {
     override val dataSpec = Builder::class
 

@@ -27,8 +27,4 @@ data class Pos(
      * z coordinate
      */
     val z: Int,
-) {
-    companion object {
-        val ORIGIN = Pos("minecraft:overworld", 0, 0, 0)
-    }
-}
+)

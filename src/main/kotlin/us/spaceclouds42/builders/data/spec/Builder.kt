@@ -8,10 +8,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Builder(
-    /**
-     * Name of the builder
-     */
     override val id: String,
+
+    /**
+     * Builder's name
+     */
+    val name: String,
 
     /**
      * If enabled, the builder will not
@@ -22,7 +24,7 @@ data class Builder(
     // Is a full on no clip possible purely server side?
 
     /**
-     * Whether or not a player sees zone borders. (Only displayed when inside a zone)
+     * Whether or not a builder sees zone borders. (Only displayed when inside a zone)
      */
     var areZoneBordersVisible: Boolean = true,
 ) : IdentifiableDataSpecBase() {
@@ -40,6 +42,7 @@ data class Builder(
      * @return Whether or not the inventory was successfully swapped
      */
     fun swapInventories(inBuilderMode: Boolean): Boolean {
+        // TODO: Implement this
         return false
     }
 }
