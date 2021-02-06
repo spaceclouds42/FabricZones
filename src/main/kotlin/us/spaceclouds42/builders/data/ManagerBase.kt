@@ -109,15 +109,16 @@ abstract class ManagerBase {
      * from [file system][dataDir] to [cache]
      *
      * @param id identifier of the requested object as a string
-     * @return whether or not it successfully loaded the data to memory
+     * @return the object that was loaded, or null if already
+     * in [cache] or a deserialization error occurred
      */
-    private fun loadData(id: String): Boolean {
+    protected fun loadData(id: String): DataSpecBase? {
         // In the case that the data is
         // already in memory, shouldn't
         // add it to cache.
         if (cache.keys.contains(id)) {
             LOGGER.warn(LogInfo("Requested data '#1' of type '#2' is already in memory!", arrayOf(id, dataSpec.simpleName!!)), LogMode.DEBUG)
-            return false
+            return null
         }
 
         val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
@@ -128,10 +129,10 @@ abstract class ManagerBase {
             return try {
                 val data = readFromFile(dataFile.readText())
                 cache[id] = data
-                true
+                data
             } catch (unknownPropErr: SerializationException) {
                 LOGGER.error(LogInfo("Could not load data at '#1.#2'", arrayOf(id, fileExtension)), LogMode.MINIMAL)
-                false
+                null
             }
         } else {
             LOGGER.warn(LogInfo("No file found at '#1.type', creating new file", arrayOf(id)), LogMode.WTF)
@@ -149,8 +150,52 @@ abstract class ManagerBase {
             // because a file doesn't exist yet
             saveData(id)
 
-            return true
+            return data
         }
+    }
+
+    /**
+     * Loads all data from file to [cache]. By default, this is only
+     * called when the server starts and if [enableLoadAllOnStart] is true
+     */
+    protected fun loadAllData() {
+        dataDir.toFile().walk().forEach {
+            if (it.name.endsWith(fileExtension)) {
+                loadData(it.name.replace(fileExtension, ""))
+            }
+        }
+    }
+
+    /**
+     * Removes the specified data from the cache, then
+     * reloads it from file.
+     *
+     * @param id id of the requested object
+     * @return the **previously** loaded data, which can
+     * be null if the [cache] did not have that data stored
+     */
+    protected fun reloadData(id: String): DataSpecBase? {
+        val oldData = cache.remove(id)
+        loadData(id)
+        return oldData
+    }
+
+    /**
+     * Clears the [cache] and repopulates with data
+     * from file. Only loads up data that was previously loaded
+     *
+     * @return the previous cache
+     */
+    protected fun reloadAllData(): Map<String, DataSpecBase> {
+        val oldCache = cache
+        val loadedIds = cache.keys
+        cache.clear()
+
+        for (id in loadedIds) {
+            loadData(id)
+        }
+
+        return oldCache
     }
 
     /**
@@ -173,40 +218,61 @@ abstract class ManagerBase {
     }
 
     /**
-     * Deletes the save file for specified object,
-     * and removes that object from the cache
-     *
-     * @param id the id of the object to be removed
-     */
-    protected fun deleteData(id: String) {
-        val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
-
-        dataFile.delete()
-
-        cache.remove(id)
-    }
-
-    /**
-     * Loads all data from file to [cache]. By default, this is only
-     * called when the server starts and if [enableLoadAllOnStart] is true
-     */
-    private fun loadAllData() {
-        dataDir.toFile().walk().forEach {
-            if (it.name.endsWith(fileExtension)) {
-                loadData(it.name.replace(fileExtension, ""))
-            }
-        }
-    }
-
-    /**
      * Saves all data in the [cache] to file. By
      * default, this will only get called when
      * the server stops and if [enableSaveOnShutDown]
      * is set to true
      */
-    private fun saveAllData() {
+    protected fun saveAllData() {
         for (key in cache.keys) {
             saveData(key)
+        }
+    }
+
+    /**
+     * Deletes the save file for specified object,
+     * and removes that object from the [cache] if present
+     *
+     * @param id the id of the object to be removed
+     * @return the deleted data, null if it was not in the [cache]
+     */
+    protected fun deleteData(id: String): DataSpecBase? {
+        val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
+
+        dataFile.delete()
+
+        return cache.remove(id)
+    }
+
+    /**
+     * Deletes the save file for all data that is currently loaded
+     * and empties the [cache]. Be very careful with this
+     *
+     * @return the deleted cache
+     */
+    protected fun deleteAllLoadedData(): Map<String, DataSpecBase> {
+        val oldCache = cache
+        val loadedIds = cache.keys
+        cache.clear()
+
+        for (id in loadedIds) {
+            deleteData(id)
+        }
+
+        return oldCache
+    }
+
+    /**
+     * This is a hard reset on all saved data. It deletes
+     * every save file and clears the [cache]
+     */
+    protected fun deleteAllData() {
+        cache.clear()
+
+        dataDir.toFile().walk().forEach {
+            if (it.name.endsWith(fileExtension)) {
+                it.delete()
+            }
         }
     }
 
@@ -215,7 +281,7 @@ abstract class ManagerBase {
      *
      * @param id the identifier of the entity as a string
      */
-    protected fun managedEntityJoined(id: String) {
+    fun managedEntityJoined(id: String) {
         loadData(id)
     }
 
@@ -224,7 +290,7 @@ abstract class ManagerBase {
      *
      * @param id the identifier of the entity as a string
      */
-    protected fun managedEntityLeft(id: String) {
+    fun managedEntityLeft(id: String) {
         saveData(id)
         cache.remove(id)
     }
