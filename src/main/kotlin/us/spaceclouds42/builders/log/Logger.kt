@@ -1,12 +1,8 @@
 package us.spaceclouds42.builders.log
 
-import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
-// TODO: ADD DOKKA
-class Logger {
-    private val logger = LogManager.getLogger("FabricBuilders")
-    private var logMode = LogMode.WTF
-
+class Logger(private val logger: Logger, private var logMode: LogMode) {
     fun info(info: LogInfo, mode: LogMode) {
         log(info, LogType.INFO, mode)
     }

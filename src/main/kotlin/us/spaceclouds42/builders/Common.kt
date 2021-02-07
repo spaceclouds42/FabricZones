@@ -3,6 +3,7 @@ package us.spaceclouds42.builders
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import org.apache.logging.log4j.LogManager
 import us.spaceclouds42.builders.commands.BuilderCommand
 import us.spaceclouds42.builders.data.BuilderManager
 import us.spaceclouds42.builders.log.LogInfo
@@ -15,7 +16,7 @@ import us.spaceclouds42.builders.utils.Dispatcher
  */
 object Common : ModInitializer {
     override fun onInitialize() {
-        LOGGER = Logger()
+        LOGGER = Logger(LogManager.getLogger("FabricBuilders"), LogMode.WTF)
         LOGGER.info(LogInfo("Initializing"), LogMode.MINIMAL)
 
         LOGGER.info(LogInfo("Registering to SERVER_STARTING event"), LogMode.WTF)
