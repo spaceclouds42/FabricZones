@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.util.WorldSavePath
 import us.spaceclouds42.builders.LOGGER
 import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
-import us.spaceclouds42.builders.log.LogInfo
 import us.spaceclouds42.builders.log.LogMode
 import java.io.File
 import java.nio.file.Path
@@ -88,6 +87,8 @@ abstract class ManagerBase {
                 .getSavePath(WorldSavePath.ROOT)
                 .resolve("FabricBuilders")
                 .resolve(dirName)
+            dataDir.toFile().mkdir()
+            LOGGER.info("${dataSpec.simpleName} data directory: $dataDir", LogMode.MINIMAL)
 
             // Loads up all data in the file system
             // for this manager's spec type
@@ -116,7 +117,7 @@ abstract class ManagerBase {
         // already in memory, shouldn't
         // add it to cache.
         if (cache.keys.contains(id)) {
-            LOGGER.warn(LogInfo("Requested data '#1' of type '#2' is already in memory!", arrayOf(id, dataSpec.simpleName!!)), LogMode.DEBUG)
+            LOGGER.warn("Requested data '$id' of type '${dataSpec.simpleName!!}' is already in memory!", LogMode.DEBUG)
             return null
         }
 
@@ -130,11 +131,11 @@ abstract class ManagerBase {
                 cache[id] = data
                 data
             } catch (unknownPropErr: SerializationException) {
-                LOGGER.error(LogInfo("Could not load data at '#1.#2'", arrayOf(id, fileExtension)), LogMode.MINIMAL)
+                LOGGER.error("Could not load data at '$id.$fileExtension'", LogMode.MINIMAL)
                 null
             }
         } else {
-            LOGGER.warn(LogInfo("No file found at '#1.type', creating new file", arrayOf(id)), LogMode.WTF)
+            LOGGER.warn("No file found at '$id.type', creating new file", LogMode.WTF)
 
             // Here's some cursed reflection code
             // to create an empty object of the

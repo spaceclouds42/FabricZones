@@ -1,7 +1,10 @@
 package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.json.Json
-import us.spaceclouds42.builders.data.spec.*
+import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
+import us.spaceclouds42.builders.data.spec.Pos
+import us.spaceclouds42.builders.data.spec.Zone
+import us.spaceclouds42.builders.data.spec.ZoneAccessMode
 import java.io.File
 
 /**
@@ -12,7 +15,7 @@ object ZoneManager : ManagerBase() {
 
     override val dirName: String = "zones"
 
-    override val fileExtension: String = ".zone"
+    override val fileExtension: String = "zone"
 
     override val enableSaveOnShutDown: Boolean = false
 

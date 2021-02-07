@@ -13,7 +13,7 @@ object BuilderManager : ManagerBase() {
 
     override val dirName: String = "builders"
 
-    override val fileExtension: String = ".builder"
+    override val fileExtension: String = "builder"
 
     override val enableSaveOnShutDown: Boolean = true
 
