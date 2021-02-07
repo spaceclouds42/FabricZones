@@ -8,7 +8,7 @@ import java.io.File
  * Manages data concerning [zones][Zone]
  */
 object ZoneManager : ManagerBase() {
-    override val dataSpec = Builder::class
+    override val dataSpec = Zone::class
 
     override val dirName: String = "zones"
 
