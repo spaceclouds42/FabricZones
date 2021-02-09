@@ -3,7 +3,7 @@ package us.spaceclouds42.builders.data.spec
 import kotlinx.serialization.Serializable
 
 /**
- * Position type, used to store
+ * PositionBase type, used to store
  * position of zone corners
  */
 @Serializable

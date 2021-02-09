@@ -211,7 +211,7 @@ class ZoneCommand : ICommand {
      */
     private fun zoneDeleteCommand(context: Context, name: String): Int {
         context.source.sendFeedback(
-            red("Deleted zone: ${ZoneManager.deleteZone(name)}"),
+            red("Deleted zone: ${ZoneManager.deleteZone(name)?.id}"),
             true
         )
 
@@ -226,6 +226,7 @@ class ZoneCommand : ICommand {
      * @return 1 if successful teleport, 0 if not
      */
     private fun zoneGotoCommand(context: Context, name: String): Int {
+        // TODO: Implement
         println("Going to \"$name\"")
         return 0
     }
@@ -249,7 +250,7 @@ class ZoneCommand : ICommand {
                     yellow(zone.value.id),
                     HoverEvent(
                         HoverEvent.Action.SHOW_TEXT,
-                                green("Click to teleport!") +
+                                green("Click to teleport!\n") +
                                         gray("Zone created by: ${zone.value.createdBy}")
                     )
                 ),

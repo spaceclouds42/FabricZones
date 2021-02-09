@@ -24,6 +24,6 @@ object BuilderManager : ManagerBase() {
     }
 
     override fun writeToFile(dataFile: File, data: IdentifiableDataSpecBase) {
-        dataFile.writeText(Json.encodeToString(Builder.serializer(), data as Builder))
+        dataFile.writeText(Json { prettyPrint = true }.encodeToString(Builder.serializer(), data as Builder))
     }
 }

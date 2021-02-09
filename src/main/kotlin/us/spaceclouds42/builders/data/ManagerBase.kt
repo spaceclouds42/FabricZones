@@ -2,6 +2,7 @@ package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.SerializationException
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.minecraft.server.MinecraftServer
 import net.minecraft.util.WorldSavePath
 import us.spaceclouds42.builders.LOGGER
 import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
@@ -71,36 +72,54 @@ abstract class ManagerBase {
     private lateinit var dataDir: Path
 
     /**
+     * Whether or not the manager has been registered yet
+     */
+    private var registered: Boolean = false
+
+    /**
      * Registers some actions to server start/stop events
      */
-    fun register() {
+    private fun register() {
         ServerLifecycleEvents.SERVER_STARTING.register { server ->
-            // Prevent any lingering data from previous
-            // server run from causing any duplicate
-            // element issues.
-            cache.clear()
-
-            // Sets data directory to the correct
-            // folder within the FabricBuilders
-            // directory
-            dataDir = server
-                .getSavePath(WorldSavePath.ROOT)
-                .resolve("FabricBuilders")
-                .resolve(dirName)
-            dataDir.toFile().mkdir()
-            LOGGER.info("${dataSpec.simpleName} data directory: $dataDir", LogMode.MINIMAL)
-
-            // Loads up all data in the file system
-            // for this manager's spec type
-            if (enableLoadAllOnStart) {
-                loadAllData()
-            }
+            initialize(server)
         }
 
         ServerLifecycleEvents.SERVER_STOPPING.register {
             if (enableSaveOnShutDown) {
                 saveAllData()
             }
+        }
+
+        registered = true
+    }
+
+    /**
+     * Things required to start up the data manager
+     *
+     * @param server the minecraft server object running the mod
+     */
+    fun initialize(server: MinecraftServer) {
+        if (!registered) register()
+
+        // Prevent any lingering data from previous
+        // server run from causing any duplicate
+        // element issues.
+        cache.clear()
+
+        // Sets data directory to the correct
+        // folder within the FabricBuilders
+        // directory
+        dataDir = server
+            .getSavePath(WorldSavePath.ROOT)
+            .resolve("FabricBuilders")
+            .resolve(dirName)
+        dataDir.toFile().mkdir()
+        LOGGER.info("${dataSpec.simpleName} data directory: $dataDir", LogMode.MINIMAL)
+
+        // Loads up all data in the file system
+        // for this manager's spec type
+        if (enableLoadAllOnStart) {
+            loadAllData()
         }
     }
 
@@ -135,7 +154,7 @@ abstract class ManagerBase {
                 null
             }
         } else {
-            LOGGER.warn("No file found at '$id.type', creating new file", LogMode.WTF)
+            LOGGER.warn("No file found at '$id.$fileExtension', creating new file", LogMode.WTF)
 
             // Here's some cursed reflection code
             // to create an empty object of the
@@ -161,7 +180,7 @@ abstract class ManagerBase {
     protected fun loadAllData() {
         dataDir.toFile().walk().forEach {
             if (it.name.endsWith(fileExtension)) {
-                loadData(it.name.replace(fileExtension, ""))
+                loadData(it.name.replace(".$fileExtension", ""))
             }
         }
     }
@@ -314,7 +333,7 @@ abstract class ManagerBase {
      *
      * Example implementation:
      * ```
-     *      dataFile.writeText(Json.encodeToString(IdentifiableDataSpecBase.serializer(), data))
+     *      dataFile.writeText(Json { prettyPrint = true }.encodeToString(IdentifiableDataSpecBase.serializer(), data))
      * ```
      *
      * @param dataFile file to write to

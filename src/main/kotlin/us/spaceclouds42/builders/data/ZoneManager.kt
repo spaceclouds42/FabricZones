@@ -26,7 +26,7 @@ object ZoneManager : ManagerBase() {
     }
 
     override fun writeToFile(dataFile: File, data: IdentifiableDataSpecBase) {
-        dataFile.writeText(Json.encodeToString(Zone.serializer(), data as Zone))
+        dataFile.writeText(Json { prettyPrint = true }.encodeToString(Zone.serializer(), data as Zone))
     }
 
     /**
@@ -65,8 +65,15 @@ object ZoneManager : ManagerBase() {
      * @param endPos the new end position of the boundary
      */
     fun editZonePos(name: String, startPos: Pos, endPos: Pos) {
-        (cache[name] as Zone?)?.startPos = startPos
-        (cache[name] as Zone?)?.endPos = endPos
+        val old = cache[name] as Zone
+
+        cache[name] = Zone(
+            id = name,
+            startPos = startPos,
+            endPos = endPos,
+            createdBy = old.createdBy,
+            accessMode = old.accessMode
+        )
 
         saveData(name)
     }

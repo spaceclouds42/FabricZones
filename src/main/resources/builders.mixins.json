@@ -3,6 +3,8 @@
   "package": "us.spaceclouds42.builders.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "PlayerMoveC2SPacketAccessor",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

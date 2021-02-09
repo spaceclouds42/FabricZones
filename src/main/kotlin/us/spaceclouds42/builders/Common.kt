@@ -23,8 +23,8 @@ object Common : ModInitializer {
         LOGGER.info("Registering to SERVER_STARTING event", LogMode.WTF)
         ServerLifecycleEvents.SERVER_STARTING.register {
             SERVER = it
-            BuilderManager.register()
-            ZoneManager.register()
+            BuilderManager.initialize(it)
+            ZoneManager.initialize(it)
         }
 
         LOGGER.info("Registering to CommandRegistrationCallback.EVENT event", LogMode.WTF)
