@@ -25,17 +25,21 @@ abstract class ServerPlayNetworkHandlerMixin {
      */
     @Shadow public ServerPlayerEntity player;
 
-    @Shadow @Final private static Logger LOGGER;
     /**
      * Whether or not the player is currently in a zone. If so,
      * the zone borders are rendered
      */
-    @Unique public Boolean inZone = false;
+    @Unique private Boolean inZone = false;
 
     /**
      * The zone that the player is currently in, if they are in a zone
      */
     @Unique private Zone playerZone;
+
+    /**
+     * The number of ticks since the last time the zones borders were rendered
+     */
+    @Unique private int lastRenderTick = 0;
 
     /**
      * Checks if a player has moved into or out of a zone
@@ -50,7 +54,7 @@ abstract class ServerPlayNetworkHandlerMixin {
             )
     )
     private void detectPlayerInZone(PlayerMoveC2SPacket packet, CallbackInfo ci) {
-        // TODO: Skip if pos is same
+        // TODO: Figure out how to skip check when player pos is unchanged
 
         Collection<Zone> zones = ZoneManager.INSTANCE.getAllZones().values();
 
@@ -60,12 +64,29 @@ abstract class ServerPlayNetworkHandlerMixin {
                 inZone = true;
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
-                playerZone.renderBorders(player);
                 break;
             } else {
                 inZone = false;
                 playerZone = null;
             }
+        }
+    }
+
+    /**
+     * Renders the borders of the zone that this player is in
+     *
+     * @param ci callback info
+     */
+    @Inject(
+            method = "tick",
+            at = @At(
+                    value = "TAIL"
+            )
+    )
+    private void renderBorders(CallbackInfo ci) {
+        if (inZone && lastRenderTick++ > 4) {
+            playerZone.renderBorders(player);
+            lastRenderTick = 0;
         }
     }
 }

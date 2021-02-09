@@ -5,6 +5,8 @@ import kotlinx.serialization.Transient
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket
 import net.minecraft.particle.DustParticleEffect
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.Vec3f
 import us.spaceclouds42.builders.ext.toRange
 import us.spaceclouds42.builders.utils.Axis
 import us.spaceclouds42.builders.utils.DoubleRange
@@ -155,14 +157,14 @@ data class Zone(
      */
     private fun renderParticles(player: ServerPlayerEntity, x: Double, y: Double, z: Double) {
         player.networkHandler.sendPacket(ParticleS2CPacket(
-            DustParticleEffect(DustParticleEffect.RED, 1.0F),
+            DustParticleEffect(Vec3f(222.0F/255, 160.0F/255, 221.0F/255), 1.0F),
             true,
             x,
             y,
             z,
-            0.2F,
-            0.2F,
-            0.2F,
+            0.1F,
+            0.1F,
+            0.1F,
             0.2F,
             1,
         ))
