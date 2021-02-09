@@ -65,9 +65,9 @@ data class Zone(
      * Calculates the edges when the zone is initialized
      */
     init {
-        val gX = max(startPos.x, endPos.x) + 0.5
+        val gX = max(startPos.x, endPos.x) + 1.0
         val gY = max(startPos.y, endPos.y) + 1.0
-        val gZ = max(startPos.x, endPos.x) + 0.5
+        val gZ = max(startPos.z, endPos.z) + 1.0
         val sX = min(startPos.x, endPos.x).toDouble()
         val sY = min(startPos.y, endPos.y).toDouble()
         val sZ = min(startPos.z, endPos.z).toDouble()
@@ -104,9 +104,9 @@ data class Zone(
         if (startPos.world != player.world.registryKey.value.toString()) return false
 
         if (
-            min(startPos.x, endPos.x) < player.x && player.x < max(startPos.x, endPos.x) &&
-            min(startPos.y, endPos.y) < player.y && player.y < max(startPos.y, endPos.y) &&
-            min(startPos.z, endPos.z) < player.z && player.z < max(startPos.z, endPos.z)
+            min(startPos.x, endPos.x) <= player.x && player.x <= (max(startPos.x, endPos.x) + 1.0) &&
+            min(startPos.y, endPos.y) <= player.y && player.y < (max(startPos.y, endPos.y) + 1.0) &&
+            min(startPos.z, endPos.z) <= player.z && player.z <= (max(startPos.z, endPos.z) + 1.0)
         ) return true
 
         return false

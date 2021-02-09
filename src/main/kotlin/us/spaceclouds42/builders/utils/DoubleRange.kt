@@ -19,7 +19,7 @@ class DoubleRange(min: Double, max: Double) {
      */
     init {
         elements.add(min)
-        while (elements.last() < (max + step)) {
+        while (elements.last() + step < max) {
             elements.add(elements.last() + step)
         }
         elements.add(max)
