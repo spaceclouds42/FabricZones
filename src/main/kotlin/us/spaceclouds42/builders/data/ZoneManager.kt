@@ -79,6 +79,49 @@ object ZoneManager : ManagerBase() {
     }
 
     /**
+     * Changes the access mode of a zone
+     *
+     * @param name the zone to be edited
+     * @param mode the new access mode
+     */
+    fun editZoneAccess(name: String, mode: ZoneAccessMode) {
+        val old = cache[name] as Zone
+
+        cache[name] = Zone(
+            id = name,
+            startPos = old.startPos,
+            endPos = old.endPos,
+            createdBy = old.createdBy,
+            accessMode = mode
+        )
+
+        saveData(name)
+    }
+
+    /**
+     * Changes the color of a zone's border, uses rgb
+     *
+     * @param name the zone to be edited
+     * @param r the new red value
+     * @param g the new green value
+     * @param b the new blue value
+     */
+    fun editZoneBorderColor(name: String, r: Int, g: Int, b: Int) {
+        val old = cache[name] as Zone
+
+        cache[name] = Zone(
+            id = name,
+            startPos = old.startPos,
+            endPos = old.endPos,
+            createdBy = old.createdBy,
+            accessMode = old.accessMode,
+            color = Triple(r, g, b)
+        )
+
+        saveData(name)
+    }
+
+    /**
      * Permanently removes a zone
      *
      * @param name the zone to be deleted

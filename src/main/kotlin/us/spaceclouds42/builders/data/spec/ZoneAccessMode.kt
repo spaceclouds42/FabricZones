@@ -21,5 +21,15 @@ enum class ZoneAccessMode {
      * Only Builders can see the zone
      * and only they are able to enter
      */
-    CLOAKED,
+    CLOAKED,;
+
+    companion object {
+        fun parse(text: String): ZoneAccessMode {
+            return when (text.toLowerCase()) {
+                "builders" -> BUILDERS
+                "cloaked" -> CLOAKED
+                else -> EVERYONE
+            }
+        }
+    }
 }

@@ -1,15 +1,20 @@
 package us.spaceclouds42.builders.commands
 
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
+import net.minecraft.command.argument.ArgumentTypes
 import net.minecraft.command.argument.BlockPosArgumentType
+import net.minecraft.command.argument.ColorArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.HoverEvent
 import net.minecraft.util.math.BlockPos
 import us.spaceclouds42.builders.data.ZoneManager
 import us.spaceclouds42.builders.data.spec.Zone
+import us.spaceclouds42.builders.data.spec.ZoneAccessMode
 import us.spaceclouds42.builders.ext.toPos
 import us.spaceclouds42.builders.utils.*
+import java.awt.Color
 
 class ZoneCommand : ICommand {
     override fun register(dispatcher: Dispatcher) {
@@ -65,15 +70,70 @@ class ZoneCommand : ICommand {
                         }
                         .then(
                             CommandManager
-                                .argument("start", BlockPosArgumentType.blockPos())
+                                .literal("access")
                                 .then(
                                     CommandManager
-                                        .argument("end", BlockPosArgumentType.blockPos())
-                                        .executes { zoneEditCommand(
+                                        .argument("mode", StringArgumentType.word())
+                                        .suggests { _, builder ->
+                                            ZoneAccessMode.values().forEach {
+                                                builder.suggest(it.toString().toLowerCase())
+                                            }
+
+                                            builder.buildFuture()
+                                        }
+                                        .executes { zoneEditAccessCommand(
                                             it,
                                             StringArgumentType.getString(it, "name"),
-                                            BlockPosArgumentType.getBlockPos(it, "start"),
-                                            BlockPosArgumentType.getBlockPos(it, "end")
+                                            ZoneAccessMode.parse(StringArgumentType.getString(it, "mode"))
+                                        ) }
+
+                                )
+                        )
+                        .then(
+                            CommandManager
+                                .literal("corners")
+                                .then(
+                                    CommandManager
+                                        .argument("start", BlockPosArgumentType.blockPos())
+                                        .then(
+                                            CommandManager
+                                                .argument("end", BlockPosArgumentType.blockPos())
+                                                .executes { zoneEditPosCommand(
+                                                    it,
+                                                    StringArgumentType.getString(it, "name"),
+                                                    BlockPosArgumentType.getBlockPos(it, "start"),
+                                                    BlockPosArgumentType.getBlockPos(it, "end")
+                                                ) }
+                                        )
+                                )
+                        ).then(
+                            CommandManager
+                                .literal("color")
+                                .then(
+                                    CommandManager
+                                        .argument("red", IntegerArgumentType.integer(0, 255))
+                                        .then(
+                                            CommandManager
+                                                .argument("green", IntegerArgumentType.integer(0, 255))
+                                                .then(
+                                                    CommandManager
+                                                        .argument("blue", IntegerArgumentType.integer(0, 255))
+                                                        .executes { zoneEditColorFromRGBCommand(
+                                                            it,
+                                                            StringArgumentType.getString(it, "name"),
+                                                            IntegerArgumentType.getInteger(it, "red"),
+                                                            IntegerArgumentType.getInteger(it, "green"),
+                                                            IntegerArgumentType.getInteger(it, "blue")
+                                                        ) }
+                                                )
+                                        )
+                                ).then(
+                                    CommandManager
+                                        .argument("hex", StringArgumentType.greedyString())
+                                        .executes { zoneEditColorFromHEXCommand(
+                                            it,
+                                            StringArgumentType.getString(it, "name"),
+                                            StringArgumentType.getString(it, "hex")
                                         ) }
                                 )
                         )
@@ -135,11 +195,17 @@ class ZoneCommand : ICommand {
                 .executes { zoneListCommand(it) }
                 .build()
 
+        // zone (create|edit|delete|goto|list)
         dispatcher.root.addChild(zoneNode)
+        // zone create <name> <start> <end>
         zoneNode.addChild(createNode)
+        // zone edit <name> (corners|access|color)
         zoneNode.addChild(editNode)
+        // zone delete <name>
         zoneNode.addChild(deleteNode)
+        // zone goto <name>
         zoneNode.addChild(gotoNode)
+        // zone list
         zoneNode.addChild(listNode)
     }
 
@@ -168,7 +234,10 @@ class ZoneCommand : ICommand {
         )
 
         source.sendFeedback(
-            green("Created zone: \"$name\" from ${startPos.x} ${startPos.y} ${startPos.z} to ${endPos.x} ${endPos.y} ${endPos.z}"),
+            green("Created zone: \"$name\", from ") +
+                    yellow("${startPos.x} ${startPos.y} ${startPos.z}") +
+                    green(" to ") +
+                    yellow("${endPos.x} ${endPos.y} ${endPos.z}"),
             true
         )
 
@@ -184,7 +253,7 @@ class ZoneCommand : ICommand {
      * @param endPos new second corner of zone
      * @return 1 if successful edit, 0 if not
      */
-    private fun zoneEditCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
+    private fun zoneEditPosCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
         val source = context.source
         val world = source.world.registryKey.value
 
@@ -195,11 +264,81 @@ class ZoneCommand : ICommand {
         )
 
         source.sendFeedback(
-            green("Edited zone: \"$name\", now at ${startPos.x} ${startPos.y} ${startPos.z} to ${endPos.x} ${endPos.y} ${endPos.z}"),
+            green("Edited zone: \"$name\", now at ") +
+            yellow("${startPos.x} ${startPos.y} ${startPos.z}") +
+            green(" to ") +
+            yellow("${endPos.x} ${endPos.y} ${endPos.z}"),
             true
         )
 
         return 1
+    }
+
+    /**
+     * Edits an existing zone's access mode
+     *
+     * @param context command source
+     * @param name zone name
+     * @param mode new access mode
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditAccessCommand(context: Context, name: String, mode: ZoneAccessMode): Int {
+        ZoneManager.editZoneAccess(
+            name = name,
+            mode = mode,
+        )
+
+        context.source.sendFeedback(
+            green("Edited zone: \"$name\", access mode is now ") + yellow(mode.toString()),
+            true
+        )
+
+        return 1
+    }
+
+    /**
+     * Edits an existing zone's border color using rgb
+     *
+     * @param context command source
+     * @param name zone name
+     * @param r red value
+     * @param g green value
+     * @param b blue value
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditColorFromRGBCommand(context: Context, name: String, r: Int, g: Int, b: Int): Int {
+        ZoneManager.editZoneBorderColor(name, r, g, b)
+
+        context.source.sendFeedback(
+            green("Edited zone: \"$name\", border color is now ") +
+                    yellow("$r, $g, $b"),
+            false
+        )
+
+        return 1
+    }
+
+    /**
+     * Edits an existing zone's border color using hex
+     *
+     * @param context command source
+     * @param name zone name
+     * @param hex color as hex code e.g. #00FF00
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditColorFromHEXCommand(context: Context, name: String, hex: String): Int {
+        if (hex.length != 7 || hex[0] != '#' || hex.substring(1).toIntOrNull() == null) {
+            context.source.sendError(
+                red("Incorrect HEX color code format")
+            )
+            return 0
+        }
+
+        val r = Integer.valueOf(hex.substring(1, 3), 16)
+        val g = Integer.valueOf(hex.substring(3, 5), 16)
+        val b = Integer.valueOf(hex.substring(5, 7), 16)
+
+        return zoneEditColorFromRGBCommand(context, name, r, g, b)
     }
 
     /**

@@ -7,6 +7,7 @@ import net.minecraft.particle.DustParticleEffect
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3f
+import net.minecraft.util.math.Vec3i
 import us.spaceclouds42.builders.ext.toRange
 import us.spaceclouds42.builders.utils.Axis
 import us.spaceclouds42.builders.utils.DoubleRange
@@ -46,6 +47,8 @@ data class Zone(
      * @see ZoneAccessMode
      */
     var accessMode: ZoneAccessMode = ZoneAccessMode.EVERYONE,
+
+    var color: Triple<Int, Int, Int> = Triple(255, 0, 0),
 
     // Not to be implemented yet.. still very unsure of how I want this implemented
     //
@@ -102,13 +105,13 @@ data class Zone(
      * @param player the player it checks to be in the zone
      * @return true if player in zone, false if not
      */
-    fun playerInZone(player: ServerPlayerEntity): Boolean {
+    fun playerInZone(player: ServerPlayerEntity, x: Double, y: Double, z: Double): Boolean {
         if (startPos.world != player.world.registryKey.value.toString()) return false
 
         if (
-            min(startPos.x, endPos.x) <= player.x && player.x <= (max(startPos.x, endPos.x) + 1.0) &&
-            min(startPos.y, endPos.y) <= player.y && player.y < (max(startPos.y, endPos.y) + 1.0) &&
-            min(startPos.z, endPos.z) <= player.z && player.z <= (max(startPos.z, endPos.z) + 1.0)
+            min(startPos.x, endPos.x) <= x && x <= (max(startPos.x, endPos.x) + 1.0) &&
+            min(startPos.y, endPos.y) <= y && y < (max(startPos.y, endPos.y) + 1.0) &&
+            min(startPos.z, endPos.z) <= z && z <= (max(startPos.z, endPos.z) + 1.0)
         ) return true
 
         return false
@@ -157,7 +160,14 @@ data class Zone(
      */
     private fun renderParticles(player: ServerPlayerEntity, x: Double, y: Double, z: Double) {
         player.networkHandler.sendPacket(ParticleS2CPacket(
-            DustParticleEffect(Vec3f(222.0F/255, 160.0F/255, 221.0F/255), 1.0F),
+            DustParticleEffect(
+                Vec3f(
+                    color.first/255.0F,
+                    color.second/255.0F,
+                    color.third/255.0F
+                ),
+                1.0F
+            ),
             true,
             x,
             y,
@@ -168,5 +178,9 @@ data class Zone(
             0.2F,
             1,
         ))
+    }
+
+    fun removePlayer(player: ServerPlayerEntity) {
+        player.networkHandler.requestTeleport(min(startPos.x, endPos.x) - 1.0, player.y, min(startPos.z, endPos.z) - 1.0, player.yaw, player.pitch)
     }
 }

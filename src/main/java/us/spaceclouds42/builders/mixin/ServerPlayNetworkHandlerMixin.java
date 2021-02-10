@@ -3,8 +3,6 @@ package us.spaceclouds42.builders.mixin;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.spaceclouds42.builders.ConstantsKt;
 import us.spaceclouds42.builders.data.ZoneManager;
 import us.spaceclouds42.builders.data.spec.Zone;
+import us.spaceclouds42.builders.data.spec.ZoneAccessMode;
 import us.spaceclouds42.builders.log.LogMode;
 
 import java.util.Collection;
@@ -42,7 +41,7 @@ abstract class ServerPlayNetworkHandlerMixin {
     @Unique private int lastRenderTick = 0;
 
     /**
-     * Checks if a player has moved into or out of a zone
+     * Checks if a player has moved into a zone, and prevents players from doing so if they do not have access
      *
      * @param packet the player's movement packet
      * @param ci callback info
@@ -50,20 +49,32 @@ abstract class ServerPlayNetworkHandlerMixin {
     @Inject(
             method = "onPlayerMove",
             at = @At(
-                    value = "TAIL"
-            )
+                    value = "HEAD"
+            ),
+            cancellable = true
     )
     private void detectPlayerInZone(PlayerMoveC2SPacket packet, CallbackInfo ci) {
-        // TODO: Figure out how to skip check when player pos is unchanged
+        if (packet instanceof PlayerMoveC2SPacket.LookOnly) { return; }
 
         Collection<Zone> zones = ZoneManager.INSTANCE.getAllZones().values();
+        PlayerMoveC2SPacketAccessor packetAccessor = (PlayerMoveC2SPacketAccessor) packet;
 
         for (Zone zone : zones) {
             ConstantsKt.LOGGER.info("Checking if " + player.getEntityName() + " is in " + zone.getId(), LogMode.WTF);
-            if (zone.playerInZone(player)) {
+            if (zone.playerInZone(player, packetAccessor.getX(), packetAccessor.getY(), packetAccessor.getZ())) {
                 inZone = true;
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
+                if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE) {
+                    ci.cancel();
+                    if (playerZone.playerInZone(player, player.getX(), player.getY(), player.getZ())) {
+                        playerZone.removePlayer(player);
+                    } else {
+                        player.requestTeleport(player.getX(), player.getY(), player.getZ());
+                    }
+                    inZone = false;
+                    playerZone = null;
+                }
                 break;
             } else {
                 inZone = false;
