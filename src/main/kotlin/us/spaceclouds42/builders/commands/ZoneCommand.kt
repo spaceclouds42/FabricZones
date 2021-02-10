@@ -352,7 +352,7 @@ class ZoneCommand : ICommand {
             return zoneEditColorFromRGBCommand(context, name, 65025, 65025, 65025)
         }
 
-        if (hex.length != 6 || hex.replace("\b[A-Fa-f0-9]{6}\b".toRegex(), "") != "") {
+        if (hex.length != 6 || hex.replace("[A-Fa-f0-9]{6}".toRegex(), "") != "") {
             context.source.sendError(
                 red("Incorrect HEX color code format")
             )
