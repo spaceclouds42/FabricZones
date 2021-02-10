@@ -1,6 +1,7 @@
 package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.json.Json
+import us.spaceclouds42.builders.SERVER
 import us.spaceclouds42.builders.data.spec.*
 import java.io.File
 
@@ -95,6 +96,18 @@ object ZoneManager : ManagerBase() {
             color = old.color,
             gotoPos = old.gotoPos,
         )
+
+        if (mode == ZoneAccessMode.CLOAKED) {
+            SERVER.playerManager.playerList.forEach {
+                (cache[name] as Zone).hideZone(it)
+            }
+        }
+
+        if (mode != ZoneAccessMode.CLOAKED && old.accessMode == ZoneAccessMode.CLOAKED) {
+            SERVER.playerManager.playerList.forEach {
+                (cache[name] as Zone).unHideZone(it)
+            }
+        }
 
         saveData(name)
     }

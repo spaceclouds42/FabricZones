@@ -2,10 +2,19 @@ package us.spaceclouds42.builders.data.spec
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import net.minecraft.block.Blocks
+import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket
 import net.minecraft.particle.DustParticleEffect
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3f
+import net.minecraft.util.math.Vec3i
+import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
+import org.apache.logging.log4j.core.jmx.Server
+import us.spaceclouds42.builders.SERVER
 import us.spaceclouds42.builders.ext.toRange
 import us.spaceclouds42.builders.utils.Axis
 import us.spaceclouds42.builders.utils.DoubleRange
@@ -186,7 +195,60 @@ data class Zone(
         ))
     }
 
+    /**
+     * Kicks a player out of a zone
+     *
+     * @param player the player that is kicked out
+     */
     fun removePlayer(player: ServerPlayerEntity) {
         player.networkHandler.requestTeleport(min(startPos.x, endPos.x) - 1.0, player.y, min(startPos.z, endPos.z) - 1.0, player.yaw, player.pitch)
+    }
+
+    /**
+     * Hides the zone from the player
+     *
+     * @param player the player the zone is hidden from
+     */
+    fun hideZone(player: ServerPlayerEntity) {
+        if (startPos.world != player.world.registryKey.value.toString()) return
+
+        for (y in min(startPos.y, endPos.y)..max(startPos.y, endPos.y)) {
+            for (x in min(startPos.x, endPos.x)..max(startPos.x, endPos.x)) {
+                for (z in min(startPos.z, endPos.z)..max(startPos.z, endPos.z)) {
+                    if (player.world.getBlockState(BlockPos(Vec3i(x, y, z))) != Blocks.AIR.defaultState) {
+                        player.networkHandler.sendPacket(
+                            BlockUpdateS2CPacket(
+                                BlockPos(Vec3i(x, y, z)),
+                                Blocks.AIR.defaultState
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Re renders the zone to players
+     *
+     * @param player the player the zone is unhidden from
+     */
+    fun unHideZone(player: ServerPlayerEntity) {
+        if (startPos.world != player.world.registryKey.value.toString()) return
+
+        for (y in min(startPos.y, endPos.y)..max(startPos.y, endPos.y)) {
+            for (x in min(startPos.x, endPos.x)..max(startPos.x, endPos.x)) {
+                for (z in min(startPos.z, endPos.z)..max(startPos.z, endPos.z)) {
+                    if (player.world.getBlockState(BlockPos(Vec3i(x, y, z))) != Blocks.AIR.defaultState) {
+                        player.networkHandler.sendPacket(
+                            BlockUpdateS2CPacket(
+                                BlockPos(Vec3i(x, y, z)),
+                                player.world.getBlockState(BlockPos(Vec3i(x, y, z)))
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 }
