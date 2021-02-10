@@ -66,6 +66,7 @@ abstract class ServerPlayNetworkHandlerMixin {
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
                 if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE) {
+                    playerZone.renderBorders(player);
                     ci.cancel();
                     if (playerZone.playerInZone(player, player.getX(), player.getY(), player.getZ())) {
                         playerZone.removePlayer(player);

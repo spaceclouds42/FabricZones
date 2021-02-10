@@ -226,6 +226,8 @@ data class Zone(
                 }
             }
         }
+
+        // TODO: mark it somehow so that when a player reloads the chunks, they see air
     }
 
     /**
@@ -250,5 +252,7 @@ data class Zone(
                 }
             }
         }
+
+        // TODO: mark it somehow so that when a player reloads the chunks, they no longer see air
     }
 }
