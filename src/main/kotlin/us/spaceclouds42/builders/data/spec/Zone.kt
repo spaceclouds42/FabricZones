@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3f
 import net.minecraft.util.math.Vec3i
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
+import net.minecraft.world.World
 import org.apache.logging.log4j.core.jmx.Server
 import us.spaceclouds42.builders.SERVER
 import us.spaceclouds42.builders.ext.toRange
@@ -127,6 +128,24 @@ data class Zone(
             min(startPos.x, endPos.x) <= x && x <= (max(startPos.x, endPos.x) + 1.0) &&
             min(startPos.y, endPos.y) <= y && y < (max(startPos.y, endPos.y) + 1.0) &&
             min(startPos.z, endPos.z) <= z && z <= (max(startPos.z, endPos.z) + 1.0)
+        ) return true
+
+        return false
+    }
+
+    /**
+     * Detects players being in this zone
+     *
+     * @param world dimension of the block
+     * @return true if block in zone, false if not
+     */
+    fun blockInZone(world: World, x: Int, y: Int, z: Int): Boolean {
+        if (startPos.world != world.registryKey.value.toString()) return false
+
+        if (
+            min(startPos.x, endPos.x) <= x && x <= (max(startPos.x, endPos.x)) &&
+            min(startPos.y, endPos.y) <= y && y <= (max(startPos.y, endPos.y)) &&
+            min(startPos.z, endPos.z) <= z && z <= (max(startPos.z, endPos.z))
         ) return true
 
         return false
