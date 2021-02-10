@@ -130,6 +130,11 @@ class ZoneCommand : ICommand {
                                 ).then(
                                     CommandManager
                                         .argument("hex", StringArgumentType.word())
+                                        .suggests { _, builder ->
+                                            builder.suggest("rainbow")
+
+                                            builder.buildFuture()
+                                        }
                                         .executes { zoneEditColorFromHEXCommand(
                                             it,
                                             StringArgumentType.getString(it, "name"),
@@ -309,6 +314,22 @@ class ZoneCommand : ICommand {
     private fun zoneEditColorFromRGBCommand(context: Context, name: String, r: Int, g: Int, b: Int): Int {
         ZoneManager.editZoneBorderColor(name, r, g, b)
 
+        if (r == g && g == b && r == b && r == 65025) {
+            context.source.sendFeedback(
+                green("Edited zone: \"$name\", border color is now ") +
+                    red("R") +
+                    gold("A") +
+                    yellow("I") +
+                    green("N") +
+                    darkGreen("B") +
+                    darkAqua("O") +
+                    darkPurple("W"),
+                false
+            )
+
+            return 1;
+        }
+
         context.source.sendFeedback(
             green("Edited zone: \"$name\", border color is now ") +
                     yellow("$r, $g, $b"),
@@ -327,16 +348,20 @@ class ZoneCommand : ICommand {
      * @return 1 if successful edit, 0 if not
      */
     private fun zoneEditColorFromHEXCommand(context: Context, name: String, hex: String): Int {
-        if (hex.length != 7 || hex[0] != '#' || hex.replace("#\b[A-Fa-f0-9]{6}\b".toRegex(), "") != "") {
+        if (hex.toLowerCase() == "rainbow") {
+            return zoneEditColorFromRGBCommand(context, name, 65025, 65025, 65025)
+        }
+
+        if (hex.length != 6 || hex.replace("\b[A-Fa-f0-9]{6}\b".toRegex(), "") != "") {
             context.source.sendError(
                 red("Incorrect HEX color code format")
             )
             return 0
         }
 
-        val r = Integer.valueOf(hex.substring(1, 3), 16)
-        val g = Integer.valueOf(hex.substring(3, 5), 16)
-        val b = Integer.valueOf(hex.substring(5, 7), 16)
+        val r = Integer.valueOf(hex.substring(0, 2), 16)
+        val g = Integer.valueOf(hex.substring(2, 4), 16)
+        val b = Integer.valueOf(hex.substring(4, 6), 16)
 
         return zoneEditColorFromRGBCommand(context, name, r, g, b)
     }
