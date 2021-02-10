@@ -72,7 +72,8 @@ object ZoneManager : ManagerBase() {
             startPos = startPos,
             endPos = endPos,
             createdBy = old.createdBy,
-            accessMode = old.accessMode
+            accessMode = old.accessMode,
+            color = old.color,
         )
 
         saveData(name)
@@ -92,7 +93,8 @@ object ZoneManager : ManagerBase() {
             startPos = old.startPos,
             endPos = old.endPos,
             createdBy = old.createdBy,
-            accessMode = mode
+            accessMode = mode,
+            color = old.color,
         )
 
         saveData(name)

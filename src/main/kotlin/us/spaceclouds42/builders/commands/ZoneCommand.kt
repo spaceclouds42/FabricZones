@@ -129,7 +129,7 @@ class ZoneCommand : ICommand {
                                         )
                                 ).then(
                                     CommandManager
-                                        .argument("hex", StringArgumentType.greedyString())
+                                        .argument("hex", StringArgumentType.word())
                                         .executes { zoneEditColorFromHEXCommand(
                                             it,
                                             StringArgumentType.getString(it, "name"),
@@ -327,7 +327,7 @@ class ZoneCommand : ICommand {
      * @return 1 if successful edit, 0 if not
      */
     private fun zoneEditColorFromHEXCommand(context: Context, name: String, hex: String): Int {
-        if (hex.length != 7 || hex[0] != '#' || hex.substring(1).toIntOrNull() == null) {
+        if (hex.length != 7 || hex[0] != '#' || hex.replace("#\b[A-Fa-f0-9]{6}\b".toRegex(), "") != "") {
             context.source.sendError(
                 red("Incorrect HEX color code format")
             )
