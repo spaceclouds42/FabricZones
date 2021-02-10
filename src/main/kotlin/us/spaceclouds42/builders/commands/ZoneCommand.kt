@@ -8,8 +8,12 @@ import net.minecraft.command.argument.ColorArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.HoverEvent
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
 import us.spaceclouds42.builders.data.ZoneManager
+import us.spaceclouds42.builders.data.spec.PosD
 import us.spaceclouds42.builders.data.spec.Zone
 import us.spaceclouds42.builders.data.spec.ZoneAccessMode
 import us.spaceclouds42.builders.ext.toPos
@@ -106,7 +110,8 @@ class ZoneCommand : ICommand {
                                                 ) }
                                         )
                                 )
-                        ).then(
+                        )
+                        .then(
                             CommandManager
                                 .literal("color")
                                 .then(
@@ -139,6 +144,23 @@ class ZoneCommand : ICommand {
                                             it,
                                             StringArgumentType.getString(it, "name"),
                                             StringArgumentType.getString(it, "hex")
+                                        ) }
+                                )
+                        )
+                        .then(
+                            CommandManager
+                                .literal("gotoPos")
+                                .executes { zoneEditGotoPos(
+                                    it,
+                                    StringArgumentType.getString(it, "name")
+                                ) }
+                                .then(
+                                    CommandManager
+                                        .literal("remove")
+                                        .executes { zoneEditGotoPos(
+                                            it,
+                                            StringArgumentType.getString(it, "name"),
+                                            true
                                         ) }
                                 )
                         )
@@ -204,7 +226,7 @@ class ZoneCommand : ICommand {
         dispatcher.root.addChild(zoneNode)
         // zone create <name> <start> <end>
         zoneNode.addChild(createNode)
-        // zone edit <name> (corners|access|color)
+        // zone edit <name> (corners|access|color|goto)
         zoneNode.addChild(editNode)
         // zone delete <name>
         zoneNode.addChild(deleteNode)
@@ -367,6 +389,57 @@ class ZoneCommand : ICommand {
     }
 
     /**
+     * Sets the goto position of a zone
+     *
+     * @param context command source
+     * @param name zone to be edited
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditGotoPos(context: Context, name: String, remove: Boolean = false): Int {
+        if (remove) {
+            ZoneManager.editZoneGotoPos(name, null)
+
+            context.source.sendFeedback(
+                red("Removed goto position for zone \"$name\""),
+                true
+            )
+
+            return 1
+        }
+
+        val player = context.source.player
+        val x = player.x
+        val y = player.y
+        val z = player.z
+
+        if (ZoneManager.getZone(name)?.playerInZone(player, x, y, z) == false) {
+            context.source.sendError(
+                red("You are not in the zone!")
+            )
+
+            return 0
+        }
+
+        ZoneManager.editZoneGotoPos(
+            name,
+            PosD(
+                player.world.registryKey.value.toString(),
+                x,
+                y,
+                z,
+            ),
+        )
+
+        context.source.sendFeedback(
+            green("Edited zone: \"$name\", now at ") +
+                yellow("${x.toInt()}, ${y.toInt()}, ${z.toInt()}"),
+            true
+        )
+
+        return 1
+    }
+
+    /**
      * Deletes an existing zone
      *
      * @param context command source
@@ -390,9 +463,34 @@ class ZoneCommand : ICommand {
      * @return 1 if successful teleport, 0 if not
      */
     private fun zoneGotoCommand(context: Context, name: String): Int {
-        // TODO: Implement
-        println("Going to \"$name\"")
-        return 0
+        val gotoZone = ZoneManager.getZone(name)
+
+        if (gotoZone?.gotoPos == null) {
+            context.source.sendError(
+                red("No goto position has been set for this zone")
+            )
+
+            return 0
+        }
+
+        val player = context.source.player
+        val gotoPos = gotoZone.gotoPos!!
+
+        player.teleport(
+            player.server.getWorld(RegistryKey.of(Registry.DIMENSION, Identifier.tryParse(gotoPos.world))),
+            gotoPos.x,
+            gotoPos.y,
+            gotoPos.z,
+            player.yaw,
+            player.pitch
+        )
+
+        context.source.sendFeedback(
+            green("Going to: ") + yellow(name),
+            false
+        )
+
+        return 1
     }
 
     /**

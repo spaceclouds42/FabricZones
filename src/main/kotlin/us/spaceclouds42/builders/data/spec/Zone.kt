@@ -5,9 +5,7 @@ import kotlinx.serialization.Transient
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket
 import net.minecraft.particle.DustParticleEffect
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.math.Vec3d
 import net.minecraft.util.math.Vec3f
-import net.minecraft.util.math.Vec3i
 import us.spaceclouds42.builders.ext.toRange
 import us.spaceclouds42.builders.utils.Axis
 import us.spaceclouds42.builders.utils.DoubleRange
@@ -29,12 +27,12 @@ data class Zone(
     /**
      * Start corner
      */
-    val startPos: Pos,
+    val startPos: PosI,
 
     /**
      * End corner
      */
-    val endPos: Pos,
+    val endPos: PosI,
 
     /**
      * Player that created the zone
@@ -48,7 +46,15 @@ data class Zone(
      */
     var accessMode: ZoneAccessMode = ZoneAccessMode.EVERYONE,
 
+    /**
+     * The color of the zone borders, uses rgb, defaults to red
+     */
     var color: Triple<Int, Int, Int> = Triple(255, 0, 0),
+
+    /**
+     * The position to teleport to when the player runs `/zone goto <name>`
+     */
+    var gotoPos: PosD? = null
 
     // Not to be implemented yet.. still very unsure of how I want this implemented
     //

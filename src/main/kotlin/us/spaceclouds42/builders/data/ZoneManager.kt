@@ -1,10 +1,7 @@
 package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.json.Json
-import us.spaceclouds42.builders.data.spec.IdentifiableDataSpecBase
-import us.spaceclouds42.builders.data.spec.Pos
-import us.spaceclouds42.builders.data.spec.Zone
-import us.spaceclouds42.builders.data.spec.ZoneAccessMode
+import us.spaceclouds42.builders.data.spec.*
 import java.io.File
 
 /**
@@ -64,7 +61,7 @@ object ZoneManager : ManagerBase() {
      * @param startPos the new start position of the boundary
      * @param endPos the new end position of the boundary
      */
-    fun editZonePos(name: String, startPos: Pos, endPos: Pos) {
+    fun editZonePos(name: String, startPos: PosI, endPos: PosI) {
         val old = cache[name] as Zone
 
         cache[name] = Zone(
@@ -74,6 +71,7 @@ object ZoneManager : ManagerBase() {
             createdBy = old.createdBy,
             accessMode = old.accessMode,
             color = old.color,
+            gotoPos = old.gotoPos,
         )
 
         saveData(name)
@@ -95,6 +93,7 @@ object ZoneManager : ManagerBase() {
             createdBy = old.createdBy,
             accessMode = mode,
             color = old.color,
+            gotoPos = old.gotoPos,
         )
 
         saveData(name)
@@ -117,7 +116,24 @@ object ZoneManager : ManagerBase() {
             endPos = old.endPos,
             createdBy = old.createdBy,
             accessMode = old.accessMode,
-            color = Triple(r, g, b)
+            color = Triple(r, g, b),
+            gotoPos = old.gotoPos,
+        )
+
+        saveData(name)
+    }
+
+    fun editZoneGotoPos(name: String, gotoPos: PosD?) {
+        val old = cache[name] as Zone
+
+        cache[name] = Zone(
+            id = name,
+            startPos = old.startPos,
+            endPos = old.endPos,
+            createdBy = old.createdBy,
+            accessMode = old.accessMode,
+            color = old.color,
+            gotoPos = gotoPos,
         )
 
         saveData(name)

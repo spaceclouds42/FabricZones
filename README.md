@@ -15,13 +15,12 @@ it is not anywhere near production ready yet, and will likely have major bugs or
     - ~~display zone edges for builders in build mode and in zone~~
     - ~~save corners~~
     - ~~detect player entering/leaving zone~~
-    - /zone goto \<name\>
+    - ~~/zone goto \<name\>~~
     - /zone pvp (true|false)
         - pvp and maybe other things? (damage, fire, tnt, mobs, etc): toggleable in zones
     - ~~/zone (delete|edit) \<name\>~~
 - /gamemode builder
     - abilities: fly, invincibility, not able to pvp, toggleable noclip
-    - block menu, maybe add some default build kits?
 - /builder (add|remove) \<name\>
     - gives `/gamemode builder` perms to player
 - log any changes to any zone to file *going to be a very future feature*

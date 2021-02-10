@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * position of zone corners
  */
 @Serializable
-data class Pos(
+data class PosI(
     /**
      * Dimension identifier as string. Ex: "minecraft:overworld"
      */
