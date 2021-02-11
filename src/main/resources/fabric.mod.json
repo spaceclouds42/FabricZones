@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "builders",
+  "id": "zones",
   "version": "${version}",
 
   "name": "Fabric Zones",
