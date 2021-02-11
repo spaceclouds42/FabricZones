@@ -17,14 +17,14 @@ import us.spaceclouds42.zones.utils.Dispatcher
  */
 object Common : ModInitializer {
     override fun onInitialize() {
-        LOGGER = Logger(LogManager.getLogger("FabricBuilders"), LogMode.MINIMAL)
+        LOGGER = Logger(LogManager.getLogger("Fabric Zones"), LogMode.MINIMAL)
         LOGGER.info("Initializing", LogMode.MINIMAL)
 
         LOGGER.info("Registering to SERVER_STARTING event", LogMode.WTF)
         ServerLifecycleEvents.SERVER_STARTING.register {
             SERVER = it
-            BuilderManager.initialize(it)
-            ZoneManager.initialize(it)
+            BuilderManager.register(it)
+            ZoneManager.register(it)
         }
 
         LOGGER.info("Registering to CommandRegistrationCallback.EVENT event", LogMode.WTF)

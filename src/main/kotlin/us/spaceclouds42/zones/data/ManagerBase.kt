@@ -8,6 +8,7 @@ import us.spaceclouds42.zones.LOGGER
 import us.spaceclouds42.zones.data.spec.IdentifiableDataSpecBase
 import us.spaceclouds42.zones.log.LogMode
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.reflect.KClass
 
@@ -79,9 +80,11 @@ abstract class ManagerBase {
     /**
      * Registers some actions to server start/stop events
      */
-    private fun register() {
-        ServerLifecycleEvents.SERVER_STARTING.register { server ->
-            initialize(server)
+    fun register(server: MinecraftServer) {
+        if (!registered) initialize(server)
+
+        ServerLifecycleEvents.SERVER_STARTING.register {
+            initialize(it)
         }
 
         ServerLifecycleEvents.SERVER_STOPPING.register {
@@ -98,22 +101,20 @@ abstract class ManagerBase {
      *
      * @param server the minecraft server object running the mod
      */
-    fun initialize(server: MinecraftServer) {
-        if (!registered) register()
-
+    private fun initialize(server: MinecraftServer) {
         // Prevent any lingering data from previous
         // server run from causing any duplicate
         // element issues.
         cache.clear()
 
         // Sets data directory to the correct
-        // folder within the FabricBuilders
+        // folder within the Fabric Zones
         // directory
         dataDir = server
             .getSavePath(WorldSavePath.ROOT)
-            .resolve("FabricBuilders")
+            .resolve("Fabric Zones")
             .resolve(dirName)
-        dataDir.toFile().mkdir()
+        Files.createDirectories(dataDir)
         LOGGER.info("${dataSpec.simpleName} data directory: $dataDir", LogMode.MINIMAL)
 
         // Loads up all data in the file system
