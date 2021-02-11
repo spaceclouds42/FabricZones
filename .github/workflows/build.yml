@@ -24,14 +24,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-  #  - name: capture build artifacts
-  #    uses: actions/download-artifact@v2
-  #    with:
-  #      name: latest
-  #      path: build/libs/
     - name: Upload build to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: build/libs
-        destination_dir: builds/latest
+        destination_dir: builds/1.17-snapshot
