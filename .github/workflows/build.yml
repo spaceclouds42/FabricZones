@@ -5,9 +5,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, 1.16.5 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, 1.16.5 ]
 
 jobs:
   build:
@@ -24,11 +24,6 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-  #  - name: capture build artifacts
-  #    uses: actions/download-artifact@v2
-  #    with:
-  #      name: latest
-  #      path: build/libs/
     - name: Upload build to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
