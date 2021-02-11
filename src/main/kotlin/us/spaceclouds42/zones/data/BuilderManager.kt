@@ -45,6 +45,12 @@ object BuilderManager : ManagerBase() {
         )
 
         saveData(uuid)
+
+        ZoneManager.getAllZones().values.forEach {
+            if (it.accessMode == ZoneAccessMode.CLOAKED) {
+                it.unHideZone(player)
+            }
+        }
     }
 
     /**
