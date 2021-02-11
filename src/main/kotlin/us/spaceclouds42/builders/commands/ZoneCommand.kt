@@ -2,6 +2,7 @@ package us.spaceclouds42.builders.commands
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
+import me.lucko.fabric.api.permissions.v0.Permissions
 import net.minecraft.command.argument.ArgumentTypes
 import net.minecraft.command.argument.BlockPosArgumentType
 import net.minecraft.command.argument.ColorArgumentType
@@ -28,7 +29,7 @@ class ZoneCommand : ICommand {
         val zoneNode: Node =
             CommandManager
                 .literal("zone")
-                .requires { it.player.hasPermissionLevel(2) }
+                .requires(Permissions.require("fabriczones.command.zone", 2))
                 .build()
 
         /**

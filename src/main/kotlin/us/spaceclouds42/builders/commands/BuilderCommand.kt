@@ -1,5 +1,6 @@
 package us.spaceclouds42.builders.commands
 
+import me.lucko.fabric.api.permissions.v0.Permissions
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.network.ServerPlayerEntity
@@ -14,7 +15,7 @@ class BuilderCommand : ICommand {
         val builderNode: Node =
             CommandManager
                 .literal("builder")
-                .requires { it.player.hasPermissionLevel(2) }
+                .requires(Permissions.require("fabriczones.command.builder", 2))
                 .build()
 
         /**

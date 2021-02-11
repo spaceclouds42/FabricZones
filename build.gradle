@@ -21,6 +21,7 @@ repositories {
     maven { url = "http://maven.fabricmc.net/" }
     maven { url = "https://dl.bintray.com/kotlin/kotlin-eap" }
     maven { url = "https://dl.bintray.com/kotlin/dokka" }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     mavenCentral()
 }
 
@@ -37,6 +38,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:${project.kx_ser_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // LuckPerms
+    modImplementation "me.lucko:fabric-permissions-api:0.1-SNAPSHOT"
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
