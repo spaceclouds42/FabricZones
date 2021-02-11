@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.spaceclouds42.builders.ConstantsKt;
+import us.spaceclouds42.builders.data.BuilderManager;
 import us.spaceclouds42.builders.data.ZoneManager;
 import us.spaceclouds42.builders.data.spec.Zone;
 import us.spaceclouds42.builders.data.spec.ZoneAccessMode;
@@ -65,7 +66,7 @@ abstract class ServerPlayNetworkHandlerMixin {
                 inZone = true;
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
-                if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE) {
+                if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE && !BuilderManager.INSTANCE.getOnlineBuilders().contains(player.getUuid())) {
                     playerZone.renderBorders(player);
                     ci.cancel();
                     if (playerZone.playerInZone(player, player.getX(), player.getY(), player.getZ())) {

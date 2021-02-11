@@ -1,6 +1,8 @@
 package us.spaceclouds42.builders.data
 
 import kotlinx.serialization.json.Json
+import net.minecraft.util.math.Vec3i
+import net.minecraft.world.chunk.WorldChunk
 import us.spaceclouds42.builders.SERVER
 import us.spaceclouds42.builders.data.spec.*
 import java.io.File
@@ -136,6 +138,11 @@ object ZoneManager : ManagerBase() {
         saveData(name)
     }
 
+    /**
+     * Changes the goto position of a zone
+     * @param name the zone to be edited
+     * @param gotoPos the new position
+     */
     fun editZoneGotoPos(name: String, gotoPos: PosD?) {
         val old = cache[name] as Zone
 
@@ -192,21 +199,38 @@ object ZoneManager : ManagerBase() {
     }
 
     /**
-     * Changes the access mode of a zone
-     *
-     * @param name the zone to be edited
-     * @param accessMode the new access mode
-     */
-    fun setAccessMode(name: String, accessMode: ZoneAccessMode) {
-        (cache[name] as Zone?)?.accessMode = accessMode
-    }
-
-    /**
      * Gets the access mode of a zone
      *
      * @param name the requested zone
      */
     fun getAccessMode(name: String): ZoneAccessMode? {
         return (cache[name] as Zone?)?.accessMode
+    }
+
+    /**
+     * Gets all the cloaked blocks within a chunk
+     *
+     * @param chunk the chunk to check
+     * @return list of vec3i containing x y z of cloaked blocks
+     */
+    fun getCloakedBlocks(chunk: WorldChunk): List<Vec3i> {
+        val cloakedPositions = mutableListOf<Vec3i>()
+
+        getAllZones().values.forEach { zone ->
+            if (zone.accessMode == ZoneAccessMode.CLOAKED) {
+                zone.getCloakedBlocks().forEach { block ->
+                    val xMin = chunk.pos.x * 16
+                    val zMin = chunk.pos.z * 16
+                    val xMax = xMin + 15
+                    val zMax = zMin + 15
+
+                    if (block.x in xMin..xMax && block.z in zMin..zMax) {
+                        cloakedPositions.add(block)
+                    }
+                }
+            }
+        }
+
+        return cloakedPositions
     }
 }

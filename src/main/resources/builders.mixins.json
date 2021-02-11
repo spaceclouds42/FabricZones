@@ -3,9 +3,13 @@
   "package": "us.spaceclouds42.builders.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ChunkSectionAccessor",
+    "PalettedContainerAccessor",
     "PlayerMoveC2SPacketAccessor",
     "ServerPlayerEntityMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "ThreadedAnvilChunkStorageMixin",
+    "WorldChunkAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

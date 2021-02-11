@@ -2,6 +2,7 @@ package us.spaceclouds42.builders.data.spec
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import net.fabricmc.loader.util.sat4j.core.Vec
 import net.minecraft.block.Blocks
 import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket
@@ -134,24 +135,6 @@ data class Zone(
     }
 
     /**
-     * Detects players being in this zone
-     *
-     * @param world dimension of the block
-     * @return true if block in zone, false if not
-     */
-    fun blockInZone(world: World, x: Int, y: Int, z: Int): Boolean {
-        if (startPos.world != world.registryKey.value.toString()) return false
-
-        if (
-            min(startPos.x, endPos.x) <= x && x <= (max(startPos.x, endPos.x)) &&
-            min(startPos.y, endPos.y) <= y && y <= (max(startPos.y, endPos.y)) &&
-            min(startPos.z, endPos.z) <= z && z <= (max(startPos.z, endPos.z))
-        ) return true
-
-        return false
-    }
-
-    /**
      * Displays particles along the edges of the zone border
      * 
      * @param player the player the receives the particle packets
@@ -231,22 +214,14 @@ data class Zone(
     fun hideZone(player: ServerPlayerEntity) {
         if (startPos.world != player.world.registryKey.value.toString()) return
 
-        for (y in min(startPos.y, endPos.y)..max(startPos.y, endPos.y)) {
-            for (x in min(startPos.x, endPos.x)..max(startPos.x, endPos.x)) {
-                for (z in min(startPos.z, endPos.z)..max(startPos.z, endPos.z)) {
-                    if (player.world.getBlockState(BlockPos(Vec3i(x, y, z))) != Blocks.AIR.defaultState) {
-                        player.networkHandler.sendPacket(
-                            BlockUpdateS2CPacket(
-                                BlockPos(Vec3i(x, y, z)),
-                                Blocks.AIR.defaultState
-                            )
-                        )
-                    }
-                }
-            }
+        for (xyz in getCloakedBlocks()) {
+            player.networkHandler.sendPacket(
+                BlockUpdateS2CPacket(
+                    BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
+                    Blocks.AIR.defaultState
+                )
+            )
         }
-
-        // TODO: mark it somehow so that when a player reloads the chunks, they see air
     }
 
     /**
@@ -257,21 +232,35 @@ data class Zone(
     fun unHideZone(player: ServerPlayerEntity) {
         if (startPos.world != player.world.registryKey.value.toString()) return
 
+        for (xyz in getCloakedBlocks()) {
+            player.networkHandler.sendPacket(
+                BlockUpdateS2CPacket(
+                    BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
+                    player.world.getBlockState(BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)))
+                )
+            )
+        }
+    }
+
+    /**
+     * Finds all the non air blocks in a zone
+     *
+     * @return a list of the block positions of all the non air blocks
+     */
+    fun getCloakedBlocks(): List<Vec3i> {
+        val blocks = mutableListOf<Vec3i>()
+        val world = SERVER.getWorld(RegistryKey.of(Registry.DIMENSION, Identifier.tryParse(startPos.world)))!!
+
         for (y in min(startPos.y, endPos.y)..max(startPos.y, endPos.y)) {
             for (x in min(startPos.x, endPos.x)..max(startPos.x, endPos.x)) {
                 for (z in min(startPos.z, endPos.z)..max(startPos.z, endPos.z)) {
-                    if (player.world.getBlockState(BlockPos(Vec3i(x, y, z))) != Blocks.AIR.defaultState) {
-                        player.networkHandler.sendPacket(
-                            BlockUpdateS2CPacket(
-                                BlockPos(Vec3i(x, y, z)),
-                                player.world.getBlockState(BlockPos(Vec3i(x, y, z)))
-                            )
-                        )
+                    if (world.getBlockState(BlockPos(Vec3i(x, y, z))) != Blocks.AIR.defaultState) {
+                        blocks.add(Vec3i(x, y, z))
                     }
                 }
             }
         }
 
-        // TODO: mark it somehow so that when a player reloads the chunks, they no longer see air
+        return blocks;
     }
 }

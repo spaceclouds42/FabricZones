@@ -28,6 +28,7 @@ class ZoneCommand : ICommand {
         val zoneNode: Node =
             CommandManager
                 .literal("zone")
+                .requires { it.player.hasPermissionLevel(2) }
                 .build()
 
         /**

@@ -17,7 +17,7 @@ import us.spaceclouds42.builders.utils.Dispatcher
  */
 object Common : ModInitializer {
     override fun onInitialize() {
-        LOGGER = Logger(LogManager.getLogger("FabricBuilders"), LogMode.WTF)
+        LOGGER = Logger(LogManager.getLogger("FabricBuilders"), LogMode.MINIMAL)
         LOGGER.info("Initializing", LogMode.MINIMAL)
 
         LOGGER.info("Registering to SERVER_STARTING event", LogMode.WTF)
