@@ -96,7 +96,7 @@ class BuilderCommand : ICommand {
      * @return success = 1, fail = 0
      */
     private fun removePlayer(context: Context, player: ServerPlayerEntity): Int {
-        BuilderManager.removePlayer(player.uuid)
+        BuilderManager.removePlayer(player)
 
         context.source.sendFeedback(
             red("Removed ") +

@@ -2,8 +2,10 @@ package us.spaceclouds42.zones.data
 
 import kotlinx.serialization.json.Json
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.network.ServerRecipeBook
 import us.spaceclouds42.zones.data.spec.Builder
 import us.spaceclouds42.zones.data.spec.IdentifiableDataSpecBase
+import us.spaceclouds42.zones.data.spec.ZoneAccessMode
 import java.io.File
 import java.util.*
 
@@ -50,8 +52,14 @@ object BuilderManager : ManagerBase() {
      *
      * @param uuid the player's uuid
      */
-    fun removePlayer(uuid: UUID) {
-        deleteData(uuid.toString())
+    fun removePlayer(player: ServerPlayerEntity) {
+        deleteData(player.uuid.toString())
+
+        ZoneManager.getAllZones().values.forEach {
+            if (it.accessMode == ZoneAccessMode.CLOAKED) {
+                it.hideZone(player)
+            }
+        }
     }
 
     /**

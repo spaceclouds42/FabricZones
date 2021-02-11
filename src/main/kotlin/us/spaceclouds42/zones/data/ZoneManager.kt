@@ -101,13 +101,17 @@ object ZoneManager : ManagerBase() {
 
         if (mode == ZoneAccessMode.CLOAKED) {
             SERVER.playerManager.playerList.forEach {
-                (cache[name] as Zone).hideZone(it)
+                if (it.uuid !in BuilderManager.getOnlineBuilders()) {
+                    (cache[name] as Zone).hideZone(it)
+                }
             }
         }
 
         if (mode != ZoneAccessMode.CLOAKED && old.accessMode == ZoneAccessMode.CLOAKED) {
             SERVER.playerManager.playerList.forEach {
-                (cache[name] as Zone).unHideZone(it)
+                if (it.uuid !in BuilderManager.getOnlineBuilders()) {
+                    (cache[name] as Zone).hideZone(it)
+                }
             }
         }
 
