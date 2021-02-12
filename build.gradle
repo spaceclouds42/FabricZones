@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.0'
     id "org.jetbrains.kotlin.jvm" version "1.4.30-RC"
     id "org.jetbrains.dokka" version "1.4.20"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -12,6 +13,14 @@ targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = project.archives_base_name
 version = "${project.mod_version}-${project.minecraft_version}"
 group = project.maven_group
+
+configurations {
+    shade
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+}
 
 minecraft {
 }
@@ -41,6 +50,9 @@ dependencies {
 
     // LuckPerms
     modImplementation "me.lucko:fabric-permissions-api:0.1-SNAPSHOT"
+
+    // JIJ'd deps
+    shade "org.jetbrains.kotlinx:kotlinx-serialization-core:${project.kx_ser_version}"
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
@@ -76,6 +88,26 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
     from "LICENSE"
+}
+
+remapJar {
+    dependsOn "shadowJar"
+
+    input.set shadowJar.archiveFile.get()
+}
+
+shadowJar {
+    relocate "kotlin", "us.spaceclouds42.zones.shaded.kotlin"
+
+    relocate "kotlinx.coroutines", "us.spaceclouds42.zones.shaded.kotlinx.coroutines"
+    relocate "kotlinx.serialization", "us.spaceclouds42.zones.shaded.kotlinx.serialization"
+
+    relocate "org.intellij", "us.spaceclouds42.zones.shaded.org.intellij"
+    relocate "org.jetbrains", "us.spaceclouds42.zones.shaded.org.jetbrains"
+
+    minimize {
+        exclude(dependency("org.jetbrains.kotlinx:.*"))
+    }
 }
 
 // configure the maven publication
