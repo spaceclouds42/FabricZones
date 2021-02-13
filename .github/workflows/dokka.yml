@@ -28,5 +28,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/dokka/html/-fabric-zones
-          destination_dir: dokka/html/-fabric-zones
+          publish_dir: build/dokka/
+          destination_dir: dokka/
