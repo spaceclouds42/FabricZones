@@ -58,6 +58,23 @@ object ZoneManager : ManagerBase() {
     }
 
     /**
+     * Gets a list of all the restricted zones
+     *
+     * @return list of [cloaked][ZoneAccessMode.CLOAKED] and [builder][ZoneAccessMode.BUILDERS] zones
+     */
+    fun getRestrictedZones(): List<Zone> {
+        val restricted = mutableListOf<Zone>()
+
+        (cache.values as MutableCollection<Zone>).forEach {
+            if (it.accessMode != ZoneAccessMode.EVERYONE) {
+                restricted.add(it)
+            }
+        }
+
+        return restricted
+    }
+
+    /**
      * Changes the boundary corners of a zone
      *
      * @param name the zone to be edited
@@ -110,7 +127,7 @@ object ZoneManager : ManagerBase() {
         if (mode != ZoneAccessMode.CLOAKED && old.accessMode == ZoneAccessMode.CLOAKED) {
             SERVER.playerManager.playerList.forEach {
                 if (it.uuid !in BuilderManager.getOnlineBuilders()) {
-                    (cache[name] as Zone).hideZone(it)
+                    (cache[name] as Zone).unHideZone(it)
                 }
             }
         }
