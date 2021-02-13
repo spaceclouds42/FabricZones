@@ -411,7 +411,7 @@ class ZoneCommand : ICommand {
         val y = player.y
         val z = player.z
 
-        if (ZoneManager.getZone(name)?.playerInZone(player, x, y, z) == false) {
+        if (ZoneManager.getZone(name)?.positionInZone(player.world, x, y, z) == false) {
             context.source.sendError(
                 red("You are not in the zone!")
             )

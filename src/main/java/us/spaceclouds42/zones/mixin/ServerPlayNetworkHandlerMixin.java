@@ -1,6 +1,7 @@
 package us.spaceclouds42.zones.mixin;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +19,9 @@ import us.spaceclouds42.zones.log.LogMode;
 
 import java.util.Collection;
 
+/**
+ * Detects players in zones. Renders borders and kicks them out if not allowed.
+ */
 @Mixin(ServerPlayNetworkHandler.class)
 abstract class ServerPlayNetworkHandlerMixin {
     /**
@@ -62,14 +66,14 @@ abstract class ServerPlayNetworkHandlerMixin {
 
         for (Zone zone : zones) {
             ConstantsKt.LOGGER.info("Checking if " + player.getEntityName() + " is in " + zone.getId(), LogMode.WTF);
-            if (zone.playerInZone(player, packetAccessor.getX(), packetAccessor.getY(), packetAccessor.getZ())) {
+            if (zone.positionInZone(player.world, packetAccessor.getX(), packetAccessor.getY(), packetAccessor.getZ())) {
                 inZone = true;
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
                 if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE && !BuilderManager.INSTANCE.getOnlineBuilders().contains(player.getUuid())) {
                     playerZone.renderBorders(player);
                     ci.cancel();
-                    if (playerZone.playerInZone(player, player.getX(), player.getY(), player.getZ())) {
+                    if (playerZone.positionInZone(player.world, player.getX(), player.getY(), player.getZ())) {
                         playerZone.removePlayer(player);
                     } else {
                         player.requestTeleport(player.getX(), player.getY(), player.getZ());

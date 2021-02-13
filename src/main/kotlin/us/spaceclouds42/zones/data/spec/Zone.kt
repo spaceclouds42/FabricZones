@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3f
 import net.minecraft.util.math.Vec3i
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
+import net.minecraft.world.World
 import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.ext.toRange
 import us.spaceclouds42.zones.utils.Axis
@@ -119,8 +120,8 @@ data class Zone(
      * @param player the player it checks to be in the zone
      * @return true if player in zone, false if not
      */
-    fun playerInZone(player: ServerPlayerEntity, x: Double, y: Double, z: Double): Boolean {
-        if (startPos.world != player.world.registryKey.value.toString()) return false
+    fun positionInZone(world: World, x: Double, y: Double, z: Double): Boolean {
+        if (startPos.world != world.registryKey.value.toString()) return false
 
         if (
             min(startPos.x, endPos.x) <= x && x <= (max(startPos.x, endPos.x) + 1.0) &&
