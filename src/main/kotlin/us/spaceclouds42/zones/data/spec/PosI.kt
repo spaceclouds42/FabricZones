@@ -3,8 +3,8 @@ package us.spaceclouds42.zones.data.spec
 import kotlinx.serialization.Serializable
 
 /**
- * PositionBase type, used to store
- * position of zone corners
+ * Position Integer type, used to store
+ * dimension specific positions with integers
  */
 @Serializable
 data class PosI(
