@@ -1,10 +1,15 @@
 package us.spaceclouds42.zones.data
 
 import kotlinx.serialization.json.Json
+import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3i
+import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.chunk.WorldChunk
+import us.spaceclouds42.zones.LOGGER
 import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.data.spec.*
+import us.spaceclouds42.zones.log.LogMode
 import java.io.File
 
 /**
@@ -46,6 +51,29 @@ object ZoneManager : ManagerBase() {
      */
     fun getZone(name: String): Zone? {
         return cache[name] as Zone?
+    }
+
+    /**
+     * Request to get a zone object based on position
+     *
+     * @param pos position to find zone
+     * @return the zone that contains that position, or null if no zone does
+     */
+    fun getZone(pos: PosD): Zone? {
+        val world = SERVER.getWorld(RegistryKey.of(Registry.DIMENSION, Identifier.tryParse(pos.world)))
+
+        if (world == null) {
+            LOGGER.error("getZone in ZoneManager received invalid world when parsing ${pos.world}\nPlease report this error if you ever see this message", LogMode.MINIMAL)
+            return null
+        }
+
+        for (zone in cache.values) {
+            if ((zone as Zone).positionInZone(world, pos.x, pos.y, pos.z)) {
+                return zone
+            }
+        }
+
+        return null
     }
 
     /**
