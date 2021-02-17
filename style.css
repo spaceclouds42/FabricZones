@@ -1,0 +1,137 @@
+::-moz-selection{background:#9a9cab}::selection{background:#9a9cab} /* change text selection color. when blended with dark bg it's the recommended #44475a. */
+html,input,select,textarea{background-color:#282a36;color:#f8f8f2} /* give common elements a bright foreground and a dark background */
+a:link{color:#8be9fd}a:visited{color:#8be9fd}a:hover{color:#bd93f9}a:active{color:#bd93f9} /* add colors to link styling: blue for unvisited, red for active, purple for visited */
+button{background-color:#6272a4}hr{border-top:1px solid #f8f8f2;border-bottom:1px solid #44475a}mark{background-color:#44475a;color:#f8f8f2} /* style uncommon elements */
+.dark{color:#282a36}.dark-bg{background-color:#282a36}.med{color:#44475a}.med-bg{background-color:#44475a}.light{color:#6272a4}.light-bg{background-color:#6272a4}
+.bright{color:#f8f8f2}.bright-bg{background-color:#f8f8f2}.cyan{color:#8be9fd}.cyan-bg{background-color:#8be9fd}.green{color:#50fa7b}.green-bg{background-color:#50fa7b}
+.orange{color:#ffb86c}.orange-bg{background-color:#ffb86c}.pink{color:#ff79c6}.pink-bg{background-color:#ff79c6}.purple{color:#bd93f9}.purple-bg{background-color:#bd93f9}
+.red{color:#f55}.red-bg{background-color:#f55}.yellow{color:#f1fa8c}.yellow-bg{background-color:#f1fa8c} /* fg & bg classes. usage: <div class="bright purple-bg" /> */
+
+/* The above styles are from redbrain's Dracula theme, with a few minor changes to link colors */
+
+/***************************************\
+|---DRACULA WEB - DARK THEME WITH CSS---|
+|  Automatic styles for most elements.  |
+| Background and foreground classes for |
+|  dark, med, light, bright, & colors.  |
+|   Made with <3 by redbrain in 2020.   |
+\***************************************/
+
+/* Below is its license */
+
+/**********************************************************************************\
+|  The MIT License (MIT)                                                           |
+|                                                                                  |
+|  Copyright (c) 2020 Dracula Theme                                                |
+|                                                                                  |
+|  Permission is hereby granted, free of charge, to any person obtaining a copy    |
+|  of this software and associated documentation files (the "Software"), to deal   |
+|  in the Software without restriction, including without limitation the rights    |
+|  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       |
+|  copies of the Software, and to permit persons to whom the Software is           |
+|  furnished to do so, subject to the following conditions:                        |
+|                                                                                  |
+|  The above copyright notice and this permission notice shall be included in all  |
+|  copies or substantial portions of the Software.                                 |
+|                                                                                  |
+|  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      |
+|  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        |
+|  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     |
+|  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          |
+|  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   |
+|  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   |
+|  SOFTWARE.                                                                       |
+\**********************************************************************************/
+
+/* Below are my own styles */
+
+/* font */
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* scrollbars */
+* {
+    scrollbar-color: #34384d #282a36;
+    scrollbar-width: thin;
+}
+
+body::-webkit-scrollbar {
+  width: .5em;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #34384d;
+}
+
+/* links */
+a {
+    text-decoration: none;
+}
+
+/* Header */
+.header {
+    padding: 1em;
+    position: sticky;
+    top: 0;
+    background: #282a36;
+}
+
+#menu-bar {
+    max-width: calc(800px - (30px * 2));
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 30px;
+    padding-left: 30px;
+    min-height: 64px;
+    position: relative;
+}
+
+#options {
+    float: right;
+    position: absolute;
+    top: 15%;
+    right: 2.5%;
+}
+
+.menu-bar-option {
+    text-align: center;
+    float: left;
+    padding-right: 10px;
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+#logo {
+    float: left;
+    list-style-type: none;
+}
+
+#logo a {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 54px;
+    letter-spacing: -1px;
+    margin-bottom: 0;
+    float: left;
+}
+
+#logo a img {
+    vertical-align: middle;
+}
+
+/* Footer */
+footer {
+    max-width: calc(800px - (30px * 2));
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 30px;
+    padding-left: 30px;
+    min-height: 24px;
+    position: relative;
+    font-size: 12px;
+}
