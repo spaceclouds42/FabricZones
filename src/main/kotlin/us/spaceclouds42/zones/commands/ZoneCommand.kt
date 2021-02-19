@@ -136,6 +136,8 @@ class ZoneCommand : ICommand {
                                         .argument("hex", StringArgumentType.word())
                                         .suggests { _, builder ->
                                             builder.suggest("rainbow")
+                                            builder.suggest("00ff00")
+                                            builder.suggest("0 255 0")
 
                                             builder.buildFuture()
                                         }
