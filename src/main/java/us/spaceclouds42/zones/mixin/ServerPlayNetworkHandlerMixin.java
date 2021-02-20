@@ -46,6 +46,11 @@ abstract class ServerPlayNetworkHandlerMixin {
     @Unique private int lastRenderTick = 0;
 
     /**
+     * Prevent TOCTOU
+     */
+    @Unique private boolean detecting = false;
+
+    /**
      * Checks if a player has moved into a zone, and prevents players from doing so if they do not have access
      *
      * @param packet the player's movement packet
@@ -59,7 +64,13 @@ abstract class ServerPlayNetworkHandlerMixin {
             cancellable = true
     )
     private void detectPlayerInZone(PlayerMoveC2SPacket packet, CallbackInfo ci) {
-        if (packet instanceof PlayerMoveC2SPacket.LookOnly) { return; }
+        if (detecting) { return; }
+        detecting = true;
+
+        if (packet instanceof PlayerMoveC2SPacket.LookOnly) {
+            detecting = false;
+            return;
+        }
 
         Collection<Zone> zones = ZoneManager.INSTANCE.getAllZones().values();
         PlayerMoveC2SPacketAccessor packetAccessor = (PlayerMoveC2SPacketAccessor) packet;
@@ -70,13 +81,22 @@ abstract class ServerPlayNetworkHandlerMixin {
                 inZone = true;
                 playerZone = zone;
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
+                ConstantsKt.LOGGER.warn("Value of playerZone.id: " + playerZone.getId(), LogMode.WTF);
+                ConstantsKt.LOGGER.warn("Value of playerZone.accessMode: " + playerZone.getAccessMode(), LogMode.WTF);
+                ConstantsKt.LOGGER.warn("Value of getOnlineBuilders(): " + BuilderManager.INSTANCE.getOnlineBuilders().toString(), LogMode.WTF);
+                ConstantsKt.LOGGER.warn("Value of player: " + player, LogMode.WTF);
+                ConstantsKt.LOGGER.warn("Value of player.uuid: " + player.getUuid(), LogMode.WTF);
                 if (playerZone.getAccessMode() != ZoneAccessMode.EVERYONE && !BuilderManager.INSTANCE.getOnlineBuilders().contains(player.getUuid())) {
+                    ConstantsKt.LOGGER.warn(zone.getId() + " is restricted and " + player.getEntityName() + " is not a builder", LogMode.WTF);
                     playerZone.renderBorders(player);
                     ci.cancel();
+                    ConstantsKt.LOGGER.warn("Player move cancelled", LogMode.WTF);
                     if (playerZone.positionInZone(player.world, player.getX(), player.getY(), player.getZ())) {
                         playerZone.removePlayer(player);
+                        ConstantsKt.LOGGER.warn("Player has been removed", LogMode.WTF);
                     } else {
                         player.requestTeleport(player.getX(), player.getY(), player.getZ());
+                        ConstantsKt.LOGGER.warn("Player was set back", LogMode.WTF);
                     }
                     inZone = false;
                     playerZone = null;
@@ -87,6 +107,8 @@ abstract class ServerPlayNetworkHandlerMixin {
                 playerZone = null;
             }
         }
+
+        detecting = false;
     }
 
     /**
