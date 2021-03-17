@@ -1,6 +1,11 @@
 package us.spaceclouds42.zones.data.spec
 
 import kotlinx.serialization.Serializable
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.world.GameMode
+import us.spaceclouds42.zones.LOGGER
+import us.spaceclouds42.zones.log.LogMode
+import us.spaceclouds42.zones.access.BuilderAccessor
 
 /**
  * Contains configurable properties of builders
@@ -13,7 +18,14 @@ data class Builder(
     /**
      * Builder's name
      */
-    val name: String,
+    val name: String = "null",
+
+    /**
+     * Whether or not the builder will
+     * be in builder mode when they enter
+     * a builder enabled zone
+     */
+    var builderModeEnabled: Boolean = true,
 
     /**
      * If enabled, the builder will not
@@ -28,21 +40,40 @@ data class Builder(
      */
     var areZoneBordersVisible: Boolean = true,
 ) : IdentifiableDataSpecBase() {
+
     /**
-     * Set's the player's active inventory to their saved inventory, and
-     * saves the previously active inventory. The inventory is saved with
-     * the "BuilderInventory" tag on the player's data. For an extra
-     * measure of "security," there is a boolean "builderInven" which
-     * marks the saved inventory as either the inventory saved from builder
-     * mode (true) or the inventory saved from normal play (false).
      *
-     * @param inBuilderMode if this boolean matches the "builderInven"
-     * boolean of the saved inventory, then it will successfully swap
-     * inventories, otherwise it will cancel
-     * @return Whether or not the inventory was successfully swapped
      */
-    fun swapInventories(inBuilderMode: Boolean): Boolean {
-        // TODO: Implement this
-        return false
+    fun activateBuilderMode(player: ServerPlayerEntity) {
+        val builderPlayer = player as BuilderAccessor
+
+        if (builderPlayer.isInBuilderMode) {
+            LOGGER.info("Tried to activate builder mode but ${player.entityName} is already in builder mode.", LogMode.DEBUG)
+            return
+        }
+
+        builderPlayer.swapInventories()
+        player.abilities.allowFlying = true
+        player.abilities.creativeMode = true
+        player.abilities.invulnerable = true
+        player.changeGameMode(GameMode.CREATIVE)
+    }
+
+    /**
+     *
+     */
+    fun deactivateBuilderMode(player: ServerPlayerEntity) {
+        val builderPlayer = player as BuilderAccessor
+
+        if (!builderPlayer.isInBuilderMode) {
+            LOGGER.info("Tried to deactivate builder mode but ${player.entityName} is not in builder mode.", LogMode.DEBUG)
+            return
+        }
+
+        builderPlayer.swapInventories()
+        player.abilities.allowFlying = false
+        player.abilities.creativeMode = false
+        player.abilities.invulnerable = false
+        player.changeGameMode(GameMode.DEFAULT)
     }
 }

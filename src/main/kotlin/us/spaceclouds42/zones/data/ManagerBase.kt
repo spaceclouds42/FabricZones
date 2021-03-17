@@ -138,7 +138,7 @@ abstract class ManagerBase {
         // add it to cache.
         if (cache.keys.contains(id)) {
             LOGGER.warn("Requested data '$id' of type '${dataSpec.simpleName!!}' is already in memory!", LogMode.DEBUG)
-            return null
+            return cache[id]
         }
 
         val dataFile = dataDir.resolve("$id.$fileExtension").toFile()
@@ -155,7 +155,7 @@ abstract class ManagerBase {
                 null
             }
         } else {
-            LOGGER.warn("No file found at '$id.$fileExtension', creating new file", LogMode.WTF)
+            LOGGER.warn("No file found at '$id.$fileExtension', creating new file", LogMode.DEBUG)
 
             // Here's some cursed reflection code
             // to create an empty object of the

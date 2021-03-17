@@ -1,7 +1,6 @@
 package us.spaceclouds42.zones.mixin;
 
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.spaceclouds42.zones.ConstantsKt;
 import us.spaceclouds42.zones.data.BuilderManager;
 import us.spaceclouds42.zones.data.ZoneManager;
+import us.spaceclouds42.zones.data.spec.Builder;
 import us.spaceclouds42.zones.data.spec.Zone;
 import us.spaceclouds42.zones.data.spec.ZoneAccessMode;
 import us.spaceclouds42.zones.log.LogMode;
@@ -33,7 +33,13 @@ abstract class ServerPlayNetworkHandlerMixin {
      * Whether or not the player is currently in a zone. If so,
      * the zone borders are rendered
      */
-    @Unique private Boolean inZone = false;
+    @Unique private boolean inZone = false;
+
+    /**
+     * Whether or not the player was last in a zone. If so,
+     * the zone borders are rendered
+     */
+    @Unique private boolean wasInZone = false;
 
     /**
      * The zone that the player is currently in, if they are in a zone
@@ -72,6 +78,8 @@ abstract class ServerPlayNetworkHandlerMixin {
             return;
         }
 
+        wasInZone = inZone;
+
         Collection<Zone> zones = ZoneManager.INSTANCE.getAllZones().values();
         PlayerMoveC2SPacketAccessor packetAccessor = (PlayerMoveC2SPacketAccessor) packet;
 
@@ -80,6 +88,8 @@ abstract class ServerPlayNetworkHandlerMixin {
             if (zone.positionInZone(player.world, packetAccessor.getX(), packetAccessor.getY(), packetAccessor.getZ())) {
                 inZone = true;
                 playerZone = zone;
+                ConstantsKt.LOGGER.info("wasInZone is " + wasInZone, LogMode.WTF);
+                ConstantsKt.LOGGER.info("inZone is " + inZone, LogMode.WTF);
                 ConstantsKt.LOGGER.info("Player in zone '" + zone.getId() + "'", LogMode.WTF);
                 ConstantsKt.LOGGER.warn("Value of playerZone.id: " + playerZone.getId(), LogMode.WTF);
                 ConstantsKt.LOGGER.warn("Value of playerZone.accessMode: " + playerZone.getAccessMode(), LogMode.WTF);
@@ -105,6 +115,15 @@ abstract class ServerPlayNetworkHandlerMixin {
             } else {
                 inZone = false;
                 playerZone = null;
+            }
+        }
+
+        if (BuilderManager.INSTANCE.isBuilder(player.getUuid())) {
+            Builder builder = BuilderManager.INSTANCE.getBuilder(player.getUuid());
+            if (wasInZone && !inZone) {
+                builder.deactivateBuilderMode(player);
+            } else if (!wasInZone && inZone && builder.getBuilderModeEnabled()) {
+                builder.activateBuilderMode(player);
             }
         }
 
