@@ -19,9 +19,8 @@ import us.spaceclouds42.zones.access.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
 
 /**
- * Manages inventory swapping
- *
- * Prevents builders from dropping items from builder mode
+ *  - Manages inventory swapping
+ *  - Prevents builders from dropping items from builder mode
  */
 @Mixin(ServerPlayerEntity.class)
 abstract class ServerPlayerEntityMixin implements BuilderAccessor {
@@ -29,32 +28,6 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     @Unique private final PlayerInventory inventory = thisPlayer.getInventory();
     @Unique private final PlayerInventory secondaryInventory = new PlayerInventory(thisPlayer);
     @Unique private boolean isInBuilderMode = false;
-
-    /**
-     * This method isn't used anywhere yet because I can't seem
-     * to find a place at which I can call it without either
-     * causing an infinite loop crash or a null pointer crash.
-     *
-     * The toTag() method is the source of the crash. If used in
-     * the mixin to writeCustomDataToTag(), infinite loop occurs
-     * because toTag() calls writeCustomDataToTag(). If used too
-     * early, a null pointer exception occurs due to the
-     * ServerPlayerEntity not being fully initialized.
-     *
-     * And yes, this is in fact a cry for help.
-     */
-    @Unique
-    private PlayerInventory deserializeSecondaryInventory() {
-        CompoundTag playerTag = thisPlayer.toTag(new CompoundTag());
-        PlayerInventory secondaryInventory = new PlayerInventory(thisPlayer);
-
-        if (playerTag.contains("SecondaryInventory")) {
-            ListTag secondaryInvTag = playerTag.getList("SecondaryInventory", NbtType.COMPOUND);
-            secondaryInventory.deserialize(secondaryInvTag);
-        }
-
-        return secondaryInventory;
-    }
 
     @Override
     public PlayerInventory getSecondaryInventory() {
@@ -109,6 +82,16 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
         tag.put("InBuilderMode", inBuilderModeTag);
 
         tag.put("SecondaryInventory", this.secondaryInventory.serialize(new ListTag()));
+    }
+
+    @Inject(
+            method = "copyFrom",
+            at = @At(
+                    value = "TAIL"
+            )
+    )
+    private void copySecondaryInventory(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        this.secondaryInventory.clone(((BuilderAccessor) oldPlayer).getSecondaryInventory());
     }
 
     @Inject(
