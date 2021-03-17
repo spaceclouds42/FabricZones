@@ -2,6 +2,7 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 
 us.spaceclouds42.zones
+us.spaceclouds42.zones.access
 us.spaceclouds42.zones.commands
 us.spaceclouds42.zones.data
 us.spaceclouds42.zones.data.spec
