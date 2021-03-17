@@ -66,7 +66,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
 
     @Override
     public boolean isInBuilderMode() {
-        return isInBuilderMode;
+        return this.isInBuilderMode;
     }
 
     @Override
@@ -81,7 +81,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
         this.secondaryInventory.clone(this.inventory);
         this.inventory.clone(tempInventory);
 
-        isInBuilderMode = !isInBuilderMode;
+        this.isInBuilderMode = !this.isInBuilderMode;
     }
 
     @Inject(
@@ -122,7 +122,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
             cancellable = true
     )
     private void preventDropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir) {
-        if (isInBuilderMode) {
+        if (this.isInBuilderMode) {
             cir.setReturnValue(null);
         }
     }
