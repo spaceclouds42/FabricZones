@@ -81,19 +81,4 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
 
         tag.put("SecondaryInventory", this.secondaryInventory.serialize(new ListTag()));
     }
-
-    @Redirect(
-            method = "onDeath",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/server/network/ServerPlayerEntity;drop(Lnet/minecraft/entity/damage/DamageSource;)V"
-            )
-    )
-    private void preventDropBuilderInventory(ServerPlayerEntity player, DamageSource source) {
-        if (!((BuilderAccessor) player).isInBuilderMode()) {
-            ((LivingEntityAccessor) player).drop(source);
-        } else {
-            swapInventories();
-        }
-    }
 }
