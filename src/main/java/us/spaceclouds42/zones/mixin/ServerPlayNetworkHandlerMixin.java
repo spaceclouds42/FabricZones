@@ -1,23 +1,15 @@
 package us.spaceclouds42.zones.mixin;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.NetworkThreadUtils;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.spaceclouds42.zones.ConstantsKt;
-import us.spaceclouds42.zones.access.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
 import us.spaceclouds42.zones.data.ZoneManager;
 import us.spaceclouds42.zones.data.spec.Builder;
@@ -153,51 +145,6 @@ abstract class ServerPlayNetworkHandlerMixin {
         if (inZone && lastRenderTick++ > 4) {
             playerZone.renderBorders(player);
             lastRenderTick = 0;
-        }
-    }
-
-    /**
-     * @author FabricZones
-     * @reason prevents builders from dropping items
-     */
-    @Overwrite
-    public void onPlayerAction(PlayerActionC2SPacket packet) {
-        NetworkThreadUtils.forceMainThread(packet, ((ServerPlayNetworkHandler) (Object) this), this.player.getServerWorld());
-        BlockPos blockPos = packet.getPos();
-        this.player.updateLastActionTime();
-        PlayerActionC2SPacket.Action action = packet.getAction();
-        switch(action) {
-            case SWAP_ITEM_WITH_OFFHAND:
-                if (!this.player.isSpectator()) {
-                    ItemStack itemStack = this.player.getStackInHand(Hand.OFF_HAND);
-                    this.player.setStackInHand(Hand.OFF_HAND, this.player.getStackInHand(Hand.MAIN_HAND));
-                    this.player.setStackInHand(Hand.MAIN_HAND, itemStack);
-                    this.player.clearActiveItem();
-                }
-
-                return;
-            case DROP_ITEM:
-                if (!this.player.isSpectator() && !((BuilderAccessor) this.player).isInBuilderMode()) {
-                    this.player.dropSelectedItem(false);
-                }
-
-                return;
-            case DROP_ALL_ITEMS:
-                if (!this.player.isSpectator() && !((BuilderAccessor) this.player).isInBuilderMode()) {
-                    this.player.dropSelectedItem(true);
-                }
-
-                return;
-            case RELEASE_USE_ITEM:
-                this.player.stopUsingItem();
-                return;
-            case START_DESTROY_BLOCK:
-            case ABORT_DESTROY_BLOCK:
-            case STOP_DESTROY_BLOCK:
-                this.player.interactionManager.processBlockBreakingAction(blockPos, action, packet.getDirection(), this.player.world.getTopY());
-                return;
-            default:
-                throw new IllegalArgumentException("Invalid player action");
         }
     }
 }
