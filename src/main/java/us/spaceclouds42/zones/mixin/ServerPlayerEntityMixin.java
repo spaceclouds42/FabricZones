@@ -1,6 +1,5 @@
 package us.spaceclouds42.zones.mixin;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,9 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
