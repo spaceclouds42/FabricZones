@@ -18,6 +18,8 @@
     "griefing.FlowableFluidMixin",
     "griefing.ProjectileEntityMixin",
 
+    "smuggling.BlockMixin",
+    "smuggling.ComposterMixin",
     "smuggling.ItemEntityMixin",
     "smuggling.ServerPlayerEntityMixin",
     "smuggling.ServerWorldMixin"
