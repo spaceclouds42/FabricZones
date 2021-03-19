@@ -10,14 +10,19 @@ import us.spaceclouds42.zones.access.BuilderAccessor;
 
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin {
-
     /**
      * Prevents a player from picking up any items when in builder mode
      *
-     * @param player player which collides with the item stack
+     * @param player the player that collides with the item stack
      * @param ci callback info
      */
-    @Inject(method = "onPlayerCollision", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(
+        method = "onPlayerCollision",
+        at = @At(
+            value = "HEAD"
+        ),
+        cancellable = true
+    )
     public void onPlayerCollision(PlayerEntity player, CallbackInfo ci) {
         if(!player.getEntityWorld().isClient()) {
             if(((BuilderAccessor) player).isInBuilderMode()) {
