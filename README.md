@@ -9,6 +9,20 @@ It is still in prealpha stage, so I do not recommend using it, but you can downl
 the releases tab on GitHub
 
 ## Grief Protections
+*Things that prevent anyone from griefing a zone*
+
+| Blocked Action | How | Currently Implemented |
+|----------------|-----|-----------------------|
+| Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
+| Fire spreading | Disables fire spreading in same way as the gamerule | no |
+| Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
+| Placing blocks | Place action is cancelled if result is in a zone (non builders only) | no |
+| Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |
+| Interacting with blocks (settings) | By default, only pressure plate and button interactions are processed, can disable all or enable all (non builders only) | no |
+| Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting | no |
+| Pistons/slimestone | TBD | no |
+| Gravity (toggleable) | When enabled (default), gravity blocks will not turn into falling block entities | no |
+| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling block entity originating from a zone will not be able to enter | no |
 
 ## Smuggling Protections
 *Things that prevent builders from abusing their building powers.*
@@ -21,6 +35,14 @@ the releases tab on GitHub
 | Blocks dropping items | Could be used to duplicate signs, banners, doors, bamboo, etc. | TBD | no |
 | Bone mealing | After bone meal is applied, could cause blocks to be created outside of zone | PlayerInteract packets are not handled if held item is bone meal | no |
 | Throwing projectiles | Prevents introduction of potions and xp | TBD | no |
-| Using spawn eggs (partial) | Prevents duping of drop loot | Spawned entities can never leave the zone, nor be killed by non builders. | no |
+| Using spawn eggs (partial) | Prevents duping of drop loot | Spawned entities can never leave the zone, nor be killed by non builders, nor drop loot | no |
 | Placing command blocks | Do I really need to explain that one? | PlayerInteract packets are not handled if held item is a type of command block (includes minecarts) | no |
 | NBT items in inventory | Would allow for bypassing of some of these, e.g. using hotbars to place in chest full of netherite | TBD | no |
+| Using jukeboxes (partial) | Disc duping | Jukeboxes will not drop discs | no |
+| Using composters (partial) | Bone meal duping | Composters will not drop bone meal when at maximum capacity, simply set back to 0 | no |
+| Baby turtles dropping scutes (partial) | Scute duping | If baby turtle spawned from a spawn egg or egg inside zone, they will not drop scute | no |
+| Attack mobs/players | Builders are in creative mode, do I really need to- | Cancels attack if mob does not originate from zone or if attack result is player | no |
+| Pillager raids | Duping totems, emeralds, etc. | Bad omen does not trigger a raid if the village is located inside a protected zone, raid parties cannot spawn in zones | no |
+
+## Zone Settings
+*Wait until the default is functional, then we can talk about fancy settings*
