@@ -46,7 +46,7 @@ abstract class FlowableFluidMixin {
             return;
 
         World world = (World) blockView;
-        
+
         Zone zoneFrom = ZoneManager.INSTANCE.getZone(world, fluidPos);
         Zone zoneTo = ZoneManager.INSTANCE.getZone(world, flowTo);
 

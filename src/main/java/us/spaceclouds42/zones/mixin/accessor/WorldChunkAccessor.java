@@ -1,4 +1,4 @@
-package us.spaceclouds42.zones.mixin;
+package us.spaceclouds42.zones.mixin.accessor;
 
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.WorldChunk;

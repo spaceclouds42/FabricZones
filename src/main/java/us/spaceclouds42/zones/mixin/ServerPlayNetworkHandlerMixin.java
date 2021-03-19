@@ -16,6 +16,7 @@ import us.spaceclouds42.zones.data.spec.Builder;
 import us.spaceclouds42.zones.data.spec.Zone;
 import us.spaceclouds42.zones.data.spec.ZoneAccessMode;
 import us.spaceclouds42.zones.log.LogMode;
+import us.spaceclouds42.zones.mixin.accessor.PlayerMoveC2SPacketAccessor;
 
 import java.util.Collection;
 
