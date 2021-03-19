@@ -18,7 +18,7 @@ abstract class ServerWorldMixin {
             )
     )
     private void addBuilderOnConnect(ServerPlayerEntity player, CallbackInfo ci) {
-        if (((BuilderAccessor) player).isInBuilderMode()) {
+        if (((BuilderAccessor) player).isInBuilderMode() && !BuilderManager.INSTANCE.isBuilder(player.getUuid())) {
             BuilderManager.INSTANCE.addPlayer(player);
         }
     }
