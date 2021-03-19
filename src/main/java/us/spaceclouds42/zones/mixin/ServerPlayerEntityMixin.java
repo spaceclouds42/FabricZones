@@ -1,6 +1,7 @@
 package us.spaceclouds42.zones.mixin;
 
 import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -8,7 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,9 +24,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import us.spaceclouds42.zones.access.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
 
+import java.util.OptionalInt;
+
 /**
- *  - Manages inventory swapping
- *  - Prevents builders from dropping items from builder mode
+ *  Manages inventory swapping.
+ *  Prevents builders from dropping items from builder mode.
+ *  Prevents builders from using containers to store items.
  */
 @Mixin(ServerPlayerEntity.class)
 abstract class ServerPlayerEntityMixin implements BuilderAccessor {
@@ -92,6 +101,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     )
     private void copySecondaryInventory(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         this.secondaryInventory.clone(((BuilderAccessor) oldPlayer).getSecondaryInventory());
+        this.isInBuilderMode = ((BuilderAccessor) oldPlayer).isInBuilderMode();
     }
 
     @Inject(
@@ -104,6 +114,20 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     private void preventDropItem(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir) {
         if (this.isInBuilderMode) {
             cir.setReturnValue(null);
+        }
+    }
+
+    @Inject(
+            method = "openHandledScreen",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
+    private void preventOpeningScreenWhenBuilder(NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> cir) {
+        if (this.isInBuilderMode && !(factory instanceof AnvilScreenHandler)) {
+            thisPlayer.sendMessage((new LiteralText("Cannot open in builder mode")).formatted(Formatting.RED), true);
+            cir.setReturnValue(OptionalInt.empty());
         }
     }
 }
