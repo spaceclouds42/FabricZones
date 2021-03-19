@@ -2,7 +2,6 @@ package us.spaceclouds42.zones.mixin;
 
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
