@@ -12,6 +12,18 @@ import us.spaceclouds42.zones.data.BuilderManager;
 @Mixin(ServerWorld.class)
 abstract class ServerWorldMixin {
     @Inject(
+            method = "onPlayerConnected",
+            at = @At(
+                    value = "HEAD"
+            )
+    )
+    private void addBuilderOnConnect(ServerPlayerEntity player, CallbackInfo ci) {
+        if (((BuilderAccessor) player).isInBuilderMode()) {
+            BuilderManager.INSTANCE.addPlayer(player);
+        }
+    }
+
+    @Inject(
             method = "addPlayer",
             at = @At(
                     value = "HEAD"
