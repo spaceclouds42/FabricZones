@@ -18,7 +18,7 @@ import java.util.Random;
  * Prevent falling blocks from falling if placed in a zone
  */
 @Mixin(FallingBlock.class)
-public abstract class FallingBlockMixin {
+abstract class FallingBlockMixin {
     /**
      * Prevents falling blocks from falling if located in a zone
      *
@@ -38,16 +38,7 @@ public abstract class FallingBlockMixin {
     )
     private boolean disallowFallingInZones(BlockState state, BlockState state2, ServerWorld world, BlockPos pos, Random random) {
         if (FallingBlock.canFallThrough(state)) {
-            Zone zone = ZoneManager.INSTANCE.getZone(
-                new PosD(
-                    world.getRegistryKey().getValue().toString(),
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ()
-                )
-            );
-
-            return zone == null;
+            return ZoneManager.INSTANCE.getZone(world, pos) == null;
         } else {
             return false;
         }
