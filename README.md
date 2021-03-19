@@ -23,7 +23,6 @@ the releases tab on GitHub
 | Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |
 | Interacting with blocks (settings) | By default, only pressure plate and button interactions are processed, can disable all or enable all (non builders only) | no |
 | Pistons/slimestone | TBD | no |
-| Gravity (toggleable) | When enabled (default), gravity blocks will not turn into falling block entities | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
 
 ## Smuggling Protections
