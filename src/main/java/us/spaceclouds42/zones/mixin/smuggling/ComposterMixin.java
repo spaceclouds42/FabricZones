@@ -20,7 +20,7 @@ import static net.minecraft.block.ComposterBlock.LEVEL;
  * Prevents composters from dropping bone meal in zones, as this could allow for builders to dupe bone meal, and that's still smuggling
  */
 @Mixin(ComposterBlock.class)
-public abstract class ComposterMixin {
+abstract class ComposterMixin {
     /**
      * Prevents this composter from dropping bone meal if within a zone
      *
@@ -32,13 +32,15 @@ public abstract class ComposterMixin {
     @Inject(
             method = "emptyFullComposter",
             at = @At(
-                    "HEAD"
-            ))
+                    value = "HEAD"
+            ),
+            cancellable = true
+    )
     private static void emptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         if (!world.isClient) {
             Zone zone = ZoneManager.INSTANCE.getZone(world, pos);
 
-            if(zone != null) { // If within a zone simply reset the composter state to 0 and don't drop any bonemeal
+            if(zone != null) { // If within a zone simply reset the composter state to 0 and don't drop any bone meal
                 BlockState blockState = state.with(LEVEL, 0);
                 world.setBlockState(pos, blockState, 3);
                 world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);

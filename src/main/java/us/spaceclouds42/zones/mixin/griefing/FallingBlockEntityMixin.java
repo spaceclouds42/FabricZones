@@ -19,7 +19,7 @@ import us.spaceclouds42.zones.data.spec.Zone;
  * Prevents falling block entities from being able to carpet bomb a zone
  */
 @Mixin(FallingBlockEntity.class)
-public abstract class FallingBlockEntityMixin extends Entity {
+abstract class FallingBlockEntityMixin extends Entity {
     /**
      * Item that this entity will drop
      */

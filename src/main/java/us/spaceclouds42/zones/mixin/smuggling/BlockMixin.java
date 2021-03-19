@@ -30,9 +30,10 @@ abstract class BlockMixin {
             method = "dropStack",
             at = @At(
                     value = "HEAD"
-            )
+            ),
+            cancellable = true
     )
-    private void dropStack(World world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
+    private static void preventDroppingInZone(World world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
         if (!world.isClient) {
             Zone zone = ZoneManager.INSTANCE.getZone(world, pos);
 
