@@ -79,19 +79,21 @@ object ZoneManager : ManagerBase() {
     }
 
     /**
-     * Request to get a zone object based on position
+     * Request to get a zone object based on block position
      *
-     * @param world world to find zone in
-     * @param pos position of block to find zone for
+     * @param world dimension of position
+     * @param pos block position
      * @return the zone that contains that position, or null if no zone does
      */
     fun getZone(world: World, pos: BlockPos): Zone? {
-        return getZone(PosD(
-            world.registryKey.value.toString(),
-            pos.x + 0.5,
-            pos.y.toDouble(),
-            pos.z + 0.5,
-        ))
+        return getZone(
+            PosD(
+                world.registryKey.value.toString(),
+                pos.x + 0.5,
+                pos.y.toDouble(),
+                pos.z + 0.5,
+            )
+        )
     }
 
     /**
