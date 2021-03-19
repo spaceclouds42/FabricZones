@@ -18,16 +18,21 @@ import us.spaceclouds42.zones.data.spec.Zone;
 
 @Mixin(FlowableFluid.class)
 public class FlowableFluidMixin {
-    @Inject(method = "canFlow", at = @At("TAIL"), cancellable = true)
+    @Inject(
+        method = "canFlow",
+        at = @At(
+            value = "TAIL"
+        ),
+        cancellable = true
+    )
     private void disallowFlowingBetweenZones(BlockView blockView, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue() || !(blockView instanceof World))
             return;
 
-        World w = (World) blockView;
-
+        World world = (World) blockView;
         Zone zoneFrom = ZoneManager.INSTANCE.getZone(
             new PosD(
-                w.getRegistryKey().getValue().toString(),
+                world.getRegistryKey().getValue().toString(),
                 fluidPos.getX(),
                 fluidPos.getY(),
                 fluidPos.getZ()
@@ -35,14 +40,15 @@ public class FlowableFluidMixin {
         );
         Zone zoneTo = ZoneManager.INSTANCE.getZone(
             new PosD(
-                w.getRegistryKey().getValue().toString(),
+                world.getRegistryKey().getValue().toString(),
                 flowTo.getX(),
                 flowTo.getY(),
                 flowTo.getZ()
             )
         );
 
-        if (zoneFrom != zoneTo)
+        if (zoneFrom != zoneTo) {
             cir.setReturnValue(false);
+        }
     }
 }
