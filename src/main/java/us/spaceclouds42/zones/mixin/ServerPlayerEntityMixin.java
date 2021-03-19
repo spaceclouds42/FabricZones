@@ -125,7 +125,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
             cancellable = true
     )
     private void preventOpeningScreenWhenBuilder(NamedScreenHandlerFactory factory, CallbackInfoReturnable<OptionalInt> cir) {
-        if (this.isInBuilderMode && !(factory instanceof AnvilScreenHandler)) {
+        if (this.isInBuilderMode) {
             thisPlayer.sendMessage((new LiteralText("Cannot open in builder mode")).formatted(Formatting.RED), true);
             cir.setReturnValue(OptionalInt.empty());
         }

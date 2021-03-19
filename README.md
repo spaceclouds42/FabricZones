@@ -5,23 +5,15 @@ using creative hotbars to cheat in illegal items, or just using the access to th
 spawn in large amounts of items like diamonds or netherite.
 
 ## Using Fabric Zones
-As it is still under development, there are no releases. I will create a prerelease when I think that
-it is reasonably ready for use, but before then, I suggest you don't build it yourself and use it, as
-it is not anywhere near production ready yet, and will likely have major bugs or features missing.
-*If you go to the website, there is a link to the latest build, use at your own risk*
+It is still in prealpha stage, so I do not recommend using it, but you can download *semi*stable builds 
+the releases tab on GitHub
 
-## Road Map
-- inventory saving (both survival inventory and builder mode inventory)
-- ~~/zone create \<name\> \<x1\> \<z1\> \<x2\> \<z2\>~~
-    - ~~display zone edges for builders in build mode and in zone~~
-    - ~~save corners~~
-    - ~~detect player entering/leaving zone~~
-    - ~~/zone goto \<name\>~~
-    - /zone settings (visual|builder|pvp|)
-    - ~~/zone (delete|edit) \<name\>~~
-- /gamemode builder
-    - abilities: fly, invincibility, not able to pvp, toggleable noclip
-- ~~/builder (add|remove) \<name\>~~
-    - gives `/gamemode builder` perms to player
-    - ~~allows builders to enter zones~~
-- log any changes to any zone to file *going to be a very future feature*
+## Grief Protections
+
+## Smuggling Protections
+*Things that prevent builders from abusing their building powers*
+
+| Blocked Action | Toggleable | Reason | How (optional) |
+|----------------|------------|--------|----------------|
+| Placing blocks outside of build zones | No | Prevent users from placing diamonds etc. into the normal world | PlayerInteract packets are not handled if result is out of zone and player is in build mode |
+| Breaking blocks outside of build zones | No | Shouldn't be able to mess with |
