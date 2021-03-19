@@ -14,6 +14,7 @@ the releases tab on GitHub
 | Blocked Action | How | Currently Implemented |
 |----------------|-----|-----------------------|
 | Projectiles from non builders (toggleable) | Any projectile entering a zone will be deleted, tridents will be given back to thrower | yes (toggle not implemented yet) | 
+| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling blocks inside zones will not fall | yes (thanks [@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
 | Fire spreading | Disables fire spreading in same way as the gamerule | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
@@ -23,7 +24,6 @@ the releases tab on GitHub
 | Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting | no |
 | Pistons/slimestone | TBD | no |
 | Gravity (toggleable) | When enabled (default), gravity blocks will not turn into falling block entities | no |
-| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling block entity originating from a zone will not be able to enter | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
 
 ## Smuggling Protections
@@ -32,6 +32,7 @@ the releases tab on GitHub
 | Blocked Action | Reason | How | Currently Implemented |
 |----------------|--------|-----|-----------------------|
 | Interacting with guis | Prevents the storage of items in BlockEntities or entity inventories to be smuggled out of zones | Cancels `ServerPlayerEntity#openScreenHandler` if player is in builder mode | yes |
+| Dropping items (normal and on death) | Seriously? *You could dupe anything if this was allowed* | yes |
 | Placing blocks outside of build zones | Prevent users from placing diamonds etc. into the normal world | PlayerInteract packets are not handled if result is out of zone and player is in build mode | no |
 | Breaking blocks outside of build zones | Shouldn't be able to mess with things outside of designated zone | TBD | no |
 | Blocks dropping items | Could be used to duplicate signs, banners, doors, bamboo, etc. | TBD | no |
@@ -45,6 +46,7 @@ the releases tab on GitHub
 | Baby turtles dropping scutes (partial) | Scute duping | If baby turtle spawned from a spawn egg or egg inside zone, they will not drop scute | no |
 | Attack mobs/players | Builders are in creative mode, do I really need to- | Cancels attack if mob does not originate from zone or if attack result is player | no |
 | Pillager raids | Duping totems, emeralds, etc. | Bad omen does not trigger a raid if the village is located inside a protected zone, raid parties cannot spawn in zones | no |
+| Picking up items | As they cannot drop items, shouldn't be able to pick up other player's items | TBD | no |
 
 ## Zone Settings
 *Wait until the default is functional, then we can talk about fancy settings*

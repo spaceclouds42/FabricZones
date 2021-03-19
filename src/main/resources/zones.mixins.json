@@ -6,6 +6,8 @@
     "ChunkSectionAccessor",
     "EntityMixin",
     "ItemEntityMixin",
+    "FallingBlockEntityMixin",
+    "FallingBlockMixin",
     "PlayerMoveC2SPacketAccessor",
     "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",

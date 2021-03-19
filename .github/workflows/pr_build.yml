@@ -4,7 +4,7 @@
 name: Java CI with Gradle
 
 on:
-  push:
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -22,9 +22,3 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Upload build to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: build/libs
-        destination_dir: builds/1.17-snapshot
