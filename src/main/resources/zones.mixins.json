@@ -5,6 +5,8 @@
   "mixins": [
     "ChunkSectionAccessor",
     "EntityMixin",
+    "FallingBlockEntityMixin",
+    "FallingBlockMixin",
     "PlayerMoveC2SPacketAccessor",
     "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
