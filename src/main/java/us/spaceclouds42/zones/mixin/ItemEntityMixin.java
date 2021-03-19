@@ -17,11 +17,11 @@ public class ItemEntityMixin {
      * @param ci callback info
      */
     @Inject(
-        method = "onPlayerCollision",
-        at = @At(
-            value = "HEAD"
-        ),
-        cancellable = true
+            method = "onPlayerCollision",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
     )
     public void onPlayerCollision(PlayerEntity player, CallbackInfo ci) {
         if(!player.getEntityWorld().isClient()) {
