@@ -25,7 +25,13 @@ public abstract class FallingBlockEntityMixin extends Entity {
         super(type, world);
     }
 
-    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    @Inject(
+        method = "tick", 
+        at = @At(
+            value = "HEAD"
+        ),
+        cancellable = true
+    )
     private void onTick(CallbackInfo ci) {
         Zone zone = ZoneManager.INSTANCE.getZone(
             new PosD(
@@ -40,9 +46,8 @@ public abstract class FallingBlockEntityMixin extends Entity {
             if (dropItem && this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 dropItem(block.getBlock());
             }
-
+            
             discard();
-
             ci.cancel();
         }
     }
