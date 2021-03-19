@@ -9,6 +9,7 @@
     "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
+    "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
     "TridentEntityAccessor",
     "WorldChunkAccessor"
