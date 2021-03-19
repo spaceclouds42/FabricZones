@@ -31,7 +31,7 @@ the releases tab on GitHub
 | Blocked Action | Reason | How | Currently Implemented |
 |----------------|--------|-----|-----------------------|
 | Interacting with guis | Prevents the storage of items in BlockEntities or entity inventories to be smuggled out of zones | Cancels `ServerPlayerEntity#openScreenHandler` if player is in builder mode | yes |
-| Dropping items (normal and on death) | Seriously? *You could dupe anything if this was allowed* | yes |
+| Dropping items (normal and on death) | Seriously? *You could dupe anything if this was allowed* | Drop item method is cancelled, works with death too | yes |
 | Picking up items | As they cannot drop items, shouldn't be able to pick up other player's items | Item pick up is cancelled if player is a builder | yes ([@profjb](https://github.com/profjb58)) |
 | Placing blocks outside of build zones | Prevent users from placing diamonds etc. into the normal world | PlayerInteract packets are not handled if result is out of zone and player is in build mode | no |
 | Breaking blocks outside of build zones | Shouldn't be able to mess with things outside of designated zone | TBD | no |
