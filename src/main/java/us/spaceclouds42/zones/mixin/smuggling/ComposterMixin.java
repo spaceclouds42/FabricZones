@@ -16,16 +16,18 @@ import us.spaceclouds42.zones.data.spec.Zone;
 
 import static net.minecraft.block.ComposterBlock.LEVEL;
 
+/**
+ * Prevents composters from dropping bone meal in zones, as this could allow for builders to dupe bone meal, and that's still smuggling
+ */
 @Mixin(ComposterBlock.class)
 public abstract class ComposterMixin {
-
     /**
-     * Prevents a composter from dropping bonemeal when within a fabric zone region
+     * Prevents this composter from dropping bone meal if within a zone
      *
-     * @param state blockstate for the composter
-     * @param world world the composter is present in
-     * @param pos position of the composter
-     * @param cir Blockstate that should be returned for the composter
+     * @param state blockstate of this composter
+     * @param world the dimension that this composter is in
+     * @param pos position of this composter
+     * @param cir BlockState that should be returned for the composter
      */
     @Inject(
             method = "emptyFullComposter",
@@ -34,9 +36,14 @@ public abstract class ComposterMixin {
             ))
     private static void emptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         if (!world.isClient) {
-            String worldRegistryTag = world.getRegistryKey().getValue().toString();
-            PosD posd = new PosD(worldRegistryTag, pos.getX(), pos.getY(), pos.getZ());
-            Zone zone = ZoneManager.INSTANCE.getZone(posd);
+            Zone zone = ZoneManager.INSTANCE.getZone(
+                new PosD(
+                    world.getRegistryKey().getValue().toString(),
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ()
+                )
+            );
 
             if(zone != null) { // If within a zone simply reset the composter state to 0 and don't drop any bonemeal
                 BlockState blockState = state.with(LEVEL, 0);
