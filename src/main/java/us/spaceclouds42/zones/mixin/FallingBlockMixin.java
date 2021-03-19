@@ -29,17 +29,8 @@ public abstract class FallingBlockMixin {
         )
     )
     private boolean disallowFallingInZones(BlockState state, BlockState state2, ServerWorld world, BlockPos pos, Random random) {
-        if (this.canFallThrough(state)) {
-            Zone zone = ZoneManager.INSTANCE.getZone(
-                new PosD(
-                    world.getRegistryKey().getValue().toString(),
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ()
-                )
-            );
-
-            return zone == null;
+        if (canFallThrough(state)) {
+            return ZoneManager.INSTANCE.getZone(world, pos) == null;
         } else {
             return false;
         }

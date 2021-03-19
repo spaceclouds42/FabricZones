@@ -2,9 +2,11 @@ package us.spaceclouds42.zones.data
 
 import kotlinx.serialization.json.Json
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
+import net.minecraft.world.World
 import net.minecraft.world.chunk.WorldChunk
 import us.spaceclouds42.zones.LOGGER
 import us.spaceclouds42.zones.SERVER
@@ -74,6 +76,22 @@ object ZoneManager : ManagerBase() {
         }
 
         return null
+    }
+
+    /**
+     * Request to get a zone object based on position
+     *
+     * @param world world to find zone in
+     * @param pos position of block to find zone for
+     * @return the zone that contains that position, or null if no zone does
+     */
+    fun getZone(world: World, pos: BlockPos): Zone? {
+        return getZone(PosD(
+            world.registryKey.value.toString(),
+            pos.x + 0.5,
+            pos.y.toDouble(),
+            pos.z + 0.5,
+        ))
     }
 
     /**

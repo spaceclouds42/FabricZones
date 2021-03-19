@@ -30,22 +30,8 @@ public class FlowableFluidMixin {
             return;
 
         World world = (World) blockView;
-        Zone zoneFrom = ZoneManager.INSTANCE.getZone(
-            new PosD(
-                world.getRegistryKey().getValue().toString(),
-                fluidPos.getX(),
-                fluidPos.getY(),
-                fluidPos.getZ()
-            )
-        );
-        Zone zoneTo = ZoneManager.INSTANCE.getZone(
-            new PosD(
-                world.getRegistryKey().getValue().toString(),
-                flowTo.getX(),
-                flowTo.getY(),
-                flowTo.getZ()
-            )
-        );
+        Zone zoneFrom = ZoneManager.INSTANCE.getZone(world, fluidPos);
+        Zone zoneTo = ZoneManager.INSTANCE.getZone(world, flowTo);
 
         if (zoneFrom != zoneTo) {
             cir.setReturnValue(false);
