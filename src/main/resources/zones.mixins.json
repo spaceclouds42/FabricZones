@@ -5,6 +5,7 @@
   "mixins": [
     "ChunkSectionAccessor",
     "EntityMixin",
+    "ItemEntityMixin",
     "FallingBlockEntityMixin",
     "FallingBlockMixin",
     "FlowableFluidMixin",
