@@ -15,7 +15,8 @@
     "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
     "TridentEntityAccessor",
-    "WorldChunkAccessor"
+    "WorldChunkAccessor",
+    "ComposterMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.spaceclouds42.zones.access.BuilderAccessor;
 
 @Mixin(ItemEntity.class)
-public class ItemEntityMixin {
+public abstract class ItemEntityMixin {
 
     /**
      * Prevents a player from picking up any items when in builder mode
