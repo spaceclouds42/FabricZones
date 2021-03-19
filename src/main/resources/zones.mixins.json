@@ -10,6 +10,7 @@
     "FallingBlockEntityMixin",
     "FallingBlockMixin",
     "ItemEntityMixin",
+    "FlowableFluidMixin",
     "PlayerMoveC2SPacketAccessor",
     "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
