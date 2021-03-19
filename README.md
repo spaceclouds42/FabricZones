@@ -14,6 +14,7 @@ the releases tab on GitHub
 | Blocked Action | How | Currently Implemented |
 |----------------|-----|-----------------------|
 | Projectiles from non builders (toggleable) | Any projectile entering a zone will be deleted, tridents will be given back to thrower | yes (toggle not implemented yet) | 
+| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling blocks inside zones will not fall | yes (thanks [@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
 | Fire spreading | Disables fire spreading in same way as the gamerule | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
@@ -23,7 +24,6 @@ the releases tab on GitHub
 | Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting | no |
 | Pistons/slimestone | TBD | no |
 | Gravity (toggleable) | When enabled (default), gravity blocks will not turn into falling block entities | no |
-| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling block entity originating from a zone will not be able to enter | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
 
 ## Smuggling Protections
