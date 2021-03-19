@@ -1,4 +1,4 @@
-package us.spaceclouds42.zones.mixin;
+package us.spaceclouds42.zones.mixin.griefing;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -14,22 +14,30 @@ import us.spaceclouds42.zones.data.spec.Zone;
 
 import java.util.Random;
 
+/**
+ * Prevent falling blocks from falling if placed in a zone
+ */
 @Mixin(FallingBlock.class)
 public abstract class FallingBlockMixin {
-    @Shadow
-    public static boolean canFallThrough(BlockState state) {
-        return false;
-    }
-
+    /**
+     * Prevents falling blocks from falling if located in a zone
+     *
+     * @param state state of this block
+     * @param state2 state of block below this block
+     * @param world the world this block is in
+     * @param pos location of this block
+     * @param random a random number
+     * @return whether or not it should fall
+     */
     @Redirect(
-        method = "scheduledTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/block/FallingBlock;canFallThrough(Lnet/minecraft/block/BlockState;)Z"
-        )
+            method = "scheduledTick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/block/FallingBlock;canFallThrough(Lnet/minecraft/block/BlockState;)Z"
+            )
     )
     private boolean disallowFallingInZones(BlockState state, BlockState state2, ServerWorld world, BlockPos pos, Random random) {
-        if (this.canFallThrough(state)) {
+        if (FallingBlock.canFallThrough(state)) {
             Zone zone = ZoneManager.INSTANCE.getZone(
                 new PosD(
                     world.getRegistryKey().getValue().toString(),

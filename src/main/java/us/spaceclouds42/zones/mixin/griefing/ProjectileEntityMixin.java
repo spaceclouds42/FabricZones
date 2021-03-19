@@ -1,4 +1,4 @@
-package us.spaceclouds42.zones.mixin;
+package us.spaceclouds42.zones.mixin.griefing;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,13 +10,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.spaceclouds42.zones.ConstantsKt;
 import us.spaceclouds42.zones.data.BuilderManager;
 import us.spaceclouds42.zones.data.ZoneManager;
 import us.spaceclouds42.zones.data.spec.PosD;
 import us.spaceclouds42.zones.data.spec.Zone;
 import us.spaceclouds42.zones.data.spec.ZoneAccessMode;
-import us.spaceclouds42.zones.log.LogMode;
+import us.spaceclouds42.zones.mixin.accessor.TridentEntityAccessor;
 
 /**
  * Prevent projectiles from landing in zones under certain conditions

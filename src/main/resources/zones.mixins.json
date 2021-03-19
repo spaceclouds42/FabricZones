@@ -3,20 +3,24 @@
   "package": "us.spaceclouds42.zones.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ChunkSectionAccessor",
     "EntityMixin",
-    "ItemEntityMixin",
-    "FallingBlockEntityMixin",
-    "FallingBlockMixin",
-    "FlowableFluidMixin",
-    "PlayerMoveC2SPacketAccessor",
-    "ProjectileEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
-    "ServerWorldMixin",
     "ThreadedAnvilChunkStorageMixin",
-    "TridentEntityAccessor",
-    "WorldChunkAccessor"
+
+    "accessor.ChunkSectionAccessor",
+    "accessor.PlayerMoveC2SPacketAccessor",
+    "accessor.TridentEntityAccessor",
+    "accessor.WorldChunkAccessor",
+
+    "griefing.FallingBlockEntityMixin",
+    "griefing.FallingBlockMixin",
+    "griefing.FlowableFluidMixin",
+    "griefing.ProjectileEntityMixin",
+
+    "smuggling.ItemEntityMixin",
+    "smuggling.ServerPlayerEntityMixin",
+    "smuggling.ServerWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
