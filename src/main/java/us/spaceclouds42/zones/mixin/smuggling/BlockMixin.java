@@ -34,14 +34,7 @@ abstract class BlockMixin {
     )
     private void dropStack(World world, BlockPos pos, ItemStack stack, CallbackInfo ci) {
         if (!world.isClient) {
-            Zone zone = ZoneManager.INSTANCE.getZone(
-                new PosD(
-                    world.getRegistryKey().getValue().toString(), 
-                    pos.getX(), 
-                    pos.getY(), 
-                    pos.getZ()
-                )
-            );
+            Zone zone = ZoneManager.INSTANCE.getZone(world, pos);
 
             if(zone != null) {
                 ci.cancel();
