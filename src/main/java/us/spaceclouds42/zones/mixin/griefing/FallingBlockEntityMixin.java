@@ -1,4 +1,4 @@
-package us.spaceclouds42.zones.mixin;
+package us.spaceclouds42.zones.mixin.griefing;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -15,24 +15,41 @@ import us.spaceclouds42.zones.data.ZoneManager;
 import us.spaceclouds42.zones.data.spec.PosD;
 import us.spaceclouds42.zones.data.spec.Zone;
 
+/**
+ * Prevents falling block entities from being able to carpet bomb a zone
+ */
 @Mixin(FallingBlockEntity.class)
 public abstract class FallingBlockEntityMixin extends Entity {
+    /**
+     * Item that this entity will drop
+     */
     @Shadow public boolean dropItem;
 
+    /**
+     * Block that this entity represents
+     */
     @Shadow private BlockState block;
 
+    /**
+     * @param type the entity type
+     * @param world the dimension
+     */
     public FallingBlockEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
 
+    /**
+     * Drops falling block as entity if enters a zone
+     * @param ci callback info
+     */
     @Inject(
-        method = "tick", 
-        at = @At(
-            value = "HEAD"
-        ),
-        cancellable = true
+            method = "tick",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
     )
-    private void onTick(CallbackInfo ci) {
+    private void killFallingBlockInZone(CallbackInfo ci) {
         Zone zone = ZoneManager.INSTANCE.getZone(
             new PosD(
                 world.getRegistryKey().getValue().toString(),

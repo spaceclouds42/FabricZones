@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import us.spaceclouds42.zones.data.BuilderManager;
 import us.spaceclouds42.zones.data.ZoneManager;
+import us.spaceclouds42.zones.mixin.accessor.WorldChunkAccessor;
 
 import java.util.List;
 
