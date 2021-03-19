@@ -36,14 +36,7 @@ public abstract class ComposterMixin {
             ))
     private static void emptyFullComposter(BlockState state, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         if (!world.isClient) {
-            Zone zone = ZoneManager.INSTANCE.getZone(
-                new PosD(
-                    world.getRegistryKey().getValue().toString(),
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ()
-                )
-            );
+            Zone zone = ZoneManager.INSTANCE.getZone(world, pos);
 
             if(zone != null) { // If within a zone simply reset the composter state to 0 and don't drop any bonemeal
                 BlockState blockState = state.with(LEVEL, 0);
