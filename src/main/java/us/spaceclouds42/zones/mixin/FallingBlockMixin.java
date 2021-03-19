@@ -21,9 +21,15 @@ public abstract class FallingBlockMixin {
         return false;
     }
 
-    @Redirect(method = "scheduledTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/FallingBlock;canFallThrough(Lnet/minecraft/block/BlockState;)Z"))
+    @Redirect(
+        method = "scheduledTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/block/FallingBlock;canFallThrough(Lnet/minecraft/block/BlockState;)Z"
+        )
+    )
     private boolean disallowFallingInZones(BlockState state, BlockState state2, ServerWorld world, BlockPos pos, Random random) {
-        if (canFallThrough(state)) {
+        if (this.canFallThrough(state)) {
             Zone zone = ZoneManager.INSTANCE.getZone(
                 new PosD(
                     world.getRegistryKey().getValue().toString(),
