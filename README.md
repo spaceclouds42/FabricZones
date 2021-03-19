@@ -14,14 +14,14 @@ the releases tab on GitHub
 | Blocked Action | How | Currently Implemented |
 |----------------|-----|-----------------------|
 | Projectiles from non builders (toggleable) | Any projectile entering a zone will be deleted, tridents will be given back to thrower | yes (toggle not implemented yet) | 
-| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling blocks inside zones will not fall | yes (thanks [@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling blocks inside zones will not fall | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
 | Fire spreading | Disables fire spreading in same way as the gamerule | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
 | Placing blocks | Place action is cancelled if result is in a zone (non builders only) | no |
 | Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |
 | Interacting with blocks (settings) | By default, only pressure plate and button interactions are processed, can disable all or enable all (non builders only) | no |
-| Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting | no |
 | Pistons/slimestone | TBD | no |
 | Gravity (toggleable) | When enabled (default), gravity blocks will not turn into falling block entities | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
