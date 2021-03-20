@@ -58,19 +58,44 @@ abstract class FlowableFluidMixin {
         }
     }
 
-    @Redirect(method = "getUpdatedState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", ordinal = 0))
+    @Redirect(
+            method = "getUpdatedState",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
+                    ordinal = 0
+            )
+    )
+    private BlockState disallowMergingBetweenZonesHorizontal(WorldView view, BlockPos posTo, WorldView world2, BlockPos posFrom, BlockState state) {
+        return disallowMergingBetweenZones(view, posTo, world2, posFrom, state);
+    }
+
+    @Redirect(
+            method = "getUpdatedState",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;",
+                    ordinal = 2
+            )
+    )
+    private BlockState disallowMergingBetweenZonesVertical(WorldView view, BlockPos posTo, WorldView world2, BlockPos posFrom, BlockState state) {
+        return disallowMergingBetweenZones(view, posTo, world2, posFrom, state);
+    }
+    
     private BlockState disallowMergingBetweenZones(WorldView view, BlockPos posTo, WorldView world2, BlockPos posFrom, BlockState state) {
-        if (!(view instanceof World))
+        if (!(view instanceof World)) {
             return view.getBlockState(posTo);
+        }
 
         World world = (World) view;
 
         Zone zoneFrom = ZoneManager.INSTANCE.getZone(world, posFrom);
         Zone zoneTo = ZoneManager.INSTANCE.getZone(world, posTo);
 
-        if (zoneFrom != zoneTo)
-            return Blocks.VOID_AIR.getDefaultState();
-        else
+        if (zoneFrom != zoneTo) {
+            return Blocks.AIR.getDefaultState();
+        } else {
             return world.getBlockState(posTo);
+        }
     }
 }
