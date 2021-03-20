@@ -17,6 +17,7 @@
     "griefing.FallingBlockMixin",
     "griefing.FlowableFluidMixin",
     "griefing.FluidBlockMixin",
+    "griefing.LavaFluidMixin",
     "griefing.ProjectileEntityMixin",
 
     "smuggling.BlockMixin",
