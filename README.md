@@ -35,6 +35,7 @@ the releases tab on GitHub
 | Picking up items | As they cannot drop items, shouldn't be able to pick up other player's items | Item pick up is cancelled if player is a builder | yes ([@profjb](https://github.com/profjb58)) |
 | Blocks dropping items | Could be used to duplicate signs, banners, doors, bamboo, etc. | Block dropping is completely cancelled, allowing for floating blocks | yes ([@profjb](https://github.com/profjb58)) |
 | Using composters (partial) | Bone meal duping | Composters will not drop bone meal when at maximum capacity, simply set back to 0 | yes ([@profjb](https://github.com/profjb58)) |
+| Using jukeboxes (partial) | Disc duping | Jukeboxes will not drop discs, non builders cannot use zoned jukeboxes | yes |
 | Placing blocks outside of build zones | Prevent users from placing diamonds etc. into the normal world | PlayerInteract packets are not handled if result is out of zone and player is in build mode | no |
 | Breaking blocks outside of build zones | Shouldn't be able to mess with things outside of designated zone | TBD | no |
 | Bone mealing | After bone meal is applied, could cause blocks to be created outside of zone | PlayerInteract packets are not handled if held item is bone meal | no |
@@ -42,10 +43,10 @@ the releases tab on GitHub
 | Using spawn eggs (partial) | Prevents duping of drop loot | Spawned entities can never leave the zone, nor be killed by non builders, nor drop loot | no |
 | Placing command blocks | Do I really need to explain that one? | PlayerInteract packets are not handled if held item is a type of command block (includes minecarts) | no |
 | NBT items in inventory | Would allow for bypassing of some of these, e.g. using hotbars to place in chest full of netherite | TBD | no |
-| Using jukeboxes (partial) | Disc duping | Jukeboxes will not drop discs | no |
 | Baby turtles dropping scutes (partial) | Scute duping | If baby turtle spawned from a spawn egg or egg inside zone, they will not drop scute | no |
 | Attack mobs/players | Builders are in creative mode, do I really need to- | Cancels attack if mob does not originate from zone or if attack result is player | no |
 | Pillager raids | Duping totems, emeralds, etc. | Bad omen does not trigger a raid if the village is located inside a protected zone, raid parties cannot spawn in zones | no |
+| Plant growth (partial) | Prevents spawning in of wood and other plants | Saplings do not grow. Cactus, sugarcane, and bamboo will not grow past the height of the zone. | no |
 
 ## Zone Settings
 *Wait until the default is functional, then we can talk about fancy settings*
