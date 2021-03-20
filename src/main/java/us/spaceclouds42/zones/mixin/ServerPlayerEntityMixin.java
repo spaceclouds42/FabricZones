@@ -59,6 +59,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     public void swapInventories() {
         PlayerInventory tempInventory = new PlayerInventory((PlayerEntity) (Object) this);
         tempInventory.clone(this.secondaryInventory);
+        tempInventory.selectedSlot = this.inventory.selectedSlot;
         this.secondaryInventory.clone(this.inventory);
         this.inventory.clone(tempInventory);
 
