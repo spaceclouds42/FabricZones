@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import us.spaceclouds42.zones.data.ZoneManager;
-import us.spaceclouds42.zones.data.spec.PosD;
 import us.spaceclouds42.zones.data.spec.Zone;
 
 /**
@@ -37,13 +36,14 @@ abstract class FlowableFluidMixin {
     @Inject(
             method = "canFlow",
             at = @At(
-                    value = "TAIL"
+                    value = "RETURN"
             ),
             cancellable = true
     )
     private void disallowFlowingBetweenZones(BlockView blockView, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() || !(blockView instanceof World))
+        if (!cir.getReturnValue() || !(blockView instanceof World)) {
             return;
+        }
 
         World world = (World) blockView;
 
