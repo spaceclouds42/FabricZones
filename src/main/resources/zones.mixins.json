@@ -7,12 +7,11 @@
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
     "ThreadedAnvilChunkStorageMixin",
-
     "accessor.ChunkSectionAccessor",
     "accessor.PlayerMoveC2SPacketAccessor",
     "accessor.TridentEntityAccessor",
     "accessor.WorldChunkAccessor",
-
+    "griefing.ServerPlayerInteractionManagerMixin",
     "griefing.FallingBlockEntityMixin",
     "griefing.FallingBlockMixin",
     "griefing.FireBlockMixin",
@@ -20,7 +19,6 @@
     "griefing.FluidBlockMixin",
     "griefing.LavaFluidMixin",
     "griefing.ProjectileEntityMixin",
-
     "smuggling.BlockMixin",
     "smuggling.ComposterMixin",
     "smuggling.ItemEntityMixin",

@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import org.apache.logging.log4j.LogManager
-import us.spaceclouds42.zones.access.BuilderAccessor
 import us.spaceclouds42.zones.commands.BuilderCommand
 import us.spaceclouds42.zones.commands.BuilderModeCommand
 import us.spaceclouds42.zones.commands.ZoneCommand
@@ -18,6 +17,7 @@ import us.spaceclouds42.zones.data.BuilderManager
 import us.spaceclouds42.zones.data.ZoneManager
 import us.spaceclouds42.zones.data.ZoneManager.getZone
 import us.spaceclouds42.zones.data.spec.PosD
+import us.spaceclouds42.zones.duck.BuilderAccessor
 import us.spaceclouds42.zones.log.LogMode
 import us.spaceclouds42.zones.log.Logger
 import us.spaceclouds42.zones.utils.Dispatcher
