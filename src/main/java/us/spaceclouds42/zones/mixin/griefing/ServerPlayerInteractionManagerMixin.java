@@ -17,39 +17,56 @@ import us.spaceclouds42.zones.data.spec.PosD;
 import us.spaceclouds42.zones.data.spec.Zone;
 import us.spaceclouds42.zones.duck.BuilderAccessor;
 
+/**
+ * Prevents player interactions for builders in the outside world or in any zone that they are not currently in, and prevents non builders from
+ * interacting with blocks in any zone.
+ */
 @Mixin(ServerPlayerInteractionManager.class)
-public class ServerPlayerInteractionManagerMixin {
-    @Inject(method = "interactBlock", at = @At(value = "NEW", target = "net/minecraft/item/ItemUsageContext"), cancellable = true)
+abstract class ServerPlayerInteractionManagerMixin {
+    @Inject(
+            method = "interactBlock",
+            at = @At(
+                    value = "NEW",
+                    target = "net/minecraft/item/ItemUsageContext"
+            ),
+            cancellable = true
+    )
     private void disablePlacingBlocksInZone(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
-        if (player.world.isClient())
+        if (player.world.isClient()) {
             return;
-
+        }
 
         Zone blockZone = ZoneManager.INSTANCE.getZone(world, hitResult.getBlockPos().offset(hitResult.getSide()));
         Zone playerZone = null;
+        
         if (((BuilderAccessor) player).isInBuilderMode()) {
-            playerZone = ZoneManager.INSTANCE.getZone(new PosD(
-                world.getRegistryKey().getValue().toString(),
-                player.getX(),
-                player.getY(),
-                player.getZ()
-            ));
+            playerZone = ZoneManager.INSTANCE.getZone(
+                new PosD(
+                    world.getRegistryKey().getValue().toString(),
+                    player.getX(),
+                    player.getY(),
+                    player.getZ()
+                )
+            );
         }
 
         if (blockZone != playerZone) {
             cir.setReturnValue(ActionResult.FAIL);
 
-            player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                -2,
-                player.getInventory().selectedSlot,
-                player.getMainHandStack()
-            ));
-
-            player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                -2,
-                40,
-                player.getOffHandStack()
-            ));
+            player.networkHandler.sendPacket(
+                new ScreenHandlerSlotUpdateS2CPacket(
+                    -2,
+                    player.getInventory().selectedSlot,
+                    player.getMainHandStack()
+                )
+            );
+            player.networkHandler.sendPacket(
+                new ScreenHandlerSlotUpdateS2CPacket(
+                    -2,
+                    40,
+                    player.getOffHandStack()
+                )
+            );
         }
     }
 }
