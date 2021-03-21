@@ -46,9 +46,9 @@ public class ServerPlayerInteractionManagerMixin {
             ));
 
             player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                    -2,
-                    40,
-                    player.getOffHandStack()
+                -2,
+                40,
+                player.getOffHandStack()
             ));
         }
     }
