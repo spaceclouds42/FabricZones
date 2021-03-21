@@ -3,17 +3,17 @@ package us.spaceclouds42.zones.mixin;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.ByteTag;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtByte;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.spaceclouds42.zones.duck.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
+import us.spaceclouds42.zones.duck.BuilderAccessor;
 
 /**
  *  Manages inventory swapping.
@@ -73,18 +73,18 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
      * @param ci callback info
      */
     @Inject(
-            method = "readCustomDataFromTag",
+            method = "readCustomDataFromNbt",
             at = @At(
                     value = "TAIL"
             )
     )
-    private void readDataFromTag(CompoundTag tag, CallbackInfo ci) {
+    private void readDataFromTag(NbtCompound tag, CallbackInfo ci) {
         if (tag.contains("InBuilderMode")) {
             this.isInBuilderMode = tag.getBoolean("InBuilderMode");
         }
 
         if (tag.contains("SecondaryInventory")) {
-            ListTag secondaryInvTag = tag.getList("SecondaryInventory", NbtType.COMPOUND);
+            NbtList secondaryInvTag = tag.getList("SecondaryInventory", NbtType.COMPOUND);
             this.secondaryInventory.deserialize(secondaryInvTag);
         }
     }
@@ -96,16 +96,16 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
      * @param ci callback info
      */
     @Inject(
-            method = "writeCustomDataToTag",
+            method = "writeCustomDataToNbt",
             at = @At(
                     value = "TAIL"
             )
     )
-    private void writeDataToTag(CompoundTag tag, CallbackInfo ci) {
-        ByteTag inBuilderModeTag = ByteTag.of(this.isInBuilderMode);
+    private void writeDataToTag(NbtCompound tag, CallbackInfo ci) {
+        NbtByte inBuilderModeTag = NbtByte.of(this.isInBuilderMode);
         tag.put("InBuilderMode", inBuilderModeTag);
 
-        tag.put("SecondaryInventory", this.secondaryInventory.serialize(new ListTag()));
+        tag.put("SecondaryInventory", this.secondaryInventory.serialize(new NbtList()));
     }
 
     /**

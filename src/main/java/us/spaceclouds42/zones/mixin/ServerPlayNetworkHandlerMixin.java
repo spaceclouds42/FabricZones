@@ -74,7 +74,7 @@ abstract class ServerPlayNetworkHandlerMixin {
         if (detecting) { return; }
         detecting = true;
 
-        if (packet instanceof PlayerMoveC2SPacket.LookOnly) {
+        if (packet instanceof PlayerMoveC2SPacket.LookAndOnGround) {
             detecting = false;
             return;
         }
