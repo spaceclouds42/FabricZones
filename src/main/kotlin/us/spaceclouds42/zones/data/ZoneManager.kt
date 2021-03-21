@@ -302,4 +302,18 @@ object ZoneManager : ManagerBase() {
 
         return cloakedPositions
     }
+
+    fun getCloakedBlocks(): List<Vec3i> {
+        val cloakedBlocks = mutableListOf<Vec3i>()
+
+        getAllZones().values.forEach { zone ->
+            if (zone.accessMode == ZoneAccessMode.CLOAKED) {
+                zone.getCloakedBlocks().forEach { block ->
+                    cloakedBlocks.add(block)
+                }
+            }
+        }
+
+        return cloakedBlocks
+    }
 }

@@ -6,7 +6,6 @@
     "EntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
-    "ThreadedAnvilChunkStorageMixin",
 
     "accessor.ChunkSectionAccessor",
     "accessor.PlayerMoveC2SPacketAccessor",
