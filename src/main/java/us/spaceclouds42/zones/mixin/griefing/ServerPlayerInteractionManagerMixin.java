@@ -40,8 +40,8 @@ public class ServerPlayerInteractionManagerMixin {
             cir.setReturnValue(ActionResult.FAIL);
 
             player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
-                0,
-                player.getInventory().selectedSlot + 36,
+                -2,
+                player.getInventory().selectedSlot,
                 player.getMainHandStack()
             ));
         }

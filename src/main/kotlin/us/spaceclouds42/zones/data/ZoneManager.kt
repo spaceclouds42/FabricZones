@@ -90,7 +90,7 @@ object ZoneManager : ManagerBase() {
             PosD(
                 world.registryKey.value.toString(),
                 pos.x + 0.5,
-                pos.y.toDouble(),
+                pos.y + 0.5,
                 pos.z + 0.5,
             )
         )
