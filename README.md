@@ -22,8 +22,8 @@ the releases tab on GitHub
 | Rain putting out fire | Rain will not put out the fire if it is located in a zone | no |
 | Lightning causing fire | Lightning bolts will not cause create fire in a zone | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
-| Placing blocks | Place action is cancelled if result is in a zone (non builders only) | no |
-| Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |
+| Placing blocks | Place action is cancelled if result is in a zone (non builders only) | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/) |
+| Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/) |
 | Interacting with blocks (settings) | By default, only pressure plate and button interactions are processed, can disable all or enable all (non builders only) | no |
 | Pistons/slimestone | TBD | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
