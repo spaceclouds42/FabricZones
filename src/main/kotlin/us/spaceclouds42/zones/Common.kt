@@ -44,14 +44,15 @@ object Common : ModInitializer {
     }
 
     /**
-     * Cancels block break event if block is in zone and player isn't a builder, or if player is not in zone, trying to break a zoned block
+     * Cancels block break event if block is in zone and player isn't a builder, or if player is not in zone,
+     * trying to break a zoned block
      */
     private fun beforeBlockBroken(world: World, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?): Boolean {
         check(player is BuilderAccessor)
 
         val blockZone = getZone(world, pos)
 
-        if (player.isInBuilderMode) {
+        return if (player.isInBuilderMode) {
             val playerZone = getZone(
                 PosD(
                     world.registryKey.value.toString(),
@@ -61,9 +62,9 @@ object Common : ModInitializer {
                 )
             )
 
-            return blockZone == playerZone
+            blockZone == playerZone
         } else {
-            return blockZone == null
+            blockZone == null
         }
     }
 
