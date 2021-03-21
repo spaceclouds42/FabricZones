@@ -49,14 +49,7 @@ object Common : ModInitializer {
     private fun beforeBlockBroken(world: World, player: PlayerEntity, pos: BlockPos, state: BlockState, blockEntity: BlockEntity?): Boolean {
         check(player is BuilderAccessor)
 
-        val blockZone = getZone(
-            PosD(
-                world.registryKey.value.toString(),
-                pos.x.toDouble(),
-                pos.y.toDouble(),
-                pos.z.toDouble()
-            )
-        )
+        val blockZone = getZone(world, pos)
 
         if (player.isInBuilderMode) {
             val playerZone = getZone(

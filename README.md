@@ -18,12 +18,12 @@ the releases tab on GitHub
 | Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting. Liquids in different zones do not interact or connect in any way. | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Lava/Water block generation | Stone/Cobble/Obsidian/Basalt generation does not occur if liquids/blocks are not all in the same zone | yes |
 | Fire spreading | Disables fire spreading in same way as the gamerule | yes |
+| Placing blocks | Place action is cancelled if result is in a zone and player is not in builder mode or if result is out of zone and player is in builder mode | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Breaking blocks | Break action is cancelled if result is in a zone and player is not in builder mode or if result is out of zone and player is in builder mode | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
 | Rain putting out fire | Rain will not put out the fire if it is located in a zone | no |
 | Lightning causing fire | Lightning bolts will not cause create fire in a zone | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
-| Placing blocks | Place action is cancelled if result is in a zone (non builders only) | no |
-| Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |
 | Interacting with blocks (settings) | By default, only pressure plate and button interactions are processed, can disable all or enable all (non builders only) | no |
 | Pistons/slimestone | TBD | no |
 | Projectiles from zoned entities | Any projectile from a zoned entity will be deleted | no |
