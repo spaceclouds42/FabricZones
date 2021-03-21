@@ -15,9 +15,12 @@ the releases tab on GitHub
 |----------------|-----|-----------------------|
 | Projectiles from non builders | Any projectile entering a zone will be deleted, tridents will be given back to thrower | yes | 
 | Falling block entity | Any falling block entity that does not originate from inside a zone will turn into an item, and any falling blocks inside zones will not fall | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
-| Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting. Liquids in different zones do not interact or connect in any way. Stone/Cobble/Obsidian/Basalt generation does not occur if liquids/blocks are not all in the same zone | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Liquids | Any liquid flowing into the zone is stopped from entering, any liquid flowing out is stopped from exiting. Liquids in different zones do not interact or connect in any way. | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Lava/Water block generation | Stone/Cobble/Obsidian/Basalt generation does not occur if liquids/blocks are not all in the same zone | yes |
+| Fire spreading | Disables fire spreading in same way as the gamerule | yes |
 | Mob griefing | Fully disables any mob griefing that the gamerule disables | no |
-| Fire spreading | Disables fire spreading in same way as the gamerule | no |
+| Rain putting out fire | Rain will not put out the fire if it is located in a zone | no |
+| Lightning causing fire | Lightning bolts will not cause create fire in a zone | no |
 | Explosions | If explodes at a position not in a zone, it will not cause any damage inside the zone, but still will cause damage outside. If position is inside of zone, griefing is cancelled entirely | no |
 | Placing blocks | Place action is cancelled if result is in a zone (non builders only) | no |
 | Breaking blocks | Break action is cancelled if result is in a zone (non builders only) | no |

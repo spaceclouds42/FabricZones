@@ -15,6 +15,7 @@
 
     "griefing.FallingBlockEntityMixin",
     "griefing.FallingBlockMixin",
+    "griefing.FireBlockMixin",
     "griefing.FlowableFluidMixin",
     "griefing.FluidBlockMixin",
     "griefing.LavaFluidMixin",
