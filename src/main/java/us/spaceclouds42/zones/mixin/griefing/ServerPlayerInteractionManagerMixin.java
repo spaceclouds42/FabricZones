@@ -25,7 +25,7 @@ public class ServerPlayerInteractionManagerMixin {
             return;
 
 
-        Zone blockZone = ZoneManager.INSTANCE.getZone(world, hitResult.getBlockPos());
+        Zone blockZone = ZoneManager.INSTANCE.getZone(world, hitResult.getBlockPos().offset(hitResult.getSide()));
         Zone playerZone = null;
         if (((BuilderAccessor) player).isInBuilderMode()) {
             playerZone = ZoneManager.INSTANCE.getZone(new PosD(
