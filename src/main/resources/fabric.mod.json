@@ -6,7 +6,11 @@
   "name": "Fabric Zones",
   "description": "Adds a builder mode to allow players to build as if in creative, but eliminates risk of spawning in illegals or loads of diamonds",
   "authors": [
-    "SpaceClouds42"
+    "SpaceClouds42",
+    "BasiqueEvangelist"
+  ],
+  "contributors": [
+    "profjb58"
   ],
   "contact": {
     "homepage": "https://SpaceClouds42.github.io/FabricZones",
