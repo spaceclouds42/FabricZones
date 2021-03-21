@@ -44,6 +44,12 @@ public class ServerPlayerInteractionManagerMixin {
                 player.getInventory().selectedSlot,
                 player.getMainHandStack()
             ));
+
+            player.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(
+                    -2,
+                    40,
+                    player.getOffHandStack()
+            ));
         }
     }
 }
