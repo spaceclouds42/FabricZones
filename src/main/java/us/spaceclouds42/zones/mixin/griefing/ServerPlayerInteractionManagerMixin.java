@@ -56,7 +56,7 @@ abstract class ServerPlayerInteractionManagerMixin {
             player.networkHandler.sendPacket(
                 new ScreenHandlerSlotUpdateS2CPacket(
                     -2,
-                    player.getInventory().selectedSlot,
+                    player.inventory.selectedSlot,
                     player.getMainHandStack()
                 )
             );

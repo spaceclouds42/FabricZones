@@ -53,10 +53,7 @@ data class Builder(
         }
 
         builderPlayer.swapInventories()
-        player.abilities.allowFlying = true
-        player.abilities.creativeMode = true
-        player.abilities.invulnerable = true
-        player.changeGameMode(GameMode.CREATIVE)
+        player.setGameMode(GameMode.CREATIVE)
     }
 
     /**
@@ -71,9 +68,6 @@ data class Builder(
         }
 
         builderPlayer.swapInventories()
-        player.abilities.allowFlying = false
-        player.abilities.creativeMode = false
-        player.abilities.invulnerable = false
-        player.changeGameMode(GameMode.DEFAULT)
+        player.setGameMode(GameMode.SURVIVAL)
     }
 }

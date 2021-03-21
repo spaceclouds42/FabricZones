@@ -9,7 +9,6 @@ import net.minecraft.particle.DustParticleEffect
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3f
 import net.minecraft.util.math.Vec3i
 import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
@@ -176,11 +175,9 @@ data class Zone(
     private fun renderParticles(player: ServerPlayerEntity, x: Double, y: Double, z: Double) {
         player.networkHandler.sendPacket(ParticleS2CPacket(
             DustParticleEffect(
-                Vec3f(
-                    color.first/255.0F,
-                    color.second/255.0F,
-                    color.third/255.0F
-                ),
+                color.first/255.0F,
+                color.second/255.0F,
+                color.third/255.0F,
                 1.0F
             ),
             true,

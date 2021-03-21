@@ -28,7 +28,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     /**
      * Player's current inventory
      */
-    @Unique private final PlayerInventory inventory = thisPlayer.getInventory();
+    @Unique private final PlayerInventory inventory = thisPlayer.inventory;
 
     /**
      * Player's secondary inventory

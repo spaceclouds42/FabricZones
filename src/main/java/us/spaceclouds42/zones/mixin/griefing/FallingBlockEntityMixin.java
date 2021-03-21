@@ -64,7 +64,7 @@ abstract class FallingBlockEntityMixin extends Entity {
                 dropItem(block.getBlock());
             }
             
-            discard();
+            this.remove();
             ci.cancel();
         }
     }

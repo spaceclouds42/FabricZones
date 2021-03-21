@@ -79,7 +79,7 @@ abstract class ProjectileEntityMixin {
                 zone.getAccessMode() != ZoneAccessMode.EVERYONE
         ) {
             ci.cancel();
-            ((Entity) (Object) this).discard();
+            ((Entity) (Object) this).remove();
 
             // Prevents players from permanently losing their tridents
             try {
