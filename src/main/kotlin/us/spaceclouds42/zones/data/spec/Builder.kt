@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.world.GameMode
 import us.spaceclouds42.zones.LOGGER
+import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.log.LogMode
 import us.spaceclouds42.zones.duck.BuilderAccessor
 
@@ -68,6 +69,6 @@ data class Builder(
         }
 
         builderPlayer.swapInventories()
-        player.setGameMode(GameMode.SURVIVAL)
+        player.setGameMode(SERVER.defaultGameMode)
     }
 }
