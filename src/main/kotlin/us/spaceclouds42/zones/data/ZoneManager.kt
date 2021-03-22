@@ -140,6 +140,7 @@ object ZoneManager : ManagerBase() {
             accessMode = old.accessMode,
             color = old.color,
             gotoPos = old.gotoPos,
+            renderDistance = old.renderDistance,
         )
 
         saveData(name)
@@ -162,6 +163,7 @@ object ZoneManager : ManagerBase() {
             accessMode = mode,
             color = old.color,
             gotoPos = old.gotoPos,
+            renderDistance = old.renderDistance,
         )
 
         if (mode == ZoneAccessMode.CLOAKED) {
@@ -202,6 +204,7 @@ object ZoneManager : ManagerBase() {
             accessMode = old.accessMode,
             color = Triple(r, g, b),
             gotoPos = old.gotoPos,
+            renderDistance = old.renderDistance,
         )
 
         saveData(name)
@@ -223,6 +226,29 @@ object ZoneManager : ManagerBase() {
             accessMode = old.accessMode,
             color = old.color,
             gotoPos = gotoPos,
+            renderDistance = old.renderDistance,
+        )
+
+        saveData(name)
+    }
+
+    /**
+     * Changes the render distance of a zone
+     * @param name the zone to be edited
+     * @param distance the new render distance
+     */
+    fun editZoneRenderDistance(name: String, distance: Int) {
+        val old = cache[name] as Zone
+
+        cache[name] = Zone(
+            id = name,
+            startPos = old.startPos,
+            endPos = old.endPos,
+            createdBy = old.createdBy,
+            accessMode = old.accessMode,
+            color = old.color,
+            gotoPos = old.gotoPos,
+            renderDistance = distance,
         )
 
         saveData(name)

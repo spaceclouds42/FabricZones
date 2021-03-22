@@ -164,6 +164,22 @@ class ZoneCommand : ICommand {
                                             true
                                         ) }
                                 )
+                        ).then(
+                            CommandManager
+                                .literal("renderDistance")
+                                .executes { zoneEditRenderDistance(
+                                    it,
+                                    StringArgumentType.getString(it, "name")
+                                ) }
+                                .then(
+                                    CommandManager
+                                        .argument("distance", IntegerArgumentType.integer(0))
+                                        .executes { zoneEditRenderDistance(
+                                            it,
+                                            StringArgumentType.getString(it, "name"),
+                                            IntegerArgumentType.getInteger(it, "distance")
+                                        ) }
+                                )
                         )
                 )
                 .build()
@@ -227,7 +243,7 @@ class ZoneCommand : ICommand {
         dispatcher.root.addChild(zoneNode)
         // zone create <name> <start> <end>
         zoneNode.addChild(createNode)
-        // zone edit <name> (corners|access|color|goto)
+        // zone edit <name> (corners|access|color|gotoPos|renderDistance)
         zoneNode.addChild(editNode)
         // zone delete <name>
         zoneNode.addChild(deleteNode)
@@ -350,7 +366,7 @@ class ZoneCommand : ICommand {
                 false
             )
 
-            return 1;
+            return 1
         }
 
         context.source.sendFeedback(
@@ -432,10 +448,37 @@ class ZoneCommand : ICommand {
         )
 
         context.source.sendFeedback(
-            green("Edited zone: \"$name\", now at ") +
+            green("Edited zone: \"$name\", goto position now at ") +
                 yellow("${x.toInt()}, ${y.toInt()}, ${z.toInt()}"),
             true
         )
+
+        return 1
+    }
+
+    /**
+     * Sets the render distance of a zone (or queries it)
+     * @param context command source
+     * @param name zone to be edited
+     * @param distance new render distance
+     * @return 1 if successful edit, 0 if not
+     */
+    private fun zoneEditRenderDistance(context: Context, name: String, distance: Int = -1): Int {
+        if (distance != -1) {
+            ZoneManager.editZoneRenderDistance(name, distance)
+
+            context.source.sendFeedback(
+                green("Edited zone: \"$name\", render distance is now ") +
+                    yellow(distance.toString()),
+                true
+            )
+        } else {
+            context.source.sendFeedback(
+                green("Zone \"$name\" has a render distance of") +
+                    yellow(ZoneManager.getZone(name)!!.renderDistance.toString()),
+                false
+            )
+        }
 
         return 1
     }
