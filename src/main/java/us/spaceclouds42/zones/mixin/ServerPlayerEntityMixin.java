@@ -28,7 +28,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     /**
      * Player's current inventory
      */
-    @Unique private final PlayerInventory inventory = thisPlayer.inventory;
+    @Unique private final PlayerInventory currentInventory = thisPlayer.inventory;
 
     /**
      * Player's secondary inventory
@@ -59,9 +59,9 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     public void swapInventories() {
         PlayerInventory tempInventory = new PlayerInventory((PlayerEntity) (Object) this);
         tempInventory.clone(this.secondaryInventory);
-        tempInventory.selectedSlot = this.inventory.selectedSlot;
-        this.secondaryInventory.clone(this.inventory);
-        this.inventory.clone(tempInventory);
+        tempInventory.selectedSlot = this.currentInventory.selectedSlot;
+        this.secondaryInventory.clone(this.currentInventory);
+        this.currentInventory.clone(tempInventory);
 
         this.isInBuilderMode = !this.isInBuilderMode;
     }
