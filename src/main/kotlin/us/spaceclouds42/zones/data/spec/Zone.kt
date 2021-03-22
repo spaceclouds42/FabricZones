@@ -15,6 +15,7 @@ import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.utils.Axis
+import java.util.concurrent.CompletableFuture
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -63,7 +64,12 @@ data class Zone(
     /**
      * The position to teleport to when the player runs `/zone goto <name>`
      */
-    var gotoPos: PosD? = null
+    var gotoPos: PosD? = null,
+
+    /**
+     * The distance (in blocks) from the player in which this zone's borders will be rendered
+     */
+    var renderDistance: Int = 50,
 
     // Not to be implemented yet.. still very unsure of how I want this implemented
     //
@@ -139,7 +145,7 @@ data class Zone(
      * @param player the player the receives the particle packets
      */
     fun renderBorders(player: ServerPlayerEntity) {
-        val r = 50 * 50
+        val r = renderDistance * renderDistance
 
         for (e in edges) {
             when (e.third) {
@@ -250,15 +256,17 @@ data class Zone(
      * @param player the player the zone is hidden from
      */
     fun hideZone(player: ServerPlayerEntity) {
-        if (startPos.world != player.world.registryKey.value.toString()) return
-
-        for (xyz in getCloakedBlocks()) {
-            player.networkHandler.sendPacket(
-                BlockUpdateS2CPacket(
-                    BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
-                    Blocks.AIR.defaultState
-                )
-            )
+        CompletableFuture.runAsync {
+            if (startPos.world == player.world.registryKey.value.toString()) {
+                for (xyz in getCloakedBlocks()) {
+                    player.networkHandler.sendPacket(
+                        BlockUpdateS2CPacket(
+                            BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
+                            Blocks.AIR.defaultState
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -268,15 +276,17 @@ data class Zone(
      * @param player the player the zone is unhidden from
      */
     fun unHideZone(player: ServerPlayerEntity) {
-        if (startPos.world != player.world.registryKey.value.toString()) return
-
-        for (xyz in getCloakedBlocks()) {
-            player.networkHandler.sendPacket(
-                BlockUpdateS2CPacket(
-                    BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
-                    player.world.getBlockState(BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)))
-                )
-            )
+        CompletableFuture.runAsync {
+            if (startPos.world == player.world.registryKey.value.toString()) {
+                for (xyz in getCloakedBlocks()) {
+                    player.networkHandler.sendPacket(
+                        BlockUpdateS2CPacket(
+                            BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
+                            player.world.getBlockState(BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)))
+                        )
+                    )
+                }
+            }
         }
     }
 
