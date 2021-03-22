@@ -14,11 +14,12 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import us.spaceclouds42.zones.SERVER
-import us.spaceclouds42.zones.ext.toRange
 import us.spaceclouds42.zones.utils.Axis
-import us.spaceclouds42.zones.utils.DoubleRange
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
+import kotlin.properties.Delegates
 
 /**
  * Zones, manageable areas where builders
@@ -78,39 +79,40 @@ data class Zone(
      * A map of edges to their axis and position, calculated from the [startPos] and [endPos]
      */
     @Transient
-    private val edges = mutableMapOf<Triple<Double, Double, Axis>, DoubleRange>()
+    private val edges = mutableListOf<Triple<Double, Double, Axis>>()
+
+    private var gX by Delegates.notNull<Double>()
+    private var gY by Delegates.notNull<Double>()
+    private var gZ by Delegates.notNull<Double>()
+    private var sX by Delegates.notNull<Double>()
+    private var sY by Delegates.notNull<Double>()
+    private var sZ by Delegates.notNull<Double>()
 
     /**
      * Calculates the edges when the zone is initialized
      */
     init {
-        val gX = max(startPos.x, endPos.x) + 1.0
-        val gY = max(startPos.y, endPos.y) + 1.0
-        val gZ = max(startPos.z, endPos.z) + 1.0
-        val sX = min(startPos.x, endPos.x).toDouble()
-        val sY = min(startPos.y, endPos.y).toDouble()
-        val sZ = min(startPos.z, endPos.z).toDouble()
+        gX = max(startPos.x, endPos.x) + 1.0
+        gY = max(startPos.y, endPos.y) + 1.0
+        gZ = max(startPos.z, endPos.z) + 1.0
+        sX = min(startPos.x, endPos.x).toDouble()
+        sY = min(startPos.y, endPos.y).toDouble()
+        sZ = min(startPos.z, endPos.z).toDouble()
 
-        // x edges
-        val xRange = sX.toRange(gX)
-        edges[Triple(gY, gZ, Axis.X)] = xRange
-        edges[Triple(gY, sZ, Axis.X)] = xRange
-        edges[Triple(sY, gZ, Axis.X)] = xRange
-        edges[Triple(sY, sZ, Axis.X)] = xRange
+        edges.add(Triple(gY, gZ, Axis.X))
+        edges.add(Triple(gY, sZ, Axis.X))
+        edges.add(Triple(sY, gZ, Axis.X))
+        edges.add(Triple(sY, sZ, Axis.X))
 
-        // y edges
-        val yRange = sY.toRange(gY)
-        edges[Triple(gX, gZ, Axis.Y)] = yRange
-        edges[Triple(gX, sZ, Axis.Y)] = yRange
-        edges[Triple(sX, gZ, Axis.Y)] = yRange
-        edges[Triple(sX, sZ, Axis.Y)] = yRange
+        edges.add(Triple(gX, gZ, Axis.Y))
+        edges.add(Triple(gX, sZ, Axis.Y))
+        edges.add(Triple(sX, gZ, Axis.Y))
+        edges.add(Triple(sX, sZ, Axis.Y))
 
-        // z edges
-        val zRange = sZ.toRange(gZ)
-        edges[Triple(gX, gY, Axis.Z)] = zRange
-        edges[Triple(gX, sY, Axis.Z)] = zRange
-        edges[Triple(sX, gY, Axis.Z)] = zRange
-        edges[Triple(sX, sY, Axis.Z)] = zRange
+        edges.add(Triple(gX, gY, Axis.Z))
+        edges.add(Triple(gX, sY, Axis.Z))
+        edges.add(Triple(sX, gY, Axis.Z))
+        edges.add(Triple(sX, sY, Axis.Z))
     }
 
     /**
@@ -137,27 +139,68 @@ data class Zone(
      * @param player the player the receives the particle packets
      */
     fun renderBorders(player: ServerPlayerEntity) {
+        val r = 50 * 50
+
         for (e in edges) {
-            when (e.key.third) {
+            when (e.third) {
                 Axis.X -> {
-                    val y = e.key.first
-                    val z = e.key.second
-                    for (x in e.value.getElements()) {
-                        renderParticles(player, x, y, z)
+                    val y = e.first
+                    val z = e.second
+                    val pX = (player.x * 2).roundToInt() / 2.0
+
+                    if (player.squaredDistanceTo(pX, y, z) > r) {
+                        continue
+                    }
+
+                    val difY = player.y - y
+                    val difZ = player.z - z
+                    val a = difY * difY + difZ * difZ
+                    val b = sqrt(r - a)
+
+                    var iX = max(pX - b, sX)
+                    while (iX <= pX + b && iX <= gX) {
+                        renderParticles(player, iX, y, z)
+                        iX += .5
                     }
                 }
                 Axis.Y -> {
-                    val x = e.key.first
-                    val z = e.key.second
-                    for (y in e.value.getElements()) {
-                        renderParticles(player, x, y, z)
+                    val x = e.first
+                    val z = e.second
+                    val pY = (player.y * 2).roundToInt() / 2.0
+
+                    if (player.squaredDistanceTo(x, pY, z) > r) {
+                        continue
+                    }
+
+                    val difX = player.x - x
+                    val difZ = player.z - z
+                    val a = difX * difX + difZ * difZ
+                    val b = sqrt(r - a)
+
+                    var iY = max(pY - b, sY)
+                    while (iY <= pY + b && iY <= gY) {
+                        renderParticles(player, x, iY, z)
+                        iY += .5
                     }
                 }
                 Axis.Z -> {
-                    val x = e.key.first
-                    val y = e.key.second
-                    for (z in e.value.getElements()) {
-                        renderParticles(player, x, y, z)
+                    val x = e.first
+                    val y = e.second
+                    val pZ = (player.z * 2).roundToInt() / 2.0
+
+                    if (player.squaredDistanceTo(x, y, pZ) > r) {
+                        continue
+                    }
+
+                    val difX = player.x - x
+                    val difY = player.y - y
+                    val a = difX * difX + difY * difY
+                    val b = sqrt(r - a)
+
+                    var iZ = max(pZ - b, sZ)
+                    while (iZ <= pZ + b && iZ <= gZ) {
+                        renderParticles(player, x, y, iZ)
+                        iZ += .5
                     }
                 }
             }
