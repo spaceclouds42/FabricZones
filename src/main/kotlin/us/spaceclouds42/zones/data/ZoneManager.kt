@@ -278,7 +278,17 @@ object ZoneManager : ManagerBase() {
      * @return the zone object that was deleted
      */
     fun deleteZone(name: String): Zone? {
-        return deleteData(name) as Zone?
+        val zone = deleteData(name) as Zone?
+
+        if (zone?.accessMode == ZoneAccessMode.CLOAKED) {
+            SERVER.playerManager.playerList.forEach {
+                if (it.uuid !in BuilderManager.getOnlineBuilders()) {
+                    zone.unHideZone(it)
+                }
+            }
+        }
+
+        return zone
     }
 
     /**
