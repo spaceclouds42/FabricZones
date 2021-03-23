@@ -3,6 +3,9 @@ package us.spaceclouds42.zones.commands
 import me.lucko.fabric.api.permissions.v0.Permissions
 import net.minecraft.server.command.CommandManager
 import us.spaceclouds42.zones.data.BuilderManager
+import us.spaceclouds42.zones.data.ZoneManager
+import us.spaceclouds42.zones.data.spec.Builder
+import us.spaceclouds42.zones.duck.BuilderAccessor
 import us.spaceclouds42.zones.utils.*
 
 class BuilderModeCommand : ICommand {
@@ -68,6 +71,11 @@ class BuilderModeCommand : ICommand {
                 green("Builder mode enabled"),
                 false
             )
+
+            if (ZoneManager.getZone(source.player) != null) {
+                Builder.activateBuilderMode(source.player)
+            }
+
             1
         }
     }
@@ -94,6 +102,11 @@ class BuilderModeCommand : ICommand {
                 red("Builder mode disabled"),
                 false
             )
+
+            if ((source.player as BuilderAccessor).isInBuilderMode) {
+                Builder.deactivateBuilderMode(source.player)
+            }
+
             1
         }
     }
