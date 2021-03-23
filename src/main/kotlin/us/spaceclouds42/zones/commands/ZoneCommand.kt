@@ -267,12 +267,22 @@ class ZoneCommand : ICommand {
     private fun zoneCreateCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
         val source = context.source
         val world = source.world.registryKey.value
+        val startPosI = startPos.toPos(world)
+        val endPosI = endPos.toPos(world)
+
+        val overlap = ZoneManager.hasOverlap(startPosI, endPosI)
+        if (overlap.first) {
+            source.sendError(
+                red("Input positions overlap with zone \"${overlap.second}\"")
+            )
+            return 0
+        }
 
         ZoneManager.setZone(
             Zone(
                 id = name,
-                startPos = startPos.toPos(world),
-                endPos = endPos.toPos(world),
+                startPos = startPosI,
+                endPos = endPosI,
                 createdBy = source.player.entityName
             )
         )
@@ -300,11 +310,21 @@ class ZoneCommand : ICommand {
     private fun zoneEditPosCommand(context: Context, name: String, startPos: BlockPos, endPos: BlockPos): Int {
         val source = context.source
         val world = source.world.registryKey.value
+        val startPosI = startPos.toPos(world)
+        val endPosI = endPos.toPos(world)
+
+        val overlap = ZoneManager.hasOverlap(startPosI, endPosI)
+        if (overlap.first) {
+            source.sendError(
+                red("Input positions overlap with zone \"${overlap.second}\"")
+            )
+            return 0
+        }
 
         ZoneManager.editZonePos(
             name = name,
-            startPos = startPos.toPos(world),
-            endPos = endPos.toPos(world),
+            startPos = startPosI,
+            endPos = endPosI,
         )
 
         source.sendFeedback(

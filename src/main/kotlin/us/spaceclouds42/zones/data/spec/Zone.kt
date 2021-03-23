@@ -311,4 +311,14 @@ data class Zone(
 
         return blocks;
     }
+
+    fun detectOverlap(minPos: PosI, maxPos: PosI): Boolean {
+        return !(minPos.world != startPos.world ||
+                minPos.x > gX ||
+                minPos.y > gY ||
+                minPos.z > gZ ||
+                maxPos.x < sX ||
+                maxPos.y < sY ||
+                maxPos.z < sZ)
+    }
 }

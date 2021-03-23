@@ -14,6 +14,8 @@ import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.data.spec.*
 import us.spaceclouds42.zones.log.LogMode
 import java.io.File
+import java.lang.Integer.min
+import kotlin.math.max
 
 /**
  * Manages data concerning [zones][Zone]
@@ -368,5 +370,28 @@ object ZoneManager : ManagerBase() {
         }
 
         return cloakedBlocks
+    }
+
+    fun hasOverlap(startPos: PosI, endPos: PosI): Pair<Boolean, String?> {
+        val minPos = PosI(
+            startPos.world,
+            min(startPos.x, endPos.x),
+            min(startPos.y, endPos.y),
+            min(startPos.z, endPos.z),
+        )
+
+        val maxPos = PosI(
+            startPos.world,
+            max(startPos.x, endPos.x),
+            max(startPos.y, endPos.y),
+            max(startPos.z, endPos.z),
+        )
+
+        getAllZones().values.forEach { zone ->
+            if (zone.detectOverlap(minPos, maxPos)) {
+                return Pair(true, zone.id)
+            }
+        }
+        return Pair(false, null)
     }
 }
