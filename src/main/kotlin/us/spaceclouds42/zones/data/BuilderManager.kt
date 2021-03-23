@@ -37,11 +37,12 @@ object BuilderManager : ManagerBase() {
      */
     fun addPlayer(player: ServerPlayerEntity) {
         val uuid = player.uuid.toString()
-
-        cache[uuid] = Builder(
+        val builder = Builder(
             id = uuid,
             name = player.entityName,
         )
+
+        cache[uuid] = builder
 
         saveData(uuid)
 
@@ -49,6 +50,11 @@ object BuilderManager : ManagerBase() {
             if (it.accessMode == ZoneAccessMode.CLOAKED) {
                 it.unHideZone(player)
             }
+        }
+
+        val zone = ZoneManager.getZone(player)
+        if (zone != null && builder.builderModeEnabled) {
+            builder.activateBuilderMode(player)
         }
     }
 
