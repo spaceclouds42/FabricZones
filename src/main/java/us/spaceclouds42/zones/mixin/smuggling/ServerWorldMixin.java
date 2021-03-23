@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import us.spaceclouds42.zones.data.spec.Builder;
 import us.spaceclouds42.zones.duck.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
 
@@ -14,24 +15,6 @@ import us.spaceclouds42.zones.data.BuilderManager;
  */
 @Mixin(ServerWorld.class)
 abstract class ServerWorldMixin {
-    /**
-     * Prevents a crash when joining in singleplayer with a new uuid
-     *
-     * @param player the player that joined
-     * @param ci callback info
-     */
-    @Inject(
-            method = "onPlayerConnected",
-            at = @At(
-                    value = "HEAD"
-            )
-    )
-    private void addBuilderOnConnect(ServerPlayerEntity player, CallbackInfo ci) {
-        if (((BuilderAccessor) player).isInBuilderMode() && !BuilderManager.INSTANCE.isBuilder(player.getUuid())) {
-            BuilderManager.INSTANCE.addPlayer(player);
-        }
-    }
-
     /**
      * Deactivates builder mode when a player joins, teleports, changes dimension, or respawns
      *
@@ -46,7 +29,7 @@ abstract class ServerWorldMixin {
     )
     private void disableBuilderModeOnRespawn(ServerPlayerEntity player, CallbackInfo ci) {
         if (((BuilderAccessor) player).isInBuilderMode()) {
-            BuilderManager.INSTANCE.getBuilder(player.getUuid()).deactivateBuilderMode(player);
+            Builder.Utils.deactivateBuilderMode(player);
         }
     }
 }

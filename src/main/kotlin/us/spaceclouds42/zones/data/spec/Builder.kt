@@ -42,33 +42,35 @@ data class Builder(
     var areZoneBordersVisible: Boolean = true,
 ) : IdentifiableDataSpecBase() {
 
-    /**
-     *
-     */
-    fun activateBuilderMode(player: ServerPlayerEntity) {
-        val builderPlayer = player as BuilderAccessor
+    companion object Utils {
+        /**
+         *
+         */
+        fun activateBuilderMode(player: ServerPlayerEntity) {
+            val builderPlayer = player as BuilderAccessor
 
-        if (builderPlayer.isInBuilderMode) {
-            LOGGER.info("Tried to activate builder mode but ${player.entityName} is already in builder mode.", LogMode.DEBUG)
-            return
+            if (builderPlayer.isInBuilderMode) {
+                LOGGER.info("Tried to activate builder mode but ${player.entityName} is already in builder mode.", LogMode.DEBUG)
+                return
+            }
+
+            builderPlayer.swapInventories()
+            player.setGameMode(GameMode.CREATIVE)
         }
 
-        builderPlayer.swapInventories()
-        player.setGameMode(GameMode.CREATIVE)
-    }
+        /**
+         *
+         */
+        fun deactivateBuilderMode(player: ServerPlayerEntity) {
+            val builderPlayer = player as BuilderAccessor
 
-    /**
-     *
-     */
-    fun deactivateBuilderMode(player: ServerPlayerEntity) {
-        val builderPlayer = player as BuilderAccessor
+            if (!builderPlayer.isInBuilderMode) {
+                LOGGER.info("Tried to deactivate builder mode but ${player.entityName} is not in builder mode.", LogMode.DEBUG)
+                return
+            }
 
-        if (!builderPlayer.isInBuilderMode) {
-            LOGGER.info("Tried to deactivate builder mode but ${player.entityName} is not in builder mode.", LogMode.DEBUG)
-            return
+            builderPlayer.swapInventories()
+            player.setGameMode(SERVER.defaultGameMode)
         }
-
-        builderPlayer.swapInventories()
-        player.setGameMode(SERVER.defaultGameMode)
     }
 }

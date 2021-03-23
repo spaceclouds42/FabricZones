@@ -122,9 +122,9 @@ abstract class ServerPlayNetworkHandlerMixin {
         if (BuilderManager.INSTANCE.isBuilder(player.getUuid())) {
             Builder builder = BuilderManager.INSTANCE.getBuilder(player.getUuid());
             if (wasInZone && !inZone) {
-                builder.deactivateBuilderMode(player);
+                Builder.Utils.deactivateBuilderMode(player);
             } else if (!wasInZone && inZone && builder.getBuilderModeEnabled()) {
-                builder.activateBuilderMode(player);
+                Builder.Utils.activateBuilderMode(player);
             }
         }
 

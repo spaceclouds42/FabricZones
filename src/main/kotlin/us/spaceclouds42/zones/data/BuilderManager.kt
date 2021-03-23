@@ -54,7 +54,7 @@ object BuilderManager : ManagerBase() {
 
         val zone = ZoneManager.getZone(player)
         if (zone != null && builder.builderModeEnabled) {
-            builder.activateBuilderMode(player)
+            Builder.activateBuilderMode(player)
         }
     }
 
