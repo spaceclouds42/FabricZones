@@ -27,4 +27,13 @@ data class PosI(
      * z coordinate
      */
     val z: Int,
-)
+) {
+    fun toPosD() : PosD {
+        return PosD(
+            world,
+            x + 0.5,
+            y + 0.5,
+            z + 0.5
+        )
+    }
+}

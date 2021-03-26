@@ -1,8 +1,13 @@
 package us.spaceclouds42.zones.mixin;
 
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+import net.minecraft.block.Blocks;
+import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,7 +20,9 @@ import us.spaceclouds42.zones.data.ZoneManager;
 import us.spaceclouds42.zones.data.spec.Builder;
 import us.spaceclouds42.zones.data.spec.Zone;
 import us.spaceclouds42.zones.data.spec.ZoneAccessMode;
+import us.spaceclouds42.zones.duck.BuilderAccessor;
 import us.spaceclouds42.zones.log.LogMode;
+import us.spaceclouds42.zones.mixin.accessor.BlockUpdateS2CPacketAccessor;
 import us.spaceclouds42.zones.mixin.accessor.PlayerMoveC2SPacketAccessor;
 
 import java.util.Collection;
@@ -146,6 +153,16 @@ abstract class ServerPlayNetworkHandlerMixin {
         if (inZone && lastRenderTick++ > 4) {
             playerZone.renderBorders(player);
             lastRenderTick = 0;
+        }
+    }
+
+    @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
+    private void dontSendCloakedBlocks(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener, CallbackInfo ci) {
+        if (packet instanceof BlockUpdateS2CPacketAccessor) {
+            BlockPos pos = ((BlockUpdateS2CPacketAccessor) packet).fabriczones$getPos();
+            if (!((BuilderAccessor) player).isBuilder() && ZoneManager.INSTANCE.isCloaked(player.getServerWorld(), pos.getX(), pos.getY(), pos.getZ()) && !((BlockUpdateS2CPacketAccessor) packet).fabriczones$getState().isAir()) {
+                ((BlockUpdateS2CPacketAccessor) packet).setState(Blocks.AIR.getDefaultState());
+            }
         }
     }
 }
