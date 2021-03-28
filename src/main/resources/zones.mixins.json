@@ -27,7 +27,8 @@
     "smuggling.JukeboxBlockMixin",
     "smuggling.MusicDiscItemMixin",
     "smuggling.ServerPlayerEntityMixin",
-    "smuggling.ServerWorldMixin"
+    "smuggling.ServerWorldMixin",
+    "smuggling.StatusEffectInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1
