@@ -6,10 +6,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -59,7 +57,7 @@ abstract class ServerPlayerEntityMixin implements BuilderAccessor {
 
     @Override
     public void swapInventories() {
-        PlayerInventory tempInventory = new PlayerInventory((PlayerEntity)(Object) this);
+        PlayerInventory tempInventory = new PlayerInventory((PlayerEntity) (Object) this);
         tempInventory.clone(this.secondaryInventory);
         tempInventory.selectedSlot = this.currentInventory.selectedSlot;
         this.secondaryInventory.clone(this.currentInventory);
