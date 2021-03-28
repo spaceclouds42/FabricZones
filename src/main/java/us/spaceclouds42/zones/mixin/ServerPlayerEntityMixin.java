@@ -1,33 +1,27 @@
 package us.spaceclouds42.zones.mixin;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.spaceclouds42.zones.duck.BuilderAccessor;
 import us.spaceclouds42.zones.data.BuilderManager;
+import us.spaceclouds42.zones.duck.BuilderAccessor;
 
 /**
  *  Manages inventory swapping.
  */
 @Mixin(ServerPlayerEntity.class)
-abstract class ServerPlayerEntityMixin extends PlayerEntity implements BuilderAccessor {
-    @Shadow public ServerPlayNetworkHandler networkHandler;
+abstract class ServerPlayerEntityMixin implements BuilderAccessor {
     /**
      * The player that the mixin is mixed-in to
      */
@@ -48,10 +42,6 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements BuilderAc
      */
     @Unique private boolean isInBuilderMode = false;
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
-        super(world, pos, yaw, profile);
-    }
-
     @Override
     public PlayerInventory getSecondaryInventory() {
         return this.secondaryInventory;
@@ -64,23 +54,18 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements BuilderAc
 
     @Override
     public boolean isBuilder() {
-        return BuilderManager.INSTANCE.isBuilder(this.getUuid());
+        return BuilderManager.INSTANCE.isBuilder(((PlayerEntity) (Object) this).getUuid());
     }
 
     @Override
     public void swapInventories() {
-        PlayerInventory tempInventory = new PlayerInventory(this);
+        PlayerInventory tempInventory = new PlayerInventory((PlayerEntity)(Object) this);
         tempInventory.clone(this.secondaryInventory);
         tempInventory.selectedSlot = this.currentInventory.selectedSlot;
         this.secondaryInventory.clone(this.currentInventory);
         this.currentInventory.clone(tempInventory);
 
         this.isInBuilderMode = !this.isInBuilderMode;
-
-
-        for (StatusEffectInstance effect : this.getStatusEffects()) {
-            networkHandler.sendPacket(new EntityStatusEffectS2CPacket(this.getEntityId(), effect));
-        }
     }
 
     /**
