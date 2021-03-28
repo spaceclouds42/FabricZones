@@ -66,9 +66,10 @@ object ZoneManager : ManagerBase() {
      * @return the zone that contains that position, or null if no zone does
      */
     fun getZone(pos: PosD): Zone? {
-        if (!isServerInitialised())
+        if (!isServerInitialised()) {
             return null
-
+        }
+        
         val world = SERVER.getWorld(RegistryKey.of(Registry.DIMENSION, Identifier.tryParse(pos.world)))
 
         if (world == null) {
