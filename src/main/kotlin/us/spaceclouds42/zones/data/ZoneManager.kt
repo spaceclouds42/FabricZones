@@ -12,6 +12,7 @@ import net.minecraft.world.chunk.WorldChunk
 import us.spaceclouds42.zones.LOGGER
 import us.spaceclouds42.zones.SERVER
 import us.spaceclouds42.zones.data.spec.*
+import us.spaceclouds42.zones.isServerInitialised
 import us.spaceclouds42.zones.log.LogMode
 import java.io.File
 import java.lang.Integer.min
@@ -65,6 +66,10 @@ object ZoneManager : ManagerBase() {
      * @return the zone that contains that position, or null if no zone does
      */
     fun getZone(pos: PosD): Zone? {
+        if (!isServerInitialised()) {
+            return null
+        }
+        
         val world = SERVER.getWorld(RegistryKey.of(Registry.DIMENSION, Identifier.tryParse(pos.world)))
 
         if (world == null) {
