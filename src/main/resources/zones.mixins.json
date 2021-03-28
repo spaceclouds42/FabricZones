@@ -29,7 +29,7 @@
     "smuggling.ServerPlayerEntityMixin",
     "smuggling.ServerWorldMixin",
     "smuggling.StatusEffectInstanceMixin",
-    "smuggling.LivingEntityMixin"
+    "smuggling.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
