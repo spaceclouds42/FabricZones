@@ -8,6 +8,8 @@ import us.spaceclouds42.zones.log.Logger
  */
 lateinit var SERVER: MinecraftServer
 
+fun isServerInitialised() = ::SERVER.isInitialized
+
 /**
  * A global [logger][Logger]
  */
