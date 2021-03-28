@@ -28,7 +28,8 @@
     "smuggling.MusicDiscItemMixin",
     "smuggling.ServerPlayerEntityMixin",
     "smuggling.ServerWorldMixin",
-    "smuggling.StatusEffectInstanceMixin"
+    "smuggling.StatusEffectInstanceMixin",
+    "smuggling.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
