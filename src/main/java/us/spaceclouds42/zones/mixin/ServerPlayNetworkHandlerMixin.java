@@ -157,7 +157,7 @@ abstract class ServerPlayNetworkHandlerMixin {
     }
 
     /**
-     * Prevents packets containing cloaked blocks from sending
+     * Edits cloaked blocks in packets to be sent as air
      *
      * @param packet the (potentailly) block update packet
      * @param listener the generic listener
@@ -167,8 +167,7 @@ abstract class ServerPlayNetworkHandlerMixin {
             method = "sendPacket(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V",
             at = @At(
                     "HEAD"
-            ),
-            cancellable = true
+            )
     )
     private void dontSendCloakedBlocks(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener, CallbackInfo ci) {
         if (packet instanceof BlockUpdateS2CPacketAccessor) {
