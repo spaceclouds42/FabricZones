@@ -156,7 +156,20 @@ abstract class ServerPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
+    /**
+     * Prevents packets containing cloaked blocks from sending
+     *
+     * @param packet the (potentailly) block update packet
+     * @param listener the generic listener
+     * @param ci callback info
+     */
+    @Inject(
+            method = "sendPacket(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V",
+            at = @At(
+                    "HEAD"
+            ),
+            cancellable = true
+    )
     private void dontSendCloakedBlocks(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener, CallbackInfo ci) {
         if (packet instanceof BlockUpdateS2CPacketAccessor) {
             BlockPos pos = ((BlockUpdateS2CPacketAccessor) packet).fabriczones$getPos();
