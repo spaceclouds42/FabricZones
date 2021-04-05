@@ -39,6 +39,8 @@ the releases tab on GitHub
 | Blocks dropping items | Could be used to duplicate signs, banners, doors, bamboo, etc. | Block dropping is completely cancelled, allowing for floating blocks | yes ([@profjb](https://github.com/profjb58)) |
 | Using composters (partial) | Bone meal duping | Composters will not drop bone meal when at maximum capacity, simply set back to 0 | yes ([@profjb](https://github.com/profjb58)) |
 | Using jukeboxes (partial) | Disc duping | Jukeboxes will not drop discs, non builders cannot use zoned jukeboxes | yes |
+| Potion timers | By entering buildermode, potion won't affect them, so timer should freeze until they return to survival | Timer stays at time it was at when entering builder mode | ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
+| Eating | Gaining potion effects (gapple), clearing effects (milk), resaturation | Eat and drink action is disabled when in builder mode | yes ([@BasiqueEvangelist](https://github.com/BasiqueEvangelist/)) |
 | Placing blocks outside of build zones | Prevent users from placing diamonds etc. into the normal world | PlayerInteract packets are not handled if result is out of zone and player is in build mode | no |
 | Breaking blocks outside of build zones | Shouldn't be able to mess with things outside of designated zone | TBD | no |
 | Bone mealing | After bone meal is applied, could cause blocks to be created outside of zone | PlayerInteract packets are not handled if held item is bone meal | no |
