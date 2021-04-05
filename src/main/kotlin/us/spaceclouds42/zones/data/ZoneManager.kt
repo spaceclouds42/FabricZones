@@ -363,6 +363,15 @@ object ZoneManager : ManagerBase() {
         return cloakedPositions
     }
 
+    /**
+     * Determines whether a specific position is cloaked
+     * 
+     * @param world dimension of position
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @return if block at pos is cloaked
+     */
     fun isCloaked(world: World, x: Int, y: Int, z: Int): Boolean {
         getAllZones().values.forEach { zone ->
             if (zone.accessMode == ZoneAccessMode.CLOAKED && zone.positionInZone(world, x + 0.5, y + 0.5, z + 0.5)) {
