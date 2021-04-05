@@ -11,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import us.spaceclouds42.zones.duck.BuilderAccessor;
 
+/**
+ * Adds protections against builders abusing the safety of builder mode to wait out potion effects.
+ */
 @Mixin(StatusEffectInstance.class)
 public abstract class StatusEffectInstanceMixin {
     @Shadow protected abstract int updateDuration();
@@ -18,19 +21,29 @@ public abstract class StatusEffectInstanceMixin {
     @Shadow private int duration;
 
     @Unique private int updateTime = 20;
-
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffectInstance;updateDuration()I"))
+    
+    /**
+     * Pauses potion effect timer when in builder mode
+     * 
+     * @param instance the potion effect
+     * @param entity the entity with potion effect
+     * @param overwriteCallback manages potion effect changes
+     */
+    @Redirect(
+            method = "update",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/effect/StatusEffectInstance;updateDuration()I"
+            )
+    )
     private int dontUpdateEffectsInBuilderMode(StatusEffectInstance instance, LivingEntity entity, Runnable overwriteCallback) {
         if (entity instanceof ServerPlayerEntity && ((BuilderAccessor) entity).isInBuilderMode()) {
-            updateTime--;
-            if (updateTime <= 0) {
+            if (--updateTime <= 0) {
                 ((ServerPlayerEntity) entity).networkHandler.sendPacket(new EntityStatusEffectS2CPacket(entity.getEntityId(), instance));
                 updateTime = 20;
             }
-
             return duration;
         }
-
         return updateDuration();
     }
 }
