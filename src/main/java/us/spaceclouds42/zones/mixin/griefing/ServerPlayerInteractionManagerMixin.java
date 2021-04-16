@@ -1,6 +1,8 @@
 package us.spaceclouds42.zones.mixin.griefing;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import us.spaceclouds42.zones.data.ZoneManager;
 import us.spaceclouds42.zones.data.spec.PosD;
 import us.spaceclouds42.zones.data.spec.Zone;
+import us.spaceclouds42.zones.data.spec.ZoneAccessMode;
 import us.spaceclouds42.zones.duck.BuilderAccessor;
 
 /**
@@ -52,6 +55,10 @@ abstract class ServerPlayerInteractionManagerMixin {
 
         if (blockZone != playerZone) {
             cir.setReturnValue(ActionResult.FAIL);
+
+            if (blockZone != null && blockZone.getAccessMode() == ZoneAccessMode.CLOAKED) {
+                player.networkHandler.sendPacket(new BlockUpdateS2CPacket(hitResult.getBlockPos().offset(hitResult.getSide()), Blocks.AIR.getDefaultState()));
+            }
 
             player.networkHandler.sendPacket(
                 new ScreenHandlerSlotUpdateS2CPacket(

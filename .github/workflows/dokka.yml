@@ -4,7 +4,7 @@ name: Dokka
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 1.16.5 ]
 
 jobs:
   build:

@@ -139,6 +139,18 @@ data class Zone(
         return false
     }
 
+    fun intersectsWith(startArea: PosD, endArea: PosD): Boolean {
+        if (startPos.world != startArea.world) return false
+
+        if (
+            min(startPos.x, endPos.x) <= endArea.x && startArea.x <= (max(startPos.x, endPos.x) + 1.0) &&
+            min(startPos.y, endPos.y) <= endArea.y && startArea.y < (max(startPos.y, endPos.y) + 1.0) &&
+            min(startPos.z, endPos.z) <= endArea.z && startArea.z <= (max(startPos.z, endPos.z) + 1.0)
+        ) return true
+
+        return false
+    }
+
     /**
      * Displays particles along the edges of the zone border
      * 
@@ -265,6 +277,26 @@ data class Zone(
                             Blocks.AIR.defaultState
                         )
                     )
+                }
+            }
+        }
+    }
+
+    fun hideArea(player: ServerPlayerEntity, start: PosI, end: PosI) {
+        CompletableFuture.runAsync {
+            if (startPos.world == player.world.registryKey.value.toString()) {
+                for (xyz in getCloakedBlocks()) {
+                    if (
+                        xyz.x >= start.x && xyz.x < end.x &&
+                        xyz.y >= start.y && xyz.y < end.y &&
+                        xyz.z >= start.z && xyz.z < end.z) {
+                        player.networkHandler.sendPacket(
+                            BlockUpdateS2CPacket(
+                                BlockPos(Vec3i(xyz.x, xyz.y, xyz.z)),
+                                Blocks.AIR.defaultState
+                            )
+                        )
+                    }
                 }
             }
         }

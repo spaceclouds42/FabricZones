@@ -6,7 +6,9 @@
     "EntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
+    "ThreadedAnvilChunkStorageMixin",
 
+    "accessor.BlockUpdateS2CPacketAccessor",
     "accessor.ChunkSectionAccessor",
     "accessor.PlayerMoveC2SPacketAccessor",
     "accessor.TridentEntityAccessor",
@@ -27,7 +29,9 @@
     "smuggling.JukeboxBlockMixin",
     "smuggling.MusicDiscItemMixin",
     "smuggling.ServerPlayerEntityMixin",
-    "smuggling.ServerWorldMixin"
+    "smuggling.ServerWorldMixin",
+    "smuggling.StatusEffectInstanceMixin",
+    "smuggling.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
