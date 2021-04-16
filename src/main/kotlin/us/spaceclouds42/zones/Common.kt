@@ -27,7 +27,7 @@ import us.spaceclouds42.zones.utils.Dispatcher
  */
 object Common : ModInitializer {
     override fun onInitialize() {
-        LOGGER = Logger(LogManager.getLogger("Fabric Zones"), LogMode.WTF)
+        LOGGER = Logger(LogManager.getLogger("Fabric Zones"), LogMode.MINIMAL)
         LOGGER.info("Initializing", LogMode.MINIMAL)
 
         LOGGER.info("Registering to SERVER_STARTING event", LogMode.WTF)
