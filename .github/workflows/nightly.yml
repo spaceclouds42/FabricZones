@@ -27,14 +27,26 @@ jobs:
       #- name: Build
       #  run: ./gradlew build
 
+      - name: Set branch property
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './.github/workflows/nightly.properties'
+          property: 'branch'
+          value: ${GITHUB_REF##*/}
+
+      - name: Read branch property to var
+        id: read_property
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: './.github/workflows/nightly.properties'
+          property: 'branch'
+
       - name: Upload to branch specific dir
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/libs
-          destination_dir: files/nightly/$dir
-        env:
-          dir: ${ GITHUB_REF##*/ }
+          destination_dir: ${{ steps.read_property.outputs.value }}
 
       - name: Upload to latest dir
         uses: peaceiris/actions-gh-pages@v3
