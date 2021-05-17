@@ -24,18 +24,18 @@ jobs:
       - name: Grant permissions to gradlew
         run: chmod +x gradlew
 
-      #- name: Build
-      #  run: ./gradlew build
+      - name: Build
+        run: ./gradlew build
 
-      - name: Set branch property
-        run: echo "branch=${GITHUB_REF##*/}" && echo "branch=${GITHUB_REF##*/}" >> nightly.properties
+      - name: Set destination/branch property
+        run: echo "destination=files/nightly/${GITHUB_REF##*/}" >> nightly.properties
 
-      - name: Read branch property to var
+      - name: Read destination property to var
         id: read_property
         uses: christian-draeger/read-properties@1.0.1
         with:
           path: './nightly.properties'
-          property: 'branch'
+          property: 'destination'
 
       - name: Upload to branch specific dir
         uses: peaceiris/actions-gh-pages@v3
