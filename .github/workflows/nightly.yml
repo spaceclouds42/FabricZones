@@ -24,8 +24,8 @@ jobs:
       - name: Grant permissions to gradlew
         run: chmod +x gradlew
 
-      - name: Build
-        run: echo "./gradlew build"
+      #- name: Build
+      #  run: ./gradlew build
 
       - name: Upload to branch specific dir
         uses: peaceiris/actions-gh-pages@v3
@@ -34,7 +34,7 @@ jobs:
           publish_dir: build/libs
           destination_dir: $branch
         env:
-          branch: files/nightly/${GITHUB_REF##*/}
+          branch: ${{ "files/nightly/$GITHUB_REF##*/" }}
 
       - name: Upload to latest dir
         uses: peaceiris/actions-gh-pages@v3
