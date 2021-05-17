@@ -32,7 +32,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/libs
-          destination_dir: 'files/nightly/${{ GITHUB_REF##*/ }}'
+          destination_dir: files/nightly/$dir
+        env:
+          dir: ${{ GITHUB_REF##*/ }}
 
       - name: Upload to latest dir
         uses: peaceiris/actions-gh-pages@v3
