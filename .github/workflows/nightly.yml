@@ -28,7 +28,7 @@ jobs:
       #  run: ./gradlew build
 
       - name: Set branch property
-        run: echo "branch=${GITHUB_REF##*/}" && rm .github/workflows/nightly.properties && echo "branch=${GITHUB_REF##*/}" >> nightly.properties
+        run: echo "branch=${GITHUB_REF##*/}" && rm .github/workflows/nightly.properties -f && echo "branch=${GITHUB_REF##*/}" >> nightly.properties
 
       - name: Read branch property to var
         id: read_property
