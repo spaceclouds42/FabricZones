@@ -34,7 +34,7 @@ jobs:
           publish_dir: build/libs
           destination_dir: files/nightly/$dir
         env:
-          dir: ${{ GITHUB_REF##*/ }}
+          dir: ${ GITHUB_REF##*/ }
 
       - name: Upload to latest dir
         uses: peaceiris/actions-gh-pages@v3
