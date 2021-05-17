@@ -20,19 +20,21 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          
+
       - name: Grant permissions to gradlew
         run: chmod +x gradlew
 
       - name: Build
-        run: echo "${GITHUB_REF##*/}"
+        run: echo "./gradlew build"
 
       - name: Upload to branch specific dir
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/libs
-          destination_dir: "files/nightly/${GITHUB_REF##*/}"
+          destination_dir: $branch
+        env:
+          branch: files/nightly/${GITHUB_REF##*/}
 
       - name: Upload to latest dir
         uses: peaceiris/actions-gh-pages@v3
