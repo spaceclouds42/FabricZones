@@ -39,13 +39,12 @@ jobs:
 
       - name: Generate build_meta.json
         run: chmod +x .github/workflows/spaceserve-web-gen && ./.github/workflows/spaceserve-web-gen meta
-        
+
       - name: Upload build_meta.json
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build_meta.json
-          destination_dir: build_meta.json
+          exclude_assets: '.github,gradle,src,.gitignore,LICENSE,*.md,*.kts,*.gradle,*.bat,gradlew,*.properties'
 
       - name: Upload build
         uses: peaceiris/actions-gh-pages@v3
