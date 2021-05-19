@@ -1,13 +1,13 @@
 {
   "data": {
     "1.16.5": {
-      "commit": "854f2cbe9a485bf78dc582890087c7d7c49ecb29",
+      "commit": "a09bc1b83a6ee180fc06019ea450b9ad59ff1a42",
       "dokka": "nightly/1.16.5/dokka/-fabric-zones/",
       "builds": {
         "main": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5.jar",
-          "sha256": "569b6f6e22cc032e63194b1a8305dce5eba7fa30c1eed80ab25d96a57b319e06",
-          "sha512": "cf2875a036bfd80a15166651c2c3cc80f26a0351b44ef921c5bc4f1c7bbfd007dbc97a4db76fc8daf810b5833ec8e9c37011c122892bf43631cdcc3b14ed536e"
+          "sha256": "9356a255a417025de6a161b9bcbd9ce7b6c5a203770cb2b5c0f49a463e8a898f",
+          "sha512": "21d37472b84cb7dba2537ec07ca6d5376f1ec348769194389c01ce0405277e3440c59197401850ce9a7cee2144a0a83734675b6bfb63a15ed1adf31a8da710ce"
         },
         "dev": {
           "path": "",
@@ -16,13 +16,13 @@
         },
         "sources": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources.jar",
-          "sha256": "af243968fc6e6b98c6b26a11a3eb3f6ce6845c064697549d10239af3d7ffa125",
-          "sha512": "bf6a4c595c1410c2d05755c01456e5c8ce2d690d602e75887b59967688f3393c41cde5f842e7a82fe8c2bc94967dc93ad340d8f160e66a1b983038e8015d1bb4"
+          "sha256": "8cd41aee687d5c29c73a45dbbd5b2c3d75edfd16a7de6e57ec950a531115b219",
+          "sha512": "1a2a2a4cc27eabae73bf6926832266989d921fe28bb3bdb91c6f82a14e0594632fee6dafa5bdae8e4952b08caf7d23cd80155b10ab007d76732953c5ca298b3e"
         },
         "sources_dev": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
-          "sha256": "b08d9797d631ca595711d74988d33b7e86e381b64e82d1a9779ac518eb0b4471",
-          "sha512": "268c689d574ad5ebb1c13d326ad8327a5cb1b0e58775bde0b7b636a2b6d34ba90617831fd391c64601bf7657db36efd1bedf1272827bf78bc2e8d908e0f2fe6c"
+          "sha256": "7f77e7e5bc9b81a7e89fa7f294f4bd841aac9d063d7138c9812ce74356a2cf02",
+          "sha512": "d9d96da684942df6aac5c268a4efda17639d6dbbd1b244d44bc79e2258abf839f54cd6d461ff9482fffd36d793b70fdb9c12dea8db31c492d9ba42bf8d87e1b7"
         }
       }
     }
