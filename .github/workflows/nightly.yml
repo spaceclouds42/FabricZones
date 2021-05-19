@@ -1,4 +1,4 @@
-# Builds and uploads latest commit to gh-pages
+# Builds and uploads latest commit to gh-pages with its generated dokka
 
 name: Nightly Build
 
@@ -27,15 +27,25 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Set destination/branch property
+      - name: Set build destination property
         run: echo "build_destination=nightly/${GITHUB_REF##*/}" >> nightly.properties
 
-      - name: Read destination property to var
+      - name: Set dokka destination property
+        run: echo "dokka_destination=nightly/${GITHUB_REF##*/}/dokka" >> nightly.properties
+
+      - name: Read build destination property to var
         id: build_destination
         uses: christian-draeger/read-properties@1.0.1
         with:
           path: './nightly.properties'
           property: 'build_destination'
+
+      - name: Read dokka destination property to var
+        id: dokka_destination
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: './nightly.properties'
+          property: 'dokka_destination'
 
       - name: Generate build_meta.json
         run: chmod +x .github/workflows/spaceserve-web-gen && ./.github/workflows/spaceserve-web-gen meta
@@ -47,9 +57,19 @@ jobs:
           publish_dir: web-gen
           destination_dir: web-gen
 
-      - name: Upload build
+      - name: Upload builds
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/libs
           destination_dir: ${{ steps.build_destination.outputs.value }}
+
+      - name: Generate dokka
+        run: ./gradlew dokkaHtml
+
+      - name: Upload dokka
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/dokka/html
+          destination_dir: ${{ steps.dokka_destination.outputs.value }}
