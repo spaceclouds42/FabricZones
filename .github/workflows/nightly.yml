@@ -28,7 +28,7 @@ jobs:
         run: ./gradlew build
 
       - name: Set destination/branch property
-        run: echo "destination=files/nightly/${GITHUB_REF##*/}" >> nightly.properties
+        run: echo "destination=nightly/${GITHUB_REF##*/}" >> nightly.properties
 
       - name: Read destination property to var
         id: read_property
@@ -37,16 +37,19 @@ jobs:
           path: './nightly.properties'
           property: 'destination'
 
-      - name: Upload to branch specific dir
+      - name: Generate build_meta.json
+        run: chmod +x .github/workflows/spaceserve-web-gen && ./.github/workflows/spaceserve-web-gen meta
+        
+      - name: Upload build_meta.json
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build_meta.json
+          destination_dir: build_meta.json
+
+      - name: Upload build
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/libs
           destination_dir: ${{ steps.read_property.outputs.value }}
-
-      - name: Upload to latest dir
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/libs
-          destination_dir: files/nightly/latest
