@@ -1,13 +1,13 @@
 {
   "data": {
-    "1.16.5": {
+    "test2": {
       "commit": "ee3ef3213188ab755acf444667323bec5fcbe267",
-      "dokka": "nightly/1.16.5/dokka/-fabric-zones/",
+      "dokka": "nightly/test2/dokka/-fabric-zones/",
       "builds": {
         "main": {
-          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5.jar",
-          "sha256": "27215a61d3bc7115729719c3b14142081e1f0992b08a09c91d40c7ba82c7395c",
-          "sha512": "4d54da26d8cc9616ca0ba2436d0bb11bf437d025f8634b52fbc5fbe920bbf101eb2fa7324c1749aebd3d347bbb45b365e8d3175b2514d1fb66712a0929e28d9f"
+          "path": "nightly/test2/fabric-zones-0.1.2-mc1.16.5.jar",
+          "sha256": "b3f93600fb41e6b2aa8e97929f8ee641cf41784c975503590eec5375755aec9c",
+          "sha512": "fefbcf76b2e394a638465e2b6a31e89812c6dc2a1ddd2aefb6c1eb5a1f25292ab4540f25738bf3cf5bc05c22d32073bb9bfb512ccc6a833eba716909da4e2e1a"
         },
         "dev": {
           "path": "",
@@ -15,14 +15,14 @@
           "sha512": ""
         },
         "sources": {
-          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources.jar",
-          "sha256": "f4323c6eec9a7cdef9cba3de64d41fb8d4cd8f10d770a2bb163bef83ab6f28cf",
-          "sha512": "947779068c492e512f72717e092318df6134817bb364af2a7e97b376dd57b936dd4a744a8796f44279996e22ab6897dc758731d7359b0d8bf0f4e741d8b85b75"
+          "path": "nightly/test2/fabric-zones-0.1.2-mc1.16.5-sources.jar",
+          "sha256": "2040bb142239bc236aec41b0f2ca3f9c64aa49d34f53cb4731b4486b91d3cb8c",
+          "sha512": "1d70f51ae91f82b36e3f612b9c84432951023ce5283c02a27888d07fa35341fd1c688803d9b7ec94c2942721714c04c9291ef46b70a074b2e22cdc3710a4c94d"
         },
         "sources_dev": {
-          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
-          "sha256": "500c9382a162ada63c4af213c58b1a5a8201bdf9fd63a70d4e3164b43f72f38c",
-          "sha512": "e6154ba40ce1f2709d545e6f7e1f71894cd8930c4c8ad2003e37e648b0f517e2e304f1b51b6c4579ead8791f8a550150d8f53fc170c7ef3b5d85075d92519148"
+          "path": "nightly/test2/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
+          "sha256": "14883c00fe464a530521df1a032d2fecba79c996ddddf3b8a4f50f235e5aff61",
+          "sha512": "9c7e2e3f83a41bcf40ae033347ee372cf318ab3c48e534992fef45724a6b7e2ce019f383f71aaf88e7133a424caaf891ac8780aa61546f19a226dd13a48aeccb"
         }
       }
     }
