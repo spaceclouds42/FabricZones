@@ -1,13 +1,13 @@
 {
   "data": {
     "1.16.5": {
-      "commit": "a09bc1b83a6ee180fc06019ea450b9ad59ff1a42",
+      "commit": "ee3ef3213188ab755acf444667323bec5fcbe267",
       "dokka": "nightly/1.16.5/dokka/-fabric-zones/",
       "builds": {
         "main": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5.jar",
-          "sha256": "41390d880cb3e680d232a666d15d8d1034faac5f1586736f7e9deed560c01072",
-          "sha512": "63e891aa2ccf2efe9147eb7220fd6831bb00ab6733cd8a799ec05fcca8a212d5c8c7babcb7419bb76974eb3221b12be7d8c5135d0195aedba6e5ad01117623b6"
+          "sha256": "27215a61d3bc7115729719c3b14142081e1f0992b08a09c91d40c7ba82c7395c",
+          "sha512": "4d54da26d8cc9616ca0ba2436d0bb11bf437d025f8634b52fbc5fbe920bbf101eb2fa7324c1749aebd3d347bbb45b365e8d3175b2514d1fb66712a0929e28d9f"
         },
         "dev": {
           "path": "",
@@ -16,13 +16,13 @@
         },
         "sources": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources.jar",
-          "sha256": "63cf463daf5b60d87b26131f276bd4a8d676b0f98f4aa85553cd560f19e85aea",
-          "sha512": "b0be92dfb42922d3f19fa409d18301926e270a879885b647e609151c1518ad8324818188af8a682658c581de2acf5e5d09947d44c6bf8760b0f7906fa7f5923e"
+          "sha256": "f4323c6eec9a7cdef9cba3de64d41fb8d4cd8f10d770a2bb163bef83ab6f28cf",
+          "sha512": "947779068c492e512f72717e092318df6134817bb364af2a7e97b376dd57b936dd4a744a8796f44279996e22ab6897dc758731d7359b0d8bf0f4e741d8b85b75"
         },
         "sources_dev": {
           "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
-          "sha256": "6f43a677192b4eedcfa0b3e79a221a332cdb006f8fba6f4933318123039a2f9a",
-          "sha512": "4bf7174eeb7f1f08b90335a09331cbcb7e42f079750610fde1ce7f5410993f06f92d97fc3be453e226b3b7afacf63b8b5a3373f9a3f6a2884860d3c3697150be"
+          "sha256": "500c9382a162ada63c4af213c58b1a5a8201bdf9fd63a70d4e3164b43f72f38c",
+          "sha512": "e6154ba40ce1f2709d545e6f7e1f71894cd8930c4c8ad2003e37e648b0f517e2e304f1b51b6c4579ead8791f8a550150d8f53fc170c7ef3b5d85075d92519148"
         }
       }
     }
