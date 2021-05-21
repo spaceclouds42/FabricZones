@@ -34,10 +34,10 @@ jobs:
       - name: Generate dokka
         run: ./gradlew dokkaHtml
 
-      # Needed to get the current branch and set the destination to `nightly/$branch` dir
+      # Needed to get the current branch and set the destination to `nightly/?branch` dir
       #  dokka dir will be input dir with `/dokka` appended
       - name: Set destination properties
-        run: ./.github/workflows/spaceserve-web-gen destination "nightly/$branch"
+        run: ./.github/workflows/spaceserve-web-gen destination "nightly/?branch"
 
       - name: Read build destination property to var
         id: build_destination
