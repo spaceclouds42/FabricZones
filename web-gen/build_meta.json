@@ -1,13 +1,13 @@
 {
   "data": {
     "1.16.5": {
-      "commit": "8cea5e8986b0f84194b4e53f0158606a731b2a20",
+      "commit": "5fdc83f6060c6c20d81cd7d3c741abcad5a0d34e",
       "dokka": "ightly/1.16.5//dokka/-fabric-zones/",
       "builds": {
         "main": {
-          "path": "ightly/1.16.5/test.jar",
-          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "sha512": "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+          "path": "ightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-all.jar",
+          "sha256": "de44bbde0c359fa66b4122d059e464a82ace7bfde625ca5835f2779684045f33",
+          "sha512": "676a56d2b9dd2e28b84a2ed9d752e23460e1ba61e0a8fcafe0e600c4a76782f901597ae15814bc7e7e61869f552bef3af4f604789efd8060f32bac72b935c908"
         },
         "dev": {
           "path": "",
@@ -15,14 +15,14 @@
           "sha512": ""
         },
         "sources": {
-          "path": "",
-          "sha256": "",
-          "sha512": ""
+          "path": "ightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources.jar",
+          "sha256": "48fc45af700d6f0ee892625e8623f85b7cb3cfa1dde97cb26a54977f6e7eb54b",
+          "sha512": "a6e60ec844e7415dde229fa81dea27dab264ed8620cfa801a03508c78727245a0386671faa6efe7904e9461ccec2fe49dc2b64bc00785f66769dbe47c23dc387"
         },
         "sources_dev": {
-          "path": "",
-          "sha256": "",
-          "sha512": ""
+          "path": "ightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
+          "sha256": "0180b7d6a1126d6d81c39f78747071783d8b329a987624efd99bebccb565f4d2",
+          "sha512": "41b7d8f2f1aa912b9809e1bf56f0d20aacc03a322e1a230e9b8ad10597c5d1f6b0f7d5cd935a6aa3bd7b497761ba0319f8a44e91273b7b30e4a16acbe8b0cba5"
         }
       }
     }
