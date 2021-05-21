@@ -1,7 +1,7 @@
 {
   "data": {
     "1.16.5": {
-      "commit": "a3a7f3e05fbec558c91b4f4aa2706b624264beb2",
+      "commit": "9ebec42dfe5fd1eac0870808cf2b8e3d5ceb256f",
       "dokka": "ightly/1.16.5//dokka/-fabric-zones/",
       "builds": {
         "main": {
