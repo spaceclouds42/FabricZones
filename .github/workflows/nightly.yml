@@ -29,10 +29,10 @@ jobs:
         run: chmod +x .github/workflows/spaceserve-web-gen
 
       - name: Build
-        run: ./gradlew build
+        run: mkdir build && mkdir build/libs && touch build/libs/test.jar # ./gradlew build
 
       - name: Generate dokka
-        run: ./gradlew dokkaHtml
+        run: mkdir build/dokka && mkdir build/dokka/html && touch build/dokka/html/test.html # ./gradlew dokkaHtml
 
       # Needed to get the current branch and set the destination to `nightly/?branch` dir
       #  dokka dir will be input dir with `/dokka` appended
