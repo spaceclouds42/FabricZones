@@ -1,4 +1,5 @@
-# Builds and uploads latest commit to gh-pages with its generated dokka
+# Builds and uploads latest commit to gh-pages with its generated dokka and an accompanying meta file
+# Written by SpaceClouds42
 
 name: Nightly Build
 
@@ -24,38 +25,33 @@ jobs:
       - name: Grant permissions to gradlew
         run: chmod +x gradlew
 
+      - name: Grant permissions to web-gen
+        run: chmod +x .github/workflows/spaceserve-web-gen
+
       - name: Build
         run: ./gradlew build
 
-      - name: Set build destination property
-        run: echo "build_destination=nightly/${GITHUB_REF##*/}" >> nightly.properties
+      - name: Generate dokka
+        run: ./gradlew dokkaHtml
 
-      - name: Set dokka destination property
-        run: echo "dokka_destination=nightly/${GITHUB_REF##*/}/dokka" >> nightly.properties
+      # Needed to get the current branch and set the destination to `nightly/$branch` dir
+      #  dokka dir will be input dir with `/dokka` appended
+      - name: Set destination properties
+        run: ./.github/workflows/spaceserve-web-gen destination "nightly/$branch"
 
       - name: Read build destination property to var
         id: build_destination
         uses: christian-draeger/read-properties@1.0.1
         with:
-          path: './nightly.properties'
-          property: 'build_destination'
+          path: './destination.properties'
+          property: 'build'
 
       - name: Read dokka destination property to var
         id: dokka_destination
         uses: christian-draeger/read-properties@1.0.1
         with:
-          path: './nightly.properties'
-          property: 'dokka_destination'
-
-      - name: Generate build_meta.json
-        run: chmod +x .github/workflows/spaceserve-web-gen && ./.github/workflows/spaceserve-web-gen meta
-
-      - name: Upload build_meta.json
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: web-gen
-          destination_dir: web-gen
+          path: './destination.properties'
+          property: 'dokka'
 
       - name: Upload builds
         uses: peaceiris/actions-gh-pages@v3
@@ -64,12 +60,19 @@ jobs:
           publish_dir: build/libs
           destination_dir: ${{ steps.build_destination.outputs.value }}
 
-      - name: Generate dokka
-        run: ./gradlew dokkaHtml
-
       - name: Upload dokka
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/dokka/html
           destination_dir: ${{ steps.dokka_destination.outputs.value }}
+
+      - name: Generate build_meta.json
+        run: ./.github/workflows/spaceserve-web-gen meta
+
+      - name: Upload build_meta.json
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: web-gen
+          destination_dir: web-gen
