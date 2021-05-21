@@ -24,6 +24,10 @@ jobs:
 
       - name: Grant permissions to gradlew
         run: chmod +x gradlew
+        
+      
+      - name: test
+        run: ls .git/refs/ -R
 
       - name: Grant permissions to web-gen
         run: chmod +x .github/workflows/spaceserve-web-gen
