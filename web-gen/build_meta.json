@@ -1,0 +1,30 @@
+{
+  "data": {
+    "1.16.5": {
+      "commit": "035ed842d5884d31082bdca27eb96892f5828a8c",
+      "dokka": "nightly/1.16.5//dokka/-fabric-zones/",
+      "builds": {
+        "main": {
+          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-all.jar",
+          "sha256": "e8444976f45d7a75e3225a0d92606d1436b1c72fc7bae5df800de30d54e589fb",
+          "sha512": "9954e94fe0056a26764e8567f02a09f5df3c9cfe5977fe1d08d475701d1c3d00d3654864238a01bd8da25cafb91f640597491f57c518f8fa4ed32ff67fcb779b"
+        },
+        "dev": {
+          "path": "",
+          "sha256": "",
+          "sha512": ""
+        },
+        "sources": {
+          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources.jar",
+          "sha256": "34c69fbf5dd197f3280202da90378a2e041c52051d17914f1d5301c4af02b738",
+          "sha512": "32f117d702a4ccb862ff1db6f558f04759de170f6e7e46742b4eab6f50669935dc27cf0a7604184b96c9d54db7cb89b502a4dc469f5988e49e2b7e69b01ebe15"
+        },
+        "sources_dev": {
+          "path": "nightly/1.16.5/fabric-zones-0.1.2-mc1.16.5-sources-dev.jar",
+          "sha256": "07457f98ce272e520f9424cf39541c56026d8a6d79d455d5d0042d22cf7e37e1",
+          "sha512": "f8bdcfa02eeef1515dd397893545e8f17641cca1f9015cb2e6e5b427ff5521c5881e30ad4e2a420e7ed3c47b94c5dac9177eaf9854e02fb06ac15679836833a0"
+        }
+      }
+    }
+  }
+}
