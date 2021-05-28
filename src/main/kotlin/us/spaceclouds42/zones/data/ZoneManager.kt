@@ -2,7 +2,6 @@ package us.spaceclouds42.zones.data
 
 import kotlinx.serialization.json.Json
 import net.minecraft.entity.Entity
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
