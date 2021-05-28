@@ -14,6 +14,7 @@
     "accessor.TridentEntityAccessor",
     "accessor.WorldChunkAccessor",
 
+    "griefing.ExplosionMixin",
     "griefing.ServerPlayerInteractionManagerMixin",
     "griefing.FallingBlockEntityMixin",
     "griefing.FallingBlockMixin",
