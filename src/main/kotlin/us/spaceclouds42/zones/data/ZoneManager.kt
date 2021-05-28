@@ -1,7 +1,7 @@
 package us.spaceclouds42.zones.data
 
 import kotlinx.serialization.json.Json
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.entity.Entity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
@@ -105,17 +105,17 @@ object ZoneManager : ManagerBase() {
     }
 
     /**
-     * Zone getter based on player object
-     * @param player the player to find zone at
-     * @return the zone that the [player] is in, or null if not in zone
+     * Zone getter based on entity object
+     * @param entity the entity to find zone at
+     * @return the zone that the [entity] is in, or null if not in zone
      */
-    fun getZone(player: ServerPlayerEntity): Zone? {
+    fun getZone(entity: Entity): Zone? {
         return getZone(
             PosD(
-                player.world.registryKey.value.toString(),
-                player.x,
-                player.y,
-                player.x,
+                entity.world.registryKey.value.toString(),
+                entity.x,
+                entity.y,
+                entity.z,
             )
         )
     }

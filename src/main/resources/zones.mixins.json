@@ -23,6 +23,7 @@
     "griefing.FluidBlockMixin",
     "griefing.LavaFluidMixin",
     "griefing.ProjectileEntityMixin",
+    "griefing.LightningEntityMixin",
 
     "smuggling.BlockMixin",
     "smuggling.ComposterMixin",
